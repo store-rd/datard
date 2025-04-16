@@ -2,7 +2,7 @@
 <html lang="ar" class="no-js" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إدارة المنتجات المحسّنة</title>
+    <title>إدارة المنتجات - سجل وتوقيت</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,138 +22,96 @@
             --grey-light: #f8f9fa;
             --grey-dark: #bdc3c7; /* Lighter Grey */
             --offline-indicator: #f39c12; /* Orange */
+            --timestamp-color: #7f8c8d; /* Grey for timestamps */
             --shadow-color: rgba(0, 0, 0, 0.1);
             --shadow-color-darker: rgba(0, 0, 0, 0.15);
              /* Font variable */
             --font-primary: 'Tajawal', 'Changa', sans-serif;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: var(--font-primary); /* Apply the primary font */
-            background: linear-gradient(135deg, var(--light), #ffffff); /* Lighter gradient */
-            color: var(--dark);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            transition: background-color 0.5s, color 0.5s;
-             font-size: 16px; /* Base font size */
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, var(--light), #ffffff);
+            color: var(--dark); display: flex; height: 100vh; overflow: hidden;
+            transition: background-color 0.5s, color 0.5s; font-size: 16px;
         }
-
         body.dark-mode {
-            background: linear-gradient(135deg, #34495e, #2c3e50); /* Darker gradient */
-            color: var(--light);
-            --shadow-color: rgba(255, 255, 255, 0.08);
-            --shadow-color-darker: rgba(255, 255, 255, 0.12);
-             --grey-light: #4a4a4a;
-             --grey-dark: #5a5a5a; /* Darker grey */
-             --light: #343a40; /* Adjust light color for dark mode */
-             --dark: #ecf0f1; /* Adjust dark color for dark mode */
+            background: linear-gradient(135deg, #34495e, #2c3e50); color: var(--light);
+            --shadow-color: rgba(255, 255, 255, 0.08); --shadow-color-darker: rgba(255, 255, 255, 0.12);
+             --grey-light: #4a4a4a; --grey-dark: #5a5a5a; --light: #343a40; --dark: #ecf0f1;
+             --timestamp-color: #95a5a6;
         }
 
         .offline-banner {
             position: fixed; top: 0; left: 0; right: 0; background-color: var(--offline-indicator);
-            color: white; text-align: center; padding: 5px 10px; font-size: 0.9em; z-index: 2001;
-            display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: white; text-align: center; padding: 6px 10px; font-size: 0.9em; z-index: 2001;
+            display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-weight: 700;
         }
         .offline-banner.show { display: block; }
-         /* No dark mode specific style needed for offline banner as orange works on both */
 
         .sidebar {
-            width: 340px; /* Slightly wider */
-            min-width: 300px;
-            background: white;
-            height: 100%; display: flex; flex-direction: column;
-            border-left: 1px solid #dee2e6; /* Slightly darker border */
-            box-shadow: -3px 0 12px var(--shadow-color);
-            z-index: 10; transition: background-color 0.3s, border-color 0.3s;
+            width: 340px; min-width: 300px; background: white; height: 100%; display: flex; flex-direction: column;
+            border-left: 1px solid #dee2e6; box-shadow: -3px 0 12px var(--shadow-color); z-index: 10;
+            transition: background-color 0.3s, border-color 0.3s;
         }
-        .dark-mode .sidebar {
-            background: #2c3e50; /* Darker sidebar */
-            border-left-color: #495057;
-            box-shadow: -3px 0 12px var(--shadow-color-darker);
-        }
-
+        .dark-mode .sidebar { background: #2c3e50; border-left-color: #495057; box-shadow: -3px 0 12px var(--shadow-color-darker); }
         .sidebar-header {
-             padding: 18px 22px; border-bottom: 1px solid #dee2e6;
-             font-size: 1.4em; font-weight: 700; /* Bolder */
-             color: var(--dark); flex-shrink: 0; position: relative;
-             display: flex; align-items: center; /* Align dot and text */
+             padding: 18px 22px; border-bottom: 1px solid #dee2e6; font-size: 1.4em; font-weight: 700;
+             color: var(--dark); flex-shrink: 0; position: relative; display: flex; align-items: center;
         }
          .dark-mode .sidebar-header { border-bottom-color: #495057; color: var(--light); }
          .connection-status-dot {
-             width: 12px; height: 12px; border-radius: 50%; background-color: #6c757d; /* Grey */
-             display: inline-block; margin-left: 10px; /* RTL: margin-left */
-             transition: background-color 0.5s; flex-shrink: 0;
+             width: 12px; height: 12px; border-radius: 50%; background-color: #adb5bd; /* Initial grey: Connecting */
+             display: inline-block; margin-left: 10px; transition: background-color 0.5s; flex-shrink: 0;
              border: 1px solid rgba(0,0,0,0.1);
          }
-         .connection-status-dot.connected { background-color: #2ecc71; border-color: #27ae60; }
-         .connection-status-dot.disconnected { background-color: #e74c3c; border-color: #c0392b; }
+         .connection-status-dot.connecting { background-color: #adb5bd; } /* Grey */
+         .connection-status-dot.connected { background-color: #2ecc71; border-color: #27ae60; } /* Green */
+         .connection-status-dot.syncing { background-color: var(--offline-indicator); border-color: #d35400; } /* Orange */
+         .connection-status-dot.disconnected { background-color: #e74c3c; border-color: #c0392b; } /* Red */
          .dark-mode .connection-status-dot { border-color: rgba(255,255,255,0.2); }
 
         #items-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
          .item-card {
-            padding: 12px; margin-bottom: 12px; background: #ffffff; /* White cards */
-            border: 1px solid #e9ecef; /* Subtle border */
-            border-radius: 8px; cursor: pointer;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s, border-left 0.3s;
-            display: flex; align-items: center; gap: 12px; position: relative;
-            border-left: 5px solid transparent; /* Wider indicator */
+            padding: 12px; margin-bottom: 12px; background: #ffffff; border: 1px solid #e9ecef;
+            border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; display: flex; align-items: center; gap: 12px;
+            position: relative; border-left: 5px solid transparent;
         }
          .item-card.has-pending-writes { border-left-color: var(--offline-indicator); opacity: 0.9; }
-        .dark-mode .item-card { background: #34495e; border-color: #495057; } /* Darker cards */
-        .item-card:hover {
-            background: #f1f3f5; transform: translateX(-5px);
-            box-shadow: 0 4px 10px var(--shadow-color); border-color: #ced4da;
-        }
+        .dark-mode .item-card { background: #34495e; border-color: #495057; }
+        .item-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px var(--shadow-color); border-color: #ced4da; z-index: 1; }
          .dark-mode .item-card:hover { background: #495057; border-color: #6c757d; }
          .item-card.selected {
              background-color: var(--accent); color: white; border-color: var(--accent);
-             box-shadow: 0 2px 8px rgba(52, 152, 219, 0.4);
+             box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); transform: scale(1.01);
          }
           .item-card.selected.has-pending-writes { border-left-color: var(--offline-indicator); }
          .dark-mode .item-card.selected {
              background-color: var(--primary); color: white; border-color: var(--primary);
-             box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+             box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4);
          }
           .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--offline-indicator); }
-
-        .item-icon {
-            width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
-            border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
+        .item-icon { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .dark-mode .item-icon { border-color: #495057; }
         .item-card.selected .item-icon { border-color: rgba(255, 255, 255, 0.6); }
         .item-details { flex-grow: 1; overflow: hidden; }
         .item-details h4 { margin: 0 0 4px 0; font-size: 1.1em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-details p { margin: 0; font-size: 0.9em; opacity: 0.8; white-space: nowrap; color: #555; }
+        .item-details p { margin: 0; font-size: 0.9em; opacity: 0.9; white-space: nowrap; color: #555; font-weight: 400; } /* Numbers use base font-weight */
         .dark-mode .item-details p { color: #adb5bd; }
         .item-card.selected h4, .item-card.selected p { color: white; opacity: 1; }
         .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-        .item-actions button {
-            background: rgba(0,0,0,0.05); border: none; color: var(--dark); cursor: pointer;
-            padding: 6px; font-size: 1.1em; /* Slightly smaller icon */
-            border-radius: 50%; width: 32px; height: 32px;
-            display: inline-flex; align-items: center; justify-content: center; transition: background-color 0.2s, color 0.2s;
-        }
+        .item-actions button { background: rgba(0,0,0,0.05); border: none; color: var(--dark); cursor: pointer; padding: 6px; font-size: 1.1em; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .dark-mode .item-actions button { background: rgba(255,255,255,0.1); color: var(--light); }
         .item-card.selected .item-actions button { background: rgba(255,255,255,0.2); color: white; }
+        .item-actions button:hover { transform: scale(1.1); }
         .item-actions .edit-btn:hover { background-color: var(--info); color: white; }
         .item-actions .delete-btn:hover { background-color: var(--danger); color: white; }
-
         .sidebar-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; flex-shrink: 0; background-color: #f8f9fa; }
          .dark-mode .sidebar-footer { border-top-color: #495057; background-color: #212529; }
         #total-price-container { text-align: center; font-weight: 700; margin-bottom: 12px; font-size: 1.15em; }
-        .report-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px 15px;
-            background-color: var(--dark); color: white; border: none; border-radius: 8px; cursor: pointer;
-            font-family: var(--font-primary); font-size: 1.05em; transition: background-color 0.3s, transform 0.1s; font-weight: 700;
-        }
+        .report-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px 15px; background-color: var(--dark); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-size: 1.05em; transition: background-color 0.3s, transform 0.1s; font-weight: 700; }
         .report-btn:hover { background-color: #555; transform: translateY(-1px); }
         .dark-mode .report-btn { background-color: var(--grey-light); color: var(--dark); }
         .dark-mode .report-btn:hover { background-color: var(--grey-dark); }
@@ -162,27 +120,32 @@
         /* --- Detail/Edit View Area --- */
         #detail-view-container {
             flex-grow: 1; height: 100%; padding: 35px 40px; overflow-y: auto; position: relative;
-             display: flex; align-items: center; justify-content: center;
-             background-color: #ffffff; /* Solid white background */
+             display: flex; align-items: center; justify-content: center; background-color: #ffffff;
         }
-         .dark-mode #detail-view-container { background-color: #343a40; } /* Dark background */
+         .dark-mode #detail-view-container { background-color: #343a40; }
          .detail-placeholder { text-align: center; color: #6c757d; font-size: 1.3em; font-weight: 700; }
          .dark-mode .detail-placeholder { color: #adb5bd; }
          .detail-content, .edit-form-container {
-             background: var(--light); padding: 30px 35px; border-radius: 12px;
-             border: 1px solid #dee2e6;
-             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); width: 100%; max-width: 550px;
-             animation: fadeIn 0.5s ease-out;
+             background: var(--light); padding: 30px 35px; border-radius: 12px; border: 1px solid #dee2e6;
+             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); width: 100%; max-width: 550px; animation: fadeIn 0.5s ease-out;
          }
          .dark-mode .detail-content, .dark-mode .edit-form-container { background: #2c3e50; border-color: #495057; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
-         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
          .detail-content h2, .edit-form-container h3 { margin-top: 0; margin-bottom: 25px; color: var(--primary); text-align: center; font-weight: 700; }
-         .dark-mode .detail-content h2, .dark-mode .edit-form-container h3 { color: var(--secondary); } /* Yellow header in dark mode */
+         .dark-mode .detail-content h2, .dark-mode .edit-form-container h3 { color: var(--secondary); }
          .detail-content p { margin-bottom: 15px; font-size: 1.1em; line-height: 1.7; }
-          .detail-content strong { color: var(--dark); font-weight: 700; }
-         .dark-mode .detail-content strong { color: var(--light); }
-          .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-           .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); }
+         .detail-content p strong { color: var(--dark); font-weight: 700; margin-left: 5px; } /* Added margin */
+         .dark-mode .detail-content p strong { color: var(--light); }
+         .detail-content .timestamp { /* Style for timestamps */
+             font-size: 0.85em;
+             color: var(--timestamp-color);
+             text-align: center;
+             margin-top: 20px;
+             border-top: 1px dashed var(--grey-dark);
+             padding-top: 10px;
+         }
+         .dark-mode .detail-content .timestamp { border-top-color: #495057; }
+         .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+         .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); }
          .edit-form-container label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95em; color: #555; }
          .dark-mode .edit-form-container label { color: #ccc; }
          .edit-form-container input { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s; }
@@ -190,16 +153,16 @@
          .dark-mode .edit-form-container input { background-color: #495057; border-color: #6c757d; color: var(--light); }
          .dark-mode .edit-form-container input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2); }
         .form-buttons { display: flex; gap: 12px; margin-top: 25px; }
-         .form-buttons button { flex-grow: 1; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-weight: 700; font-size: 1.05em; transition: background-color 0.3s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-         .form-buttons button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+         .form-buttons button { flex-grow: 1; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-weight: 700; font-size: 1.05em; transition: all 0.2s ease-out; display: flex; align-items: center; justify-content: center; gap: 8px; }
+         .form-buttons button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; background-color: #adb5bd !important; }
          .form-buttons .btn-save { background-color: var(--info); color: white; }
-          .form-buttons .btn-save:hover:not(:disabled) { background-color: var(--info-hover); transform: translateY(-2px); }
-          .form-buttons .btn-cancel { background-color: #adb5bd; color: #fff; } /* Grey cancel */
-          .form-buttons .btn-cancel:hover { background-color: #6c757d; transform: translateY(-2px); }
-          .dark-mode .form-buttons .btn-save { background-color: var(--accent); color: white; }
-          .dark-mode .form-buttons .btn-save:hover:not(:disabled) { background-color: #2980b9; }
-          .dark-mode .form-buttons .btn-cancel { background-color: #6c757d; color: white; }
-          .dark-mode .form-buttons .btn-cancel:hover { background-color: #5a6268; }
+         .form-buttons .btn-save:hover:not(:disabled) { background-color: var(--info-hover); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+         .form-buttons .btn-cancel { background-color: #adb5bd; color: #fff; }
+         .form-buttons .btn-cancel:hover { background-color: #6c757d; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
+         .dark-mode .form-buttons .btn-save { background-color: var(--accent); color: white; }
+         .dark-mode .form-buttons .btn-save:hover:not(:disabled) { background-color: #2980b9; }
+         .dark-mode .form-buttons .btn-cancel { background-color: #6c757d; color: white; }
+         .dark-mode .form-buttons .btn-cancel:hover { background-color: #5a6268; }
 
         /* --- Modal Styles --- */
         .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; backdrop-filter: blur(5px); }
@@ -207,13 +170,13 @@
         .modal-content { background: white; padding: 35px; border-radius: 15px; width: 90%; max-width: 480px; box-shadow: 0 10px 35px rgba(0,0,0,0.15); position: relative; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
          .modal.show .modal-content { transform: scale(1); }
         .dark-mode .modal-content { background: #34495e; color: var(--light); box-shadow: 0 10px 35px rgba(0,0,0,0.3); }
-         .modal-content h3 { margin-top: 0; margin-bottom: 25px; text-align: center; color: var(--primary); font-weight: 700; }
+         .modal-content h3 { margin-top: 0; margin-bottom: 25px; text-align: center; color: var(--primary); font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
          .dark-mode .modal-content h3 { color: var(--secondary); }
-          .modal-content label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.95em; color: #555; }
+         .modal-content label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.95em; color: #555; }
          .dark-mode .modal-content label { color: #ccc; }
          .modal-content input { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; }
          .dark-mode .modal-content input { background-color: #495057; border-color: #6c757d; color: var(--light); }
-         .close-btn { position: absolute; top: 12px; left: 15px; background: none; border: none; font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s, transform 0.2s; }
+        .close-btn { position: absolute; top: 12px; left: 15px; background: none; border: none; font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s, transform 0.2s; }
         .close-btn:hover { color: var(--danger); transform: rotate(90deg) scale(1.1); }
         .dark-mode .close-btn { color: #777; }
         .dark-mode .close-btn:hover { color: var(--primary); }
@@ -221,15 +184,14 @@
 
         /* --- Toast Styles --- */
         #toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #34495e; color: white;
-            padding: 12px 22px; border-radius: 8px; z-index: 2000; font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease;
-            font-weight: 700;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #34495e; color: white; padding: 12px 22px;
+            border-radius: 8px; z-index: 2000; font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.2); opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease; font-weight: 700;
         }
         #toast.show { opacity: 1; visibility: visible; bottom: 30px; transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease; }
         #toast.error { background-color: var(--danger); }
         #toast.warning { background-color: var(--offline-indicator); color: #333; }
-        #toast.success { background-color: var(--info); } /* Added success style */
+        #toast.success { background-color: var(--info); }
          .dark-mode #toast { background: #495057; }
          .dark-mode #toast.error { background-color: var(--danger-hover); }
          .dark-mode #toast.warning { background-color: var(--secondary); color: var(--dark); }
@@ -239,8 +201,7 @@
         .control-panel { position: fixed; bottom: 25px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 100; }
         .btn-magic {
             background: var(--accent); border: none; width: 55px; height: 55px; border-radius: 50%; color: white; font-size: 1.8em;
-            cursor: pointer; transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
             display: flex; justify-content: center; align-items: center;
         }
          .btn-magic:hover { background-color: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5); }
@@ -249,17 +210,16 @@
 
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; } /* Slightly smaller base font on mobile */
+            body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; }
             #detail-view-container { order: 1; height: auto; min-height: 35vh; padding: 20px 15px; }
              .detail-content, .edit-form-container { padding: 20px 25px; }
             .sidebar { order: 2; width: 100%; height: auto; min-height: 55vh; border-left: none; border-top: 1px solid #dee2e6; box-shadow: none; }
              .dark-mode .sidebar { border-top-color: #495057; }
-            #items-list { max-height: none; padding: 10px; } /* Remove max-height, rely on page scroll */
+            #items-list { max-height: none; padding: 10px; }
             .sidebar-header { padding: 15px; font-size: 1.3em; }
             .sidebar-footer { padding: 15px; }
-            .control-panel { /* Move to bottom right, stacked vertically */
+            .control-panel { /* Bottom Right on Mobile */
                  bottom: 20px; left: auto; right: 20px; transform: none; flex-direction: column; gap: 12px;
-                 /* Remove background/shadow from panel itself */
                  background: transparent; box-shadow: none;
             }
             .btn-magic { /* Ensure buttons themselves have shadow */
@@ -267,9 +227,10 @@
                  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
              .dark-mode .btn-magic { box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-            #toast { bottom: 85px; /* Adjust if needed based on control panel */ width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
+            #toast { bottom: 85px; width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
             .modal-content { width: 95%; padding: 25px; }
-            .form-buttons { flex-direction: column; } /* Stack modal buttons */
+            .form-buttons { flex-direction: column; }
+             .offline-banner { font-size: 0.8em; padding: 4px 8px; }
         }
 
     </style>
@@ -288,13 +249,13 @@
 
     <div class="sidebar">
         <div class="sidebar-header">
-             <span id="connectionStatus" class="connection-status-dot" title="حالة الاتصال"></span> إدارة المخزون
+             إدارة المخزون <span id="connectionStatus" class="connection-status-dot" title="حالة الاتصال: جارٍ الاتصال..."></span>
         </div>
         <div id="items-list">
             </div>
         <div class="sidebar-footer">
             <div id="total-price-container">
-                إجمالي  : <span id="total-price">0</span> د.ع
+                إجمالي قيمة المخزون: <span id="total-price">0</span> د.ع
             </div>
             <button class="report-btn" onclick="window.generateReport()" title="تنزيل تقرير المنتجات">
                 <span class="icon">📄</span> تقرير المخزون
@@ -308,13 +269,10 @@
              <h3><span class="icon" style="margin-left: 8px;">📦</span>إضافة منتج جديد</h3>
              <label for="itemName">اسم المنتج:</label>
              <input type="text" id="itemName" placeholder="مثال: قميص قطني أزرق" required>
-
              <label for="itemStock">الكمية المتوفرة:</label>
              <input type="number" id="itemStock" placeholder="مثال: 50" required min="0">
-
              <label for="itemPrice">السعر (د.ع):</label>
              <input type="number" id="itemPrice" placeholder="مثال: 25000" required min="0" step="500">
-
              <div class="form-buttons" style="margin-top: 15px;">
                  <button id="addItemBtn" class="btn-save" onclick="window.addItem()"> <span class="icon">➕</span> إضافة المنتج</button>
                  <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
@@ -337,17 +295,18 @@
     <div id="toast"></div>
 
     <div class="control-panel">
-        <button class="btn-magic" onclick="window.toggleDarkMode()" title="تبديل الوضع">💡</button> <button class="btn-magic" onclick="window.showAddForm()" title="إضافة منتج جديد">➕</button>
+        <button class="btn-magic" onclick="window.toggleDarkMode()" title="تبديل الوضع">💡</button>
+        <button class="btn-magic" onclick="window.showAddForm()" title="إضافة منتج جديد">➕</button>
     </div>
 
     <script type="module">
         // --- Firebase SDK Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"; // Update to latest tested version if needed
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
         import {
             getFirestore, enableIndexedDbPersistence, terminate,
             collection, query, orderBy, onSnapshot,
             addDoc, updateDoc, deleteDoc, doc, serverTimestamp,
-            getDoc, writeBatch // Added writeBatch for potential future use
+            getDoc, writeBatch, Timestamp // Added Timestamp
         } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
         // --- Firebase Configuration ---
@@ -364,10 +323,11 @@
 
         // --- Global Variables & State ---
         let app; let db; let unsubscribeSnapshot = null;
-        let items = []; let currentEditItemId = null; let currentViewItemId = null; let isOffline = false;
-        let latestSnapshotMetadata = { fromCache: true, hasPendingWrites: false }; // Initialize assuming offline first
-        const defaultIcon = 'https://via.placeholder.com/45/bdc3c7/ffffff?text=?'; // Default Icon URL
-        const icons = [ // Example Icons
+        let items = []; let currentEditItemId = null; let currentViewItemId = null;
+        let isDefinitelyOffline = !navigator.onLine; // Use browser API for initial guess
+        let latestSnapshotMetadata = { fromCache: true, hasPendingWrites: false };
+        const defaultIcon = 'https://via.placeholder.com/45/bdc3c7/ffffff?text=?';
+        const icons = [
             'https://img.icons8.com/fluency/48/000000/t-shirt.png', 'https://img.icons8.com/fluency/48/000000/polo-shirt.png',
             'https://img.icons8.com/fluency/48/000000/jeans.png', 'https://img.icons8.com/fluency/48/000000/dress.png',
             'https://img.icons8.com/fluency/48/000000/jacket.png', 'https://img.icons8.com/fluency/48/000000/sneakers.png',
@@ -381,50 +341,51 @@
         const addFormModalEl = document.getElementById('addFormModal');
         const confirmModalEl = document.getElementById('confirmModal');
         const confirmMessageEl = document.getElementById('confirmMessage');
-        // const confirmDeleteBtnEl = document.getElementById('confirmDeleteBtn'); // Re-get inside modal function due to cloning
         const toastEl = document.getElementById('toast');
         const offlineBannerEl = document.getElementById('offlineBanner');
         const connectionStatusDotEl = document.getElementById('connectionStatus');
-        const addFormButton = addFormModalEl?.querySelector('#addItemBtn'); // Get Add button reference
+        const addFormButton = addFormModalEl?.querySelector('#addItemBtn');
+
+        // --- Helper Functions ---
+        function formatFirestoreTimestamp(timestamp) {
+            if (!timestamp) return 'غير متوفر';
+            // Check if it's a Firestore Timestamp object
+            if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+                return timestamp.toDate().toLocaleString('ar-IQ', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            }
+            // If it's already a Date object or string (less likely from Firestore)
+            try {
+                 return new Date(timestamp).toLocaleString('ar-IQ', {
+                     day: '2-digit', month: 'short', year: 'numeric',
+                     hour: '2-digit', minute: '2-digit'
+                 });
+            } catch (e) {
+                return 'تاريخ غير صالح';
+            }
+        }
 
         // --- Core Functions ---
 
         function renderItemsList() {
             if (!itemsListEl) return;
-            itemsListEl.innerHTML = ''; // Clear current list
+            itemsListEl.innerHTML = '';
+            const metadata = latestSnapshotMetadata;
 
-            const metadata = latestSnapshotMetadata; // Use the stored metadata
-
-            if (items.length === 0 && !metadata.fromCache) {
+            if (items.length === 0 && !metadata.fromCache && !isDefinitelyOffline) {
                 itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">لا توجد منتجات مضافة بعد.</p>';
-            } else if (items.length === 0 && metadata.fromCache) {
-                 itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل من التخزين المحلي...</p>';
-            }
-            else {
-                // Sort items: those with pending writes might appear slightly different or first/last
-                items.sort((a, b) => {
-                    // Basic sort by name primarily
-                    const nameCompare = a.name.localeCompare(b.name);
-                    return nameCompare;
-                     // Add more complex sorting if needed based on pending status etc.
-                });
-
+            } else if (items.length === 0 && (metadata.fromCache || isDefinitelyOffline)) {
+                 itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل أو لا توجد بيانات محلية...</p>';
+            } else {
+                items.sort((a, b) => a.name.localeCompare(b.name));
                 items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
                     card.setAttribute('data-id', item.id);
-
-                    // Check if this specific item has pending writes - using global metadata as approximation
-                    if (metadata.hasPendingWrites) {
-                         // Find if this specific item could have pending writes (heuristic: recently added/modified locally)
-                         // This requires more complex state tracking not implemented here.
-                         // We apply the style based on the global flag for simplicity.
-                         card.classList.add('has-pending-writes');
-                    }
-
-                    if (item.id === currentViewItemId || item.id === currentEditItemId) {
-                         card.classList.add('selected');
-                    }
+                    if (metadata.hasPendingWrites) { card.classList.add('has-pending-writes'); }
+                    if (item.id === currentViewItemId || item.id === currentEditItemId) { card.classList.add('selected'); }
 
                     card.innerHTML = `
                         <img class="item-icon" src="${item.icon || defaultIcon}" alt="${item.name}" loading="lazy" onerror="this.src='${defaultIcon}'">
@@ -447,17 +408,16 @@
         function showItemDetails(itemId) {
             const item = items.find(i => i.id === itemId);
             if (!item) {
-                detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج.</div>';
+                detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج المحدد.</div>';
                 currentViewItemId = null;
-                renderItemsList(); // Update list selection
-                return;
+                renderItemsList(); return;
             }
-             // Clear previous selection highlight only if different item or edit mode was active
             if (currentViewItemId !== itemId || currentEditItemId !== null) {
-                currentEditItemId = null; // Exit edit mode if active
-                currentViewItemId = itemId;
-                renderItemsList(); // Update list selection
+                currentEditItemId = null; currentViewItemId = itemId; renderItemsList();
             }
+
+            const createdAtFormatted = formatFirestoreTimestamp(item.createdAt);
+            const updatedAtFormatted = item.updatedAt ? formatFirestoreTimestamp(item.updatedAt) : 'لم يتم التعديل بعد';
 
             detailViewContainerEl.innerHTML = `
                 <div class="detail-content">
@@ -466,26 +426,23 @@
                     <p><strong>الكمية المتوفرة:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.stock}</span></p>
                     <p><strong>السعر:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
                     <p><strong>قيمة المخزون لهذا المنتج:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
-                     <p style="font-size: 0.8em; opacity: 0.6; text-align: center; margin-top: 20px;">معرف المنتج: ${item.id}</p>
-                     <div class="form-buttons">
-                         <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button>
+                     <div class="timestamp">
+                        أنشئ في: ${createdAtFormatted} <br> آخر تعديل: ${updatedAtFormatted}
                      </div>
+                     <div class="form-buttons" style="margin-top: 25px;">
+                         <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button>
+                         </div>
+                     <p style="font-size: 0.8em; opacity: 0.6; text-align: center; margin-top: 20px;">ID: ${item.id}</p>
                 </div>
             `;
-            // No need to call renderItemsList again here, it was called at the start
         }
 
         function showEditForm(itemId) {
             const item = items.find(i => i.id === itemId);
             if (!item) { showNotification("لم يتم العثور على المنتج للتعديل.", true); return; }
-
             if (currentEditItemId !== itemId || currentViewItemId !== null) {
-                 currentViewItemId = null; // Ensure detail view is off
-                 currentEditItemId = itemId;
-                 renderItemsList(); // Update list selection
+                 currentViewItemId = null; currentEditItemId = itemId; renderItemsList();
             }
-
-
             detailViewContainerEl.innerHTML = `
                 <div class="edit-form-container">
                     <h3><span class="icon" style="margin-left: 8px;">✏️</span>تعديل المنتج</h3>
@@ -509,67 +466,35 @@
         function cancelEdit() {
             const previousEditId = currentEditItemId;
             currentEditItemId = null;
-            if (previousEditId && items.some(i => i.id === previousEditId)) {
-                 showItemDetails(previousEditId);
-             } else {
-                 detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>';
-                 currentViewItemId = null;
-                 renderItemsList();
-             }
+            if (previousEditId && items.some(i => i.id === previousEditId)) { showItemDetails(previousEditId); }
+            else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>'; currentViewItemId = null; renderItemsList(); }
         }
 
         async function addItem() {
-            if (!db) { showNotification("خطأ: قاعدة البيانات غير متصلة.", true); return; }
-            if (!addFormButton) { console.error("Add button not found"); return; } // Safety check
-
-            const nameInput = document.getElementById('itemName');
-            const stockInput = document.getElementById('itemStock');
-            const priceInput = document.getElementById('itemPrice');
-            const name = nameInput.value.trim();
-            const stock = parseInt(stockInput.value);
-            const price = parseFloat(priceInput.value);
+            if (!db || !addFormButton) { showNotification("خطأ: قاعدة البيانات غير جاهزة أو الزر غير موجود.", true); return; }
+            const nameInput = document.getElementById('itemName'), stockInput = document.getElementById('itemStock'), priceInput = document.getElementById('itemPrice');
+            const name = nameInput.value.trim(), stock = parseInt(stockInput.value), price = parseFloat(priceInput.value);
             let icon = icons[Math.floor(Math.random() * icons.length)];
+            if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء جميع الحقول بقيم صحيحة!', true); return; }
 
-            if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) {
-                showNotification('يرجى ملء جميع الحقول بقيم صحيحة!', true); return;
-            }
-
-            addFormButton.disabled = true; // Disable button immediately
-            addFormButton.innerHTML = '<span class="icon">⏳</span> جارٍ الإضافة...';
-
-            const newItemData = { name, stock, price, icon, createdAt: serverTimestamp() };
+            addFormButton.disabled = true; addFormButton.innerHTML = '<span class="icon">⏳</span> جارٍ الإضافة...';
+            const newItemData = { name, stock, price, icon, createdAt: serverTimestamp(), updatedAt: null }; // Add updatedAt as null initially
 
             try {
                 const docRef = await addDoc(collection(db, 'clothes'), newItemData);
-                // Listener updates UI. Show appropriate message.
-                if (isOffline) {
-                    showNotification('✅ تم الحفظ محلياً. ستتم المزامنة عند عودة الاتصال.', false, 'warning');
-                } else {
-                    // Check if write is still pending shortly after (small delay might be needed for metadata)
-                    setTimeout(() => {
-                        if(latestSnapshotMetadata.hasPendingWrites) {
-                             showNotification('✅ تم الحفظ محلياً. جارٍ المزامنة...', false, 'warning');
-                        } else {
-                             showNotification('تمت إضافة المنتج بنجاح!', false, 'success');
-                        }
-                    }, 300); // Short delay to check pending status
-                }
-                hideAddForm();
-                nameInput.value = ''; stockInput.value = ''; priceInput.value = '';
-
-            } catch (error) {
-                showNotification('حدث خطأ أثناء إضافة المنتج.', true);
-                console.error("Error adding document: ", error);
-            } finally {
-                 addFormButton.disabled = false; // Re-enable button
-                 addFormButton.innerHTML = '<span class="icon">➕</span> إضافة المنتج';
-            }
+                if (isDefinitelyOffline) { showNotification('✅ تم الحفظ محلياً. ستتم المزامنة عند عودة الاتصال.', false, 'warning'); }
+                else { setTimeout(() => { // Check pending status after short delay
+                         showNotification(latestSnapshotMetadata.hasPendingWrites ? '✅ تم الحفظ محلياً. جارٍ المزامنة...' : 'تمت إضافة المنتج بنجاح!', false, latestSnapshotMetadata.hasPendingWrites ? 'warning' : 'success');
+                     }, 300); }
+                hideAddForm(); nameInput.value = ''; stockInput.value = ''; priceInput.value = '';
+            } catch (error) { showNotification('حدث خطأ أثناء إضافة المنتج.', true); console.error("Error adding document: ", error);
+            } finally { addFormButton.disabled = false; addFormButton.innerHTML = '<span class="icon">➕</span> إضافة المنتج'; }
         }
 
         async function updateItem() {
              if (!db) { showNotification("خطأ: قاعدة البيانات غير متصلة.", true); return; }
              const updateButton = document.getElementById('updateItemBtn');
-             if(updateButton) updateButton.disabled = true; // Disable update button
+             if(updateButton) updateButton.disabled = true;
 
             const itemId = document.getElementById('editItemId').value;
             const name = document.getElementById('editItemName').value.trim();
@@ -578,54 +503,66 @@
             let iconUrl = document.getElementById('editItemIcon').value.trim();
 
             if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) {
-                showNotification('يرجى ملء الحقول المطلوبة بقيم صحيحة!', true);
-                 if(updateButton) updateButton.disabled = false;
-                return;
+                showNotification('يرجى ملء الحقول بقيم صحيحة!', true); if(updateButton) updateButton.disabled = false; return;
             }
 
-            const currentItem = items.find(i => i.id === itemId);
-            if (!iconUrl && currentItem) { iconUrl = currentItem.icon; }
-
             const itemRef = doc(db, 'clothes', itemId);
-            const updatedData = { name, stock, price, icon: iconUrl || defaultIcon };
+            const historyRef = collection(db, 'clothes', itemId, 'history'); // Reference to history subcollection
 
             try {
-                await updateDoc(itemRef, updatedData);
-                if (isOffline) {
-                    showNotification('✅ تم حفظ التعديل محلياً. ستتم المزامنة.', false, 'warning');
-                } else {
-                     setTimeout(() => { // Delay check for pending writes
-                         if(latestSnapshotMetadata.hasPendingWrites) {
-                             showNotification('✅ تم حفظ التعديل محلياً. جارٍ المزامنة...', false, 'warning');
-                         } else {
-                             showNotification('تم تحديث المنتج بنجاح!', false, 'success');
-                         }
-                     }, 300);
-                }
-                 currentEditItemId = null;
-                 showItemDetails(itemId); // Show updated details
+                 // 1. Get current data to compare for history log
+                 const currentDocSnap = await getDoc(itemRef);
+                 if (!currentDocSnap.exists()) { throw new Error("Document does not exist!"); }
+                 const currentData = currentDocSnap.data();
+
+                 // If iconUrl is empty in form, keep the existing one
+                 if (!iconUrl) { iconUrl = currentData.icon || defaultIcon; }
+
+                 // 2. Prepare updated data
+                 const updatedData = { name, stock, price, icon: iconUrl, updatedAt: serverTimestamp() };
+
+                 // 3. Prepare history log entry (only if data changed)
+                 const logEntry = { timestamp: serverTimestamp(), changes: {} };
+                 if (currentData.name !== name) logEntry.changes.name = { old: currentData.name, new: name };
+                 if (currentData.stock !== stock) logEntry.changes.stock = { old: currentData.stock, new: stock };
+                 if (currentData.price !== price) logEntry.changes.price = { old: currentData.price, new: price };
+                 if (currentData.icon !== iconUrl) logEntry.changes.icon = { old: currentData.icon, new: iconUrl };
+
+                 // 4. Use a batch write for atomicity
+                 const batch = writeBatch(db);
+                 batch.update(itemRef, updatedData); // Update the main document
+
+                 if (Object.keys(logEntry.changes).length > 0) { // Only add log if something changed
+                     batch.add(doc(historyRef), logEntry); // Add a new document to history subcollection
+                     console.log("History log entry prepared:", logEntry);
+                 }
+
+                 // 5. Commit the batch
+                 await batch.commit();
+
+                // 6. Show notification
+                if (isDefinitelyOffline) { showNotification('✅ تم حفظ التعديل محلياً. ستتم المزامنة.', false, 'warning'); }
+                else { setTimeout(() => { showNotification(latestSnapshotMetadata.hasPendingWrites ? '✅ تم الحفظ محلياً. جارٍ المزامنة...' : 'تم تحديث المنتج بنجاح!', false, latestSnapshotMetadata.hasPendingWrites ? 'warning' : 'success'); }, 300); }
+                 currentEditItemId = null; showItemDetails(itemId);
 
             } catch (error) {
-                showNotification('حدث خطأ أثناء تحديث المنتج.', true);
-                console.error("Error updating document: ", error);
+                showNotification('حدث خطأ أثناء تحديث المنتج.', true); console.error("Error updating document or logging history: ", error);
             } finally {
                  if(updateButton) updateButton.disabled = false;
             }
         }
 
         function showConfirmModal(itemId, itemName) {
+            // ... (Modal display logic remains the same, ensure button cloning)
             if (!itemId) return;
             const safeItemName = itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             confirmMessageEl.innerHTML = `هل أنت متأكد أنك تريد حذف المنتج: <strong style="color: var(--danger);">${safeItemName}</strong>؟`;
-
             const currentBtn = document.getElementById('confirmDeleteBtn');
-            const newConfirmBtn = currentBtn.cloneNode(true); // Clone to remove old listeners
+            const newConfirmBtn = currentBtn.cloneNode(true);
             currentBtn.parentNode.replaceChild(newConfirmBtn, currentBtn);
-
-            newConfirmBtn.onclick = () => deleteItem(itemId); // Assign delete action to the NEW button
+            newConfirmBtn.onclick = () => deleteItem(itemId);
             newConfirmBtn.style.backgroundColor = 'var(--danger)';
             newConfirmBtn.innerHTML = '<span class="icon">✔️</span> نعم، احذف';
-
             confirmModalEl.classList.add('show');
         }
 
@@ -633,50 +570,34 @@
 
         async function deleteItem(itemId) {
              if (!db) { showNotification("خطأ: قاعدة البيانات غير متصلة.", true); return; }
-            hideConfirmModal();
-            if (!itemId) return;
+            hideConfirmModal(); if (!itemId) return;
 
-             // Disable delete button temporarily if possible (more complex to find original button)
-             // ...
+            // Note: Deleting history subcollection is harder. Usually, just delete the main doc.
+            // If history needs deletion, query all docs in subcollection and delete in a batch.
+            // For now, just delete the main doc. History remains but becomes orphaned.
 
             try {
                 await deleteDoc(doc(db, 'clothes', itemId));
-                 if (isOffline) {
-                    showNotification('✅ تم الحذف محلياً. ستتم المزامنة.', false, 'warning');
-                } else {
-                     setTimeout(() => { // Delay check for pending writes
-                         if(latestSnapshotMetadata.hasPendingWrites && items.some(i => i.id === itemId)) { // Check if item still exists locally due to pending delete
-                             showNotification('✅ تم الحذف محلياً. جارٍ المزامنة...', false, 'warning');
-                         } else if (!items.some(i => i.id === itemId)) { // Check if actually removed from list
-                             showNotification('تم حذف المنتج بنجاح.', false, 'success');
-                         }
-                     }, 300);
-                }
-                if (currentViewItemId === itemId) {
-                    currentViewItemId = null;
-                    detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج.</div>';
-                }
-                 if (currentEditItemId === itemId) {
-                    currentEditItemId = null;
-                    detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>';
-                }
-            } catch (error) {
-                showNotification('حدث خطأ أثناء حذف المنتج.', true);
-                console.error("Error deleting document: ", error);
-            }
+                 if (isDefinitelyOffline) { showNotification('✅ تم الحذف محلياً. ستتم المزامنة.', false, 'warning'); }
+                 else { setTimeout(() => { showNotification(latestSnapshotMetadata.hasPendingWrites && items.some(i => i.id === itemId) ? '✅ تم الحذف محلياً. جارٍ المزامنة...' : 'تم حذف المنتج بنجاح.', false, latestSnapshotMetadata.hasPendingWrites ? 'warning' : 'success'); }, 300); }
+                if (currentViewItemId === itemId) { currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج.</div>'; }
+                 if (currentEditItemId === itemId) { currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>'; }
+                 // Listener will update the list
+            } catch (error) { showNotification('حدث خطأ أثناء حذف المنتج.', true); console.error("Error deleting document: ", error); }
         }
 
         function updateTotalPrice() {
-            const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
-            if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
+            // ... (Price calculation remains the same) ...
+             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
+             if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
         }
 
         function generateReport() {
-            // ... (generateReport function remains largely the same as before) ...
+            // ... (Report generation remains the same) ...
              if (items.length === 0) { showNotification("لا توجد منتجات لإنشاء تقرير.", true); return; }
             let reportContent = `تقرير مخزون المنتجات\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n========================================\n\n`;
             items.forEach((item, index) => {
-                reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n----------------------------------------\n`;
+                reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)}\n   آخر تعديل: ${item.updatedAt ? formatFirestoreTimestamp(item.updatedAt) : '-'}\n----------------------------------------\n`;
             });
             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
             reportContent += `\nإجمالي قيمة المخزون: ${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}\nإجمالي عدد أنواع المنتجات: ${items.length}\n`;
@@ -687,73 +608,71 @@
                 a.href = url; a.download = `Product_Report_${new Date().toISOString().slice(0,10)}.txt`;
                 document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
                 showNotification("تم إنشاء وتنزيل التقرير بنجاح.", false, 'success');
-            } catch (e) {
-                showNotification("فشل إنشاء التقرير.", true); console.error("Error generating report blob/link:", e);
-                alert("فشل تنزيل التقرير. سيتم عرضه الآن:\n\n" + reportContent);
-            }
+            } catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Error generating report blob/link:", e); alert("فشل تنزيل التقرير. سيتم عرضه الآن:\n\n" + reportContent); }
         }
 
         function toggleDarkMode() {
-            const isDarkMode = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false');
-            // Update control panel icon
-            const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
-            if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙';
-            if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
-
+             // ... (Dark mode toggle remains the same, including button icon update) ...
+             const isDarkMode = document.body.classList.toggle('dark-mode');
+             localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false');
+             const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
+             if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙';
+             if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
         }
 
         function showAddForm() { addFormModalEl.classList.add('show'); }
         function hideAddForm() { addFormModalEl.classList.remove('show'); }
 
         function showNotification(message, isError = false, type = 'normal') {
-            if (!toastEl) return;
-            toastEl.textContent = message;
-            toastEl.className = 'toast'; // Reset classes
-            if (isError) toastEl.classList.add('error');
-            else if (type === 'warning') toastEl.classList.add('warning');
-            else if (type === 'success') toastEl.classList.add('success');
-            toastEl.classList.add('show');
-            setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
+             // ... (Notification display logic remains the same) ...
+              if (!toastEl) return;
+             toastEl.textContent = message;
+             toastEl.className = 'toast'; // Reset classes
+             if (isError) toastEl.classList.add('error');
+             else if (type === 'warning') toastEl.classList.add('warning');
+             else if (type === 'success') toastEl.classList.add('success');
+             toastEl.classList.add('show');
+             setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
         }
+
+        // --- Update Connection Status ---
+        function updateConnectionStatusUI(online) {
+            isDefinitelyOffline = !online;
+            offlineBannerEl.classList.toggle('show', !online);
+             connectionStatusDotEl.className = 'connection-status-dot'; // Reset
+             if (online) {
+                 // If online, dot depends on whether sync is happening (hasPendingWrites)
+                 connectionStatusDotEl.classList.add(latestSnapshotMetadata.hasPendingWrites ? 'syncing' : 'connected');
+                 connectionStatusDotEl.title = latestSnapshotMetadata.hasPendingWrites ? 'متصل (جارٍ المزامنة...)' : 'متصل';
+             } else {
+                 // Offline
+                 connectionStatusDotEl.classList.add('disconnected');
+                 connectionStatusDotEl.title = 'غير متصل';
+             }
+        }
+
 
         // --- Initialization ---
         async function initializeAppAndFirestore() {
+             connectionStatusDotEl.className = 'connection-status-dot connecting'; // Initial state
+             connectionStatusDotEl.title = 'جارٍ الاتصال...';
+
             try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                await enableIndexedDbPersistence(db);
-                console.log("Firestore offline persistence enabled.");
+                app = initializeApp(firebaseConfig); db = getFirestore(app);
+                await enableIndexedDbPersistence(db); console.log("Offline persistence enabled.");
                 showNotification("✅ تم تمكين التخزين المحلي.", false, 'success');
-                if (detailViewContainerEl.querySelector('.detail-placeholder')) {
-                    detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم الاتصال. جارٍ تحميل المنتجات...</div>';
-                }
-            } catch (err) {
-                if (err.code === 'failed-precondition') {
-                    console.warn("Persistence failed (multiple tabs?). Operating online only.");
-                    showNotification("⚠️ لم يتم تمكين التخزين المحلي (ربما بسبب فتح علامات تبويب متعددة).", false, 'warning');
-                    if (!db) db = getFirestore(app); // Initialize without persistence
-                } else { /* ... other error handling ... */
-                    console.error("Firebase init/persistence error:", err);
-                    showNotification("❌ خطأ فادح في تهيئة Firebase!", true);
-                    if (detailViewContainerEl.querySelector('.detail-placeholder')) {
-                         detailViewContainerEl.innerHTML = '<div class="detail-placeholder" style="color: var(--danger);">فشل الاتصال بقاعدة البيانات.</div>';
-                    }
-                    return;
-                }
+                if (detailViewContainerEl.querySelector('.detail-placeholder')) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم الاتصال. جارٍ تحميل المنتجات...</div>'; }
+            } catch (err) { /* ... Error handling as before ... */
+                 if (err.code === 'failed-precondition') { console.warn("Persistence failed (multiple tabs?). Operating online only."); showNotification("⚠️ لم يتم تمكين التخزين المحلي (ربما بسبب فتح علامات تبويب متعددة).", false, 'warning'); if (!db) db = getFirestore(app); }
+                 else { console.error("Firebase init/persistence error:", err); showNotification("❌ خطأ فادح في تهيئة Firebase!", true); if (detailViewContainerEl.querySelector('.detail-placeholder')) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder" style="color: var(--danger);">فشل الاتصال بقاعدة البيانات.</div>'; } return; }
             }
 
-            // Apply saved theme & Update theme button icon
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.classList.add('dark-mode');
-                 const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
-                 if(themeButton) themeButton.innerHTML = '☀️'; // Sun icon if dark mode is loaded
-                 if(themeButton) themeButton.title = 'تبديل للوضع الفاتح';
-            } else {
-                 const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
-                 if(themeButton) themeButton.innerHTML = '🌙'; // Moon icon if light mode is loaded
-                 if(themeButton) themeButton.title = 'تبديل للوضع الداكن';
-            }
+            // Apply theme & update button icon
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) document.body.classList.add('dark-mode');
+             const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
+             if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙';
+             if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
 
 
             // --- Firestore Snapshot Listener ---
@@ -762,60 +681,49 @@
                  const q = query(itemsCollection, orderBy('createdAt', 'desc'));
 
                  unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-                    latestSnapshotMetadata = snapshot.metadata; // Store metadata globally
-                    isOffline = latestSnapshotMetadata.fromCache;
+                    latestSnapshotMetadata = snapshot.metadata; // Store metadata
+                    // Update connection status based on cache ONLY if navigator doesn't report offline
+                    // isDefinitelyOffline is the primary source now via events.
+                    updateConnectionStatusUI(navigator.onLine); // Update dot based on browser status + pending writes
 
-                    connectionStatusDotEl.className = 'connection-status-dot'; // Reset classes
-                    connectionStatusDotEl.classList.add(isOffline ? 'disconnected' : 'connected');
-                    connectionStatusDotEl.title = isOffline ? 'غير متصل (يستخدم التخزين المحلي)' : 'متصل';
-                    offlineBannerEl.classList.toggle('show', isOffline);
+                    items = snapshot.docs.map(doc => {
+                         const data = doc.data();
+                         // Ensure timestamps are converted correctly if needed (usually handled)
+                         return {
+                             id: doc.id,
+                             ...data,
+                             createdAt: data.createdAt || null, // Handle cases where it might be missing
+                             updatedAt: data.updatedAt || null
+                         };
+                     });
 
-                    items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     renderItemsList(); // Render based on new items and metadata
 
-                    // Update detail/edit view intelligently
-                    if (currentViewItemId && !items.some(i => i.id === currentViewItemId)) { // Item viewed was deleted
-                        currentViewItemId = null;
-                        detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تشاهده.</div>';
-                    } else if (currentViewItemId && items.some(i => i.id === currentViewItemId)) { // Item viewed still exists
-                         // Optional: Only refresh if data actually changed?
-                         // const currentItemDataInSnapshot = items.find(i => i.id === currentViewItemId);
-                         // if (JSON.stringify(currentItemDataInSnapshot) !== JSON.stringify(currentlyDisplayedData)) {
-                         //     showItemDetails(currentViewItemId); // Refresh if data differs
-                         // }
-                         // Simple approach: refresh always if viewed
-                         showItemDetails(currentViewItemId);
-                    }
+                    // Update detail/edit view if needed
+                     if (currentViewItemId && !items.some(i => i.id === currentViewItemId)) { /* ... handle deletion ... */ currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تشاهده.</div>';}
+                     else if (currentViewItemId) { showItemDetails(currentViewItemId); } // Refresh viewed item
 
-                    if (currentEditItemId && !items.some(i => i.id === currentEditItemId)) { // Item edited was deleted
-                        currentEditItemId = null;
-                        detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>';
-                    }
-                    // No automatic refresh for edit form while editing
+                     if (currentEditItemId && !items.some(i => i.id === currentEditItemId)) { /* ... handle deletion ... */ currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>';}
 
                     // Update placeholder if needed
-                     if (!currentViewItemId && !currentEditItemId) {
-                          if (items.length > 0) {
-                               if (detailViewContainerEl.querySelector('.detail-placeholder')) {
-                                   detailViewContainerEl.innerHTML = '<div class="detail-placeholder">حدد منتجًا من القائمة لعرض التفاصيل.</div>';
-                               }
-                          } else if (!isOffline) { // No items, online
-                               detailViewContainerEl.innerHTML = '<div class="detail-placeholder">ابدأ بإضافة منتجات جديدة!</div>';
-                          } else { // No items, offline
-                               detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لا توجد بيانات مخزنة محليًا أو تمت مزامنتها.</div>';
-                          }
+                     if (!currentViewItemId && !currentEditItemId) { /* ... update placeholder based on items.length and isDefinitelyOffline ... */
+                         if (items.length > 0) { if (detailViewContainerEl.querySelector('.detail-placeholder')) detailViewContainerEl.innerHTML = '<div class="detail-placeholder">حدد منتجًا من القائمة لعرض التفاصيل.</div>'; }
+                         else if (!isDefinitelyOffline) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">ابدأ بإضافة منتجات جديدة!</div>'; }
+                         else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لا توجد بيانات مخزنة محليًا أو تمت مزامنتها.</div>'; }
                      }
 
-
-                }, (error) => {
-                    console.error("Error in Firestore listener:", error);
-                    showNotification("حدث خطأ أثناء استقبال التحديثات.", true);
-                    connectionStatusDotEl.className = 'connection-status-dot disconnected';
-                    connectionStatusDotEl.title = 'خطأ في الاتصال';
-                    isOffline = true; // Assume offline on listener error
-                    offlineBannerEl.classList.add('show');
+                }, (error) => { /* ... Error handling ... */
+                     console.error("Error in Firestore listener:", error); showNotification("حدث خطأ أثناء استقبال التحديثات.", true);
+                     updateConnectionStatusUI(false); // Assume offline on listener error
                 });
              }
+
+             // --- Browser Online/Offline Event Listeners ---
+             window.addEventListener('online', () => updateConnectionStatusUI(true));
+             window.addEventListener('offline', () => updateConnectionStatusUI(false));
+             // Initial status check
+             updateConnectionStatusUI(navigator.onLine);
+
 
              // Make functions globally accessible
              window.addItem = addItem; window.updateItem = updateItem; window.deleteItem = deleteItem;
@@ -827,12 +735,8 @@
 
         // Start the App
         document.addEventListener('DOMContentLoaded', initializeAppAndFirestore);
-
         // Cleanup listener on page unload
-        window.addEventListener('beforeunload', () => {
-            if (unsubscribeSnapshot) unsubscribeSnapshot();
-            // Consider terminate(db) if strict cleanup is needed, but usually not required with persistence.
-        });
+        window.addEventListener('beforeunload', () => { if (unsubscribeSnapshot) unsubscribeSnapshot(); });
 
     </script>
 
