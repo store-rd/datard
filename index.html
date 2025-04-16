@@ -453,9 +453,9 @@
                 <div class="detail-content">
                      <img src="${item.icon || defaultIcon}" alt="${item.name}" class="detail-icon" onerror="this.src='${defaultIcon}'">
                     <h2>${item.name}</h2>
-                    <p><strong>الكمية المتوفرة:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.stock}</span></p>
+                    <p><strong>الكمية المبيوعة:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.stock}</span></p>
                     <p><strong>السعر:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
-                    <p><strong>قيمة المخزون:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
+                    <p><strong>اجمالي ارباح:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
                      <div class="timestamp">
                         أنشئ في: ${createdAtFormatted} <br> آخر تعديل: ${updatedAtFormatted}
                      </div>
