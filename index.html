@@ -2,7 +2,7 @@
 <html lang="ar" class="no-js" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إدارة المنتجات - حالة الاتصال المحسّنة</title>
+    <title>إدارة المنتجات السريعة</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,13 +20,14 @@
             --dark: #34495e; /* Dark Blue/Grey */
             --light: #ecf0f1; /* Light Grey */
             --grey-light: #f8f9fa;
-            --grey-dark: #bdc3c7;
+            --grey-dark: #bdc3c7; /* Lighter Grey */
             --offline-indicator: #f39c12; /* Orange */
             --syncing-indicator: var(--offline-indicator); /* Use same color for syncing dot */
             --connecting-indicator: #adb5bd; /* Grey for connecting dot */
-            --timestamp-color: #7f8c8d;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --shadow-color-darker: rgba(0, 0, 0, 0.15);
+            --timestamp-color: #7f8c8d; /* Grey for timestamps */
+            --shadow-color: rgba(0, 0, 0, 0.08); /* Softer shadow */
+            --shadow-color-darker: rgba(0, 0, 0, 0.12);
+             /* Font variable */
             --font-primary: 'Tajawal', 'Changa', sans-serif;
         }
 
@@ -36,10 +37,11 @@
             font-family: var(--font-primary); background: linear-gradient(135deg, var(--light), #ffffff);
             color: var(--dark); display: flex; height: 100vh; overflow: hidden;
             transition: background-color 0.5s, color 0.5s; font-size: 16px;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
         body.dark-mode {
             background: linear-gradient(135deg, #34495e, #2c3e50); color: var(--light);
-            --shadow-color: rgba(255, 255, 255, 0.08); --shadow-color-darker: rgba(255, 255, 255, 0.12);
+            --shadow-color: rgba(255, 255, 255, 0.06); --shadow-color-darker: rgba(255, 255, 255, 0.1);
              --grey-light: #4a4a4a; --grey-dark: #5a5a5a; --light: #343a40; --dark: #ecf0f1;
              --timestamp-color: #95a5a6;
         }
@@ -61,27 +63,29 @@
         .dark-mode .sidebar { background: #2c3e50; border-left-color: #495057; box-shadow: -3px 0 12px var(--shadow-color-darker); }
         .sidebar-header {
              padding: 18px 22px; border-bottom: 1px solid #dee2e6; font-size: 1.4em; font-weight: 700;
-             color: var(--dark); flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: space-between; /* Space between title and dot */
+             color: var(--dark); flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: space-between;
         }
          .dark-mode .sidebar-header { border-bottom-color: #495057; color: var(--light); }
          .connection-status-dot {
-             width: 12px; height: 12px; border-radius: 50%; background-color: var(--connecting-indicator); /* Initial grey */
+             width: 12px; height: 12px; border-radius: 50%; background-color: var(--connecting-indicator);
              display: inline-block; transition: background-color 0.5s, box-shadow 0.3s; flex-shrink: 0;
              border: 1px solid rgba(0,0,0,0.1);
          }
-         .connection-status-dot.connecting { background-color: var(--connecting-indicator); }
-         .connection-status-dot.connected { background-color: #2ecc71; border-color: #27ae60; box-shadow: 0 0 5px rgba(46, 204, 113, 0.7); }
-         .connection-status-dot.syncing { background-color: var(--syncing-indicator); border-color: #d35400; box-shadow: 0 0 5px rgba(243, 156, 18, 0.7); }
-         .connection-status-dot.disconnected { background-color: #e74c3c; border-color: #c0392b; box-shadow: 0 0 5px rgba(231, 76, 60, 0.7); }
+         .connection-status-dot.connecting { background-color: var(--connecting-indicator); animation: pulse 1.5s infinite ease-in-out; }
+         .connection-status-dot.connected { background-color: #2ecc71; border-color: #27ae60; box-shadow: 0 0 5px rgba(46, 204, 113, 0.7); animation: none; }
+         .connection-status-dot.syncing { background-color: var(--syncing-indicator); border-color: #d35400; box-shadow: 0 0 5px rgba(243, 156, 18, 0.7); animation: pulse 1s infinite ease-in-out; }
+         .connection-status-dot.disconnected { background-color: #e74c3c; border-color: #c0392b; box-shadow: 0 0 5px rgba(231, 76, 60, 0.7); animation: none; }
          .dark-mode .connection-status-dot { border-color: rgba(255,255,255,0.2); }
+         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         #items-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
+         /* Add will-change for potentially faster rendering updates, might be minor */
          .item-card {
             padding: 12px; margin-bottom: 12px; background: #ffffff; border: 1px solid #e9ecef;
             border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; display: flex; align-items: center; gap: 12px;
-            position: relative; border-left: 5px solid transparent;
+            position: relative; border-left: 5px solid transparent; will-change: transform, box-shadow, background-color;
         }
-         .item-card.has-pending-writes { border-left-color: var(--syncing-indicator); opacity: 0.9; } /* Use syncing color */
+         .item-card.has-pending-writes { border-left-color: var(--syncing-indicator); opacity: 0.9; }
         .dark-mode .item-card { background: #34495e; border-color: #495057; }
         .item-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px var(--shadow-color); border-color: #ced4da; z-index: 1; }
          .dark-mode .item-card:hover { background: #495057; border-color: #6c757d; }
@@ -89,8 +93,8 @@
           .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
          .dark-mode .item-card.selected { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4); }
           .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
-        .item-icon { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .dark-mode .item-icon { border-color: #495057; }
+        .item-icon { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #eee; } /* Added bg color */
+        .dark-mode .item-icon { border-color: #495057; background-color: #555; }
         .item-card.selected .item-icon { border-color: rgba(255, 255, 255, 0.6); }
         .item-details { flex-grow: 1; overflow: hidden; }
         .item-details h4 { margin: 0 0 4px 0; font-size: 1.1em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -101,7 +105,7 @@
         .item-actions button { background: rgba(0,0,0,0.05); border: none; color: var(--dark); cursor: pointer; padding: 6px; font-size: 1.1em; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .dark-mode .item-actions button { background: rgba(255,255,255,0.1); color: var(--light); }
         .item-card.selected .item-actions button { background: rgba(255,255,255,0.2); color: white; }
-        .item-actions button:hover { transform: scale(1.15); } /* Slightly bigger hover effect */
+        .item-actions button:hover { transform: scale(1.15); }
         .item-actions .edit-btn:hover { background-color: var(--info); color: white; }
         .item-actions .delete-btn:hover { background-color: var(--danger); color: white; }
         .sidebar-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; flex-shrink: 0; background-color: #f8f9fa; }
@@ -123,9 +127,10 @@
          .dark-mode .detail-placeholder { color: #adb5bd; }
          .detail-content, .edit-form-container {
              background: var(--light); padding: 30px 35px; border-radius: 12px; border: 1px solid #dee2e6;
-             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); width: 100%; max-width: 550px; animation: fadeIn 0.5s ease-out;
+             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); width: 100%; max-width: 550px; animation: fadeIn 0.3s ease-out; /* Faster fade */
          }
          .dark-mode .detail-content, .dark-mode .edit-form-container { background: #2c3e50; border-color: #495057; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
+         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
          .detail-content h2, .edit-form-container h3 { margin-top: 0; margin-bottom: 25px; color: var(--primary); text-align: center; font-weight: 700; }
          .dark-mode .detail-content h2, .dark-mode .edit-form-container h3 { color: var(--secondary); }
          .detail-content p { margin-bottom: 15px; font-size: 1.1em; line-height: 1.7; }
@@ -133,8 +138,8 @@
          .dark-mode .detail-content p strong { color: var(--light); }
          .detail-content .timestamp { font-size: 0.9em; color: var(--timestamp-color); text-align: center; margin-top: 25px; border-top: 1px dashed var(--grey-dark); padding-top: 15px; line-height: 1.6; }
          .dark-mode .detail-content .timestamp { border-top-color: #495057; }
-         .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-         .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); }
+         .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #eee;}
+         .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); background-color: #555;}
          .edit-form-container label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95em; color: #555; }
          .dark-mode .edit-form-container label { color: #ccc; }
          .edit-form-container input { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s; }
@@ -209,7 +214,7 @@
             }
             .btn-magic { width: 50px; height: 50px; font-size: 1.6em; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
              .dark-mode .btn-magic { box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-            #toast { bottom: 85px; width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
+            #toast { bottom: 90px; /* Raise above controls */ width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
             .modal-content { width: 95%; padding: 25px; }
             .form-buttons { flex-direction: column; }
              .offline-banner { font-size: 0.8em; padding: 4px 8px; }
@@ -237,7 +242,7 @@
             </div>
         <div class="sidebar-footer">
             <div id="total-price-container">
-                إجمالي قيمة المخزون: <span id="total-price">0</span> د.ع
+                إجمالي : <span id="total-price">0</span> د.ع
             </div>
             <button class="report-btn" onclick="window.generateReport()" title="تنزيل تقرير المنتجات">
                 <span class="icon">📄</span> تقرير المخزون
@@ -250,11 +255,11 @@
              <button class="close-btn" onclick="window.hideAddForm()" title="إغلاق">&times;</button>
              <h3><span class="icon" style="margin-left: 8px;">📦</span>إضافة منتج جديد</h3>
              <label for="itemName">اسم المنتج:</label>
-             <input type="text" id="itemName" placeholder="مثال: قميص قطني أزرق" required>
-             <label for="itemStock">الكمية المتوفرة:</label>
-             <input type="number" id="itemStock" placeholder="مثال: 50" required min="0">
+             <input type="text" id="itemName" placeholder="مثال: قميص، تيشيرت، بنطلون جينز..." required>
+             <label for="itemStock">الكمية المباعة:</label>
+             <input type="number" id="itemStock" placeholder="0" required min="0">
              <label for="itemPrice">السعر (د.ع):</label>
-             <input type="number" id="itemPrice" placeholder="مثال: 25000" required min="0" step="500">
+             <input type="number" id="itemPrice" placeholder="0" required min="0" step="500">
              <div class="form-buttons" style="margin-top: 15px;">
                  <button id="addItemBtn" class="btn-save" onclick="window.addItem()"> <span class="icon">➕</span> إضافة المنتج</button>
                  <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
@@ -306,17 +311,57 @@
         // --- Global Variables & State ---
         let app; let db; let unsubscribeSnapshot = null;
         let items = []; let currentEditItemId = null; let currentViewItemId = null;
-        let isDefinitelyOffline = !navigator.onLine; // Use browser API for initial state
+        let isDefinitelyOffline = !navigator.onLine;
         let latestSnapshotMetadata = { fromCache: true, hasPendingWrites: false };
-        const defaultIcon = 'https://via.placeholder.com/45/bdc3c7/ffffff?text=?';
-        const icons = [ /* ... icon URLs ... */
-             'https://img.icons8.com/fluency/48/000000/t-shirt.png', 'https://img.icons8.com/fluency/48/000000/polo-shirt.png',
-            'https://img.icons8.com/fluency/48/000000/jeans.png', 'https://img.icons8.com/fluency/48/000000/dress.png',
-            'https://img.icons8.com/fluency/48/000000/jacket.png', 'https://img.icons8.com/fluency/48/000000/sneakers.png',
-            'https://img.icons8.com/fluency/48/000000/hat.png', 'https://img.icons8.com/fluency/48/000000/shorts.png',
-        ];
+        const defaultIcon = 'https://img.icons8.com/fluency/48/000000/hanger.png'; // Default hanger icon
+
+        // --- Keyword to Icon Mapping ---
+        const keywordIconMap = {
+            'قميص': 'https://img.icons8.com/fluency/48/000000/shirt.png',
+            'تيشيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
+            'تي شيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
+            'بولو': 'https://img.icons8.com/fluency/48/000000/polo-shirt.png',
+            'بنطلون': 'https://img.icons8.com/fluency/48/000000/pantaloon.png', // Pantaloon icon
+            'جينز': 'https://img.icons8.com/fluency/48/000000/jeans.png',
+            'سروال': 'https://img.icons8.com/fluency/48/000000/pantaloon.png',
+            'شورت': 'https://img.icons8.com/fluency/48/000000/shorts.png',
+            'برمودا': 'https://img.icons8.com/fluency/48/000000/bermuda-shorts.png',
+            'فستان': 'https://img.icons8.com/fluency/48/000000/dress.png',
+            'تنورة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
+            'جيبة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
+            'جاكيت': 'https://img.icons8.com/fluency/48/000000/jacket.png',
+            'سترة': 'https://img.icons8.com/fluency/48/000000/vest.png', // Vest icon
+            'معطف': 'https://img.icons8.com/fluency/48/000000/coat.png',
+            'بليزر': 'https://img.icons8.com/fluency/48/000000/blazer.png',
+            'هودي': 'https://img.icons8.com/fluency/48/000000/hoodie.png',
+            'كنزة': 'https://img.icons8.com/fluency/48/000000/sweater.png', // Sweater icon
+            'بلوفر': 'https://img.icons8.com/fluency/48/000000/sweater.png',
+            'حذاء': 'https://img.icons8.com/fluency/48/000000/trainers.png', // Trainers icon
+            'احذية': 'https://img.icons8.com/fluency/48/000000/trainers.png',
+            'رياضي': 'https://img.icons8.com/fluency/48/000000/sneakers.png',
+            'جزمة': 'https://img.icons8.com/fluency/48/000000/boot.png', // Boot icon
+            'كعب': 'https://img.icons8.com/fluency/48/000000/high-heels.png',
+            'صندل': 'https://img.icons8.com/fluency/48/000000/sandal.png',
+            'شبشب': 'https://img.icons8.com/fluency/48/000000/slippers.png',
+            'ملابس داخلية': 'https://img.icons8.com/fluency/48/000000/underwear.png',
+            'داخلي': 'https://img.icons8.com/fluency/48/000000/underwear.png',
+            'بدي': 'https://img.icons8.com/fluency/48/000000/bodysuit.png',
+            'بيجامة': 'https://img.icons8.com/fluency/48/000000/pajamas.png',
+            'قبعة': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png', // Cap icon
+            'طاقية': 'https://img.icons8.com/fluency/48/000000/winter-hat.png', // Winter hat
+            'كاب': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png',
+            'وشاح': 'https://img.icons8.com/fluency/48/000000/scarf.png',
+            'شال': 'https://img.icons8.com/fluency/48/000000/scarf.png',
+            'قفاز': 'https://img.icons8.com/fluency/48/000000/gloves.png',
+            'كفوف': 'https://img.icons8.com/fluency/48/000000/gloves.png',
+            'حزام': 'https://img.icons8.com/fluency/48/000000/belt.png',
+            'ربطة': 'https://img.icons8.com/fluency/48/000000/tie.png', // Tie icon
+            'حقيبة': 'https://img.icons8.com/fluency/48/000000/handbag.png', // Handbag icon
+            'شنطة': 'https://img.icons8.com/fluency/48/000000/school-bag.png' // School bag/backpack
+        };
 
         // --- DOM Elements ---
+        // (Same as before)
         const itemsListEl = document.getElementById('items-list');
         const detailViewContainerEl = document.getElementById('detail-view-container');
         const totalPriceEl = document.getElementById('total-price');
@@ -328,65 +373,56 @@
         const connectionStatusDotEl = document.getElementById('connectionStatus');
         const addFormButton = addFormModalEl?.querySelector('#addItemBtn');
 
+
         // --- Helper Functions ---
-        function formatFirestoreTimestamp(timestamp) {
-            if (!timestamp) return '-'; // Return dash if no timestamp
+        function formatFirestoreTimestamp(timestamp) { /* ... Same as before ... */
+            if (!timestamp) return '-';
             try {
-                 // Firestore Timestamps have a toDate() method
                 if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-                    return timestamp.toDate().toLocaleString('ar-IQ', {
-                        day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true
-                    });
+                    return timestamp.toDate().toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
                 }
-                // Fallback for potential Date objects (less likely directly from Firestore)
-                return new Date(timestamp).toLocaleString('ar-IQ', {
-                     day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true
-                 });
-            } catch(e) {
-                 console.error("Error formatting timestamp:", timestamp, e);
-                 return 'تاريخ غير صالح';
+                return new Date(timestamp).toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+            } catch(e) { return 'تاريخ غير صالح'; }
+        }
+
+         // Function to get icon based on name keywords
+        function getIconForName(name) {
+            if (!name) return defaultIcon;
+            const lowerCaseName = name.toLowerCase(); // Simple lowercase matching
+            // Iterate through keywords - maybe prioritize longer matches first?
+            const keywords = Object.keys(keywordIconMap).sort((a, b) => b.length - a.length); // Longer keywords first
+
+            for (const keyword of keywords) {
+                if (lowerCaseName.includes(keyword.toLowerCase())) {
+                    return keywordIconMap[keyword]; // Return the first (longest) match
+                }
             }
+            return defaultIcon; // Return default if no keyword matches
         }
 
          // --- Update Connection Status UI ---
-         function updateConnectionStatusUI(online) {
-            isDefinitelyOffline = !online; // Update global state
-            offlineBannerEl.classList.toggle('show', !online); // Show banner only if browser reports offline
-
-            connectionStatusDotEl.className = 'connection-status-dot'; // Reset dot classes
-             if (!online) {
-                 connectionStatusDotEl.classList.add('disconnected');
-                 connectionStatusDotEl.title = 'غير متصل بالإنترنت';
-             } else {
-                 // Online: check for pending writes from Firestore metadata
-                 if (latestSnapshotMetadata.hasPendingWrites) {
-                     connectionStatusDotEl.classList.add('syncing');
-                     connectionStatusDotEl.title = 'متصل (جارٍ مزامنة التغييرات...)';
-                 } else {
-                     connectionStatusDotEl.classList.add('connected');
-                     connectionStatusDotEl.title = 'متصل ومُحدَّث';
-                 }
-             }
+         function updateConnectionStatusUI(online) { /* ... Same as before ... */
+             isDefinitelyOffline = !online;
+             offlineBannerEl.classList.toggle('show', !online);
+             connectionStatusDotEl.className = 'connection-status-dot';
+             if (!online) { connectionStatusDotEl.classList.add('disconnected'); connectionStatusDotEl.title = 'غير متصل بالإنترنت'; }
+             else { if (latestSnapshotMetadata.hasPendingWrites) { connectionStatusDotEl.classList.add('syncing'); connectionStatusDotEl.title = 'متصل (جارٍ مزامنة التغييرات...)'; }
+                    else { connectionStatusDotEl.classList.add('connected'); connectionStatusDotEl.title = 'متصل ومُحدَّث'; } }
         }
 
-
         // --- Core Functions (renderItemsList, showItemDetails, showEditForm, cancelEdit) ---
-        // (These functions remain mostly the same as the previous version,
-        //  ensuring they use the latest `items` array and handle selection state correctly)
-        function renderItemsList() {
+        function renderItemsList() { /* ... Same as before ... */
             if (!itemsListEl) return;
             itemsListEl.innerHTML = '';
-            const metadata = latestSnapshotMetadata; // Use latest metadata
+            const metadata = latestSnapshotMetadata;
 
-            if (items.length === 0 && !metadata.fromCache && !isDefinitelyOffline) { /* ... placeholder ... */ itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">لا توجد منتجات مضافة بعد.</p>'; }
-            else if (items.length === 0 && (metadata.fromCache || isDefinitelyOffline)) { /* ... placeholder ... */ itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل أو لا توجد بيانات محلية...</p>';}
+            if (items.length === 0 && !metadata.fromCache && !isDefinitelyOffline) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">لا توجد منتجات مضافة بعد.</p>'; }
+            else if (items.length === 0 && (metadata.fromCache || isDefinitelyOffline)) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل أو لا توجد بيانات محلية...</p>';}
             else {
                 items.sort((a, b) => a.name.localeCompare(b.name));
                 items.forEach(item => {
                     const card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.setAttribute('data-id', item.id);
-                    // Use global metadata for pending writes indicator (approximation)
+                    card.className = 'item-card'; card.setAttribute('data-id', item.id);
                     if (metadata.hasPendingWrites) { card.classList.add('has-pending-writes'); }
                     if (item.id === currentViewItemId || item.id === currentEditItemId) { card.classList.add('selected'); }
 
@@ -407,15 +443,12 @@
             }
             updateTotalPrice();
         }
-
-        function showItemDetails(itemId) {
-            const item = items.find(i => i.id === itemId);
-            if (!item) { /* ... handle not found ... */ detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج المحدد.</div>'; currentViewItemId = null; renderItemsList(); return; }
+        function showItemDetails(itemId) { /* ... Same as before, includes timestamp display ... */
+             const item = items.find(i => i.id === itemId);
+            if (!item) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج المحدد.</div>'; currentViewItemId = null; renderItemsList(); return; }
             if (currentViewItemId !== itemId || currentEditItemId !== null) { currentEditItemId = null; currentViewItemId = itemId; renderItemsList(); }
-
             const createdAtFormatted = formatFirestoreTimestamp(item.createdAt);
-            const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt); // Will show '-' if null/undefined
-
+            const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt);
             detailViewContainerEl.innerHTML = `
                 <div class="detail-content">
                      <img src="${item.icon || defaultIcon}" alt="${item.name}" class="detail-icon" onerror="this.src='${defaultIcon}'">
@@ -426,17 +459,12 @@
                      <div class="timestamp">
                         أنشئ في: ${createdAtFormatted} <br> آخر تعديل: ${updatedAtFormatted}
                      </div>
-                     <div class="form-buttons" style="margin-top: 25px;">
-                         <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button>
-                     </div>
+                     <div class="form-buttons" style="margin-top: 25px;"> <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button> </div>
                      <p style="font-size: 0.8em; opacity: 0.6; text-align: center; margin-top: 20px;">ID: ${item.id}</p>
-                </div>
-            `;
+                </div>`;
         }
-
-        function showEditForm(itemId) {
-            const item = items.find(i => i.id === itemId);
-            if (!item) { /* ... handle not found ... */ showNotification("لم يتم العثور على المنتج للتعديل.", true); return; }
+        function showEditForm(itemId) { /* ... Same as before ... */
+            const item = items.find(i => i.id === itemId); if (!item) { showNotification("لم يتم العثور على المنتج للتعديل.", true); return; }
             if (currentEditItemId !== itemId || currentViewItemId !== null) { currentViewItemId = null; currentEditItemId = itemId; renderItemsList(); }
             detailViewContainerEl.innerHTML = `
                 <div class="edit-form-container">
@@ -448,50 +476,41 @@
                     <input type="number" id="editItemStock" value="${item.stock}" required min="0">
                     <label for="editItemPrice">السعر (د.ع):</label>
                     <input type="number" id="editItemPrice" value="${item.price}" required min="0" step="500">
-                    <label for="editItemIcon">رابط الأيقونة (اختياري):</label>
-                    <input type="text" id="editItemIcon" value="${item.icon || ''}" placeholder="اتركه فارغًا للاحتفاظ بالأيقونة الحالية">
-                    <div class="form-buttons">
-                        <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()"> <span class="icon">💾</span> حفظ التعديلات</button>
-                        <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button>
-                    </div>
-                </div>
-            `;
+                    <label for="editItemIcon">رابط الأيقونة (تلقائي أو يدوي):</label>
+                    <input type="text" id="editItemIcon" value="${item.icon || ''}" placeholder="اتركه فارغًا للتحديد التلقائي بناءً على الاسم">
+                    <div class="form-buttons"> <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()"> <span class="icon">💾</span> حفظ التعديلات</button> <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button> </div>
+                </div>`;
         }
-
-        function cancelEdit() {
-            const previousEditId = currentEditItemId;
-            currentEditItemId = null;
+        function cancelEdit() { /* ... Same as before ... */
+            const previousEditId = currentEditItemId; currentEditItemId = null;
             if (previousEditId && items.some(i => i.id === previousEditId)) { showItemDetails(previousEditId); }
-            else { /* ... handle cancel ... */ detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>'; currentViewItemId = null; renderItemsList(); }
+            else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>'; currentViewItemId = null; renderItemsList(); }
         }
 
         // --- Firestore Operations (Add, Update, Delete) ---
         async function addItem() {
-            if (!db || !addFormButton) { /* ... handle error ... */ return; }
+            if (!db || !addFormButton) { return; }
             const nameInput = document.getElementById('itemName'), stockInput = document.getElementById('itemStock'), priceInput = document.getElementById('itemPrice');
             const name = nameInput.value.trim(), stock = parseInt(stockInput.value), price = parseFloat(priceInput.value);
-            let icon = icons[Math.floor(Math.random() * icons.length)];
-            if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { /* ... validation ... */ showNotification('يرجى ملء الحقول بقيم صحيحة!', true); return; }
+            if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول بقيم صحيحة!', true); return; }
 
             addFormButton.disabled = true; addFormButton.innerHTML = '<span class="icon">⏳</span> جارٍ الإضافة...';
-            // Use serverTimestamp() for creation, null for update initially
+            // --- Get icon based on name ---
+            const icon = getIconForName(name);
+            // -----------------------------
             const newItemData = { name, stock, price, icon, createdAt: serverTimestamp(), updatedAt: null };
 
             try {
                 const docRef = await addDoc(collection(db, 'clothes'), newItemData);
-                // Listener updates UI. Show appropriate message based on *browser* online status primarily.
-                if (isDefinitelyOffline) { showNotification('✅ تم الحفظ محلياً. ستتم المزامنة عند عودة الاتصال.', false, 'warning'); }
-                else {
-                    // Assume success, listener will update pending status if needed
-                     showNotification('تمت إضافة المنتج بنجاح!', false, 'success');
-                }
+                if (isDefinitelyOffline) { showNotification('✅ تم الحفظ محلياً. ستتم المزامنة.', false, 'warning'); }
+                else { showNotification('تمت إضافة المنتج بنجاح!', false, 'success'); } // Assume online success initially
                 hideAddForm(); nameInput.value = ''; stockInput.value = ''; priceInput.value = '';
             } catch (error) { showNotification('حدث خطأ أثناء إضافة المنتج.', true); console.error("Error adding document: ", error);
             } finally { addFormButton.disabled = false; addFormButton.innerHTML = '<span class="icon">➕</span> إضافة المنتج'; }
         }
 
         async function updateItem() {
-             if (!db) { /* ... handle error ... */ return; }
+             if (!db) { return; }
              const updateButton = document.getElementById('updateItemBtn');
              if(updateButton) updateButton.disabled = true;
 
@@ -499,42 +518,46 @@
             const name = document.getElementById('editItemName').value.trim();
             const stock = parseInt(document.getElementById('editItemStock').value);
             const price = parseFloat(document.getElementById('editItemPrice').value);
-            let iconUrl = document.getElementById('editItemIcon').value.trim();
+            let iconUrl = document.getElementById('editItemIcon').value.trim(); // Manual icon override
 
-            if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { /* ... validation ... */ showNotification('يرجى ملء الحقول بقيم صحيحة!', true); if(updateButton) updateButton.disabled = false; return; }
+            if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول بقيم صحيحة!', true); if(updateButton) updateButton.disabled = false; return; }
 
             const itemRef = doc(db, 'clothes', itemId);
             const historyRef = collection(db, 'clothes', itemId, 'history');
 
             try {
-                 const currentDocSnap = await getDoc(itemRef); // Get current data for history
+                 const currentDocSnap = await getDoc(itemRef);
                  if (!currentDocSnap.exists()) { throw new Error("Document does not exist!"); }
                  const currentData = currentDocSnap.data();
-                 if (!iconUrl) { iconUrl = currentData.icon || defaultIcon; } // Retain old icon if empty
 
-                 const updatedData = { name, stock, price, icon: iconUrl, updatedAt: serverTimestamp() }; // Use serverTimestamp()
+                 // --- Get icon: Use manual input if provided, otherwise determine from NEW name ---
+                 if (!iconUrl) {
+                     iconUrl = getIconForName(name); // Determine icon from the potentially new name
+                 }
+                 // ----------------------------------------------------------------------------------
 
-                 const logEntry = { timestamp: serverTimestamp(), changes: {} }; // Use serverTimestamp() for log
+                 const updatedData = { name, stock, price, icon: iconUrl, updatedAt: serverTimestamp() };
+                 const logEntry = { timestamp: serverTimestamp(), changes: {} };
                  if (currentData.name !== name) logEntry.changes.name = { old: currentData.name, new: name };
                  if (currentData.stock !== stock) logEntry.changes.stock = { old: currentData.stock, new: stock };
                  if (currentData.price !== price) logEntry.changes.price = { old: currentData.price, new: price };
+                 // Only log icon change if it actually changed (comparing determined/manual new icon with old)
                  if (currentData.icon !== iconUrl) logEntry.changes.icon = { old: currentData.icon, new: iconUrl };
 
                  const batch = writeBatch(db);
                  batch.update(itemRef, updatedData);
-                 if (Object.keys(logEntry.changes).length > 0) { batch.set(doc(historyRef), logEntry); } // Use set for new doc in subcollection
+                 if (Object.keys(logEntry.changes).length > 0) { batch.set(doc(historyRef), logEntry); }
                  await batch.commit();
 
                 if (isDefinitelyOffline) { showNotification('✅ تم حفظ التعديل محلياً. ستتم المزامنة.', false, 'warning'); }
-                else { showNotification('تم تحديث المنتج بنجاح!', false, 'success'); }
+                else { showNotification('تم تحديث المنتج بنجاح!', false, 'success'); } // Assume online success
                  currentEditItemId = null; showItemDetails(itemId);
 
             } catch (error) { showNotification('حدث خطأ أثناء تحديث المنتج.', true); console.error("Error updating/logging: ", error);
             } finally { if(updateButton) updateButton.disabled = false; }
         }
 
-        function showConfirmModal(itemId, itemName) {
-            // ... (Same as before) ...
+        function showConfirmModal(itemId, itemName) { /* ... Same as before ... */
              if (!itemId) return;
              const safeItemName = itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
              confirmMessageEl.innerHTML = `هل أنت متأكد أنك تريد حذف المنتج: <strong style="color: var(--danger);">${safeItemName}</strong>؟`;
@@ -546,44 +569,35 @@
              newConfirmBtn.innerHTML = '<span class="icon">✔️</span> نعم، احذف';
              confirmModalEl.classList.add('show');
         }
-
         function hideConfirmModal() { confirmModalEl.classList.remove('show'); }
 
-        async function deleteItem(itemId) {
-             if (!db) { /* ... handle error ... */ return; }
-            hideConfirmModal(); if (!itemId) return;
-
+        async function deleteItem(itemId) { /* ... Same as before ... */
+             if (!db) { return; } hideConfirmModal(); if (!itemId) return;
             try {
                 await deleteDoc(doc(db, 'clothes', itemId));
                  if (isDefinitelyOffline) { showNotification('✅ تم الحذف محلياً. ستتم المزامنة.', false, 'warning'); }
                  else { showNotification('تم حذف المنتج بنجاح.', false, 'success'); }
-                if (currentViewItemId === itemId) { /* ... clear view ... */ currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج.</div>'; }
-                 if (currentEditItemId === itemId) { /* ... clear edit ... */ currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>'; }
-                 // Listener will remove from list.
+                if (currentViewItemId === itemId) { currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج.</div>'; }
+                 if (currentEditItemId === itemId) { currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>'; }
             } catch (error) { showNotification('حدث خطأ أثناء حذف المنتج.', true); console.error("Error deleting document: ", error); }
         }
 
-        function updateTotalPrice() {
-             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
+        function updateTotalPrice() { /* ... Same as before ... */
+            const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
              if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
         }
-
-        function generateReport() { /* ... Same as before, includes timestamps now ... */
+        function generateReport() { /* ... Same as before, includes timestamps ... */
             if (items.length === 0) { showNotification("لا توجد منتجات لإنشاء تقرير.", true); return; }
             let reportContent = `تقرير مخزون المنتجات\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n========================================\n\n`;
-            items.forEach((item, index) => {
-                reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)}\n   آخر تعديل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------------------------------\n`;
-            });
+            items.forEach((item, index) => { reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)}\n   آخر تعديل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------------------------------\n`; });
             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
             reportContent += `\nإجمالي قيمة المخزون: ${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}\nإجمالي عدد أنواع المنتجات: ${items.length}\n`;
             try { const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Product_Report_${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showNotification("تم إنشاء وتنزيل التقرير بنجاح.", false, 'success'); }
             catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Error generating report blob/link:", e); alert("فشل تنزيل التقرير. سيتم عرضه الآن:\n\n" + reportContent); }
         }
-
         function toggleDarkMode() { /* ... Same as before ... */
             const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false');
-             const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]');
-             if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
+             const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
         }
         function showAddForm() { addFormModalEl.classList.add('show'); }
         function hideAddForm() { addFormModalEl.classList.remove('show'); }
@@ -596,20 +610,19 @@
         // --- Initialization ---
         async function initializeAppAndFirestore() {
              connectionStatusDotEl.className = 'connection-status-dot connecting'; connectionStatusDotEl.title = 'جارٍ الاتصال...';
-             updateConnectionStatusUI(navigator.onLine); // Initial UI update based on browser status
+             updateConnectionStatusUI(navigator.onLine); // Initial UI based on browser
 
             try {
                 app = initializeApp(firebaseConfig); db = getFirestore(app);
                 await enableIndexedDbPersistence(db); console.log("Offline persistence enabled.");
-                showNotification("✅ تم تمكين التخزين المحلي.", false, 'success');
-                if (detailViewContainerEl.querySelector('.detail-placeholder')) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم الاتصال. جارٍ تحميل المنتجات...</div>'; }
+                // Don't show notification here, wait for first snapshot connection
             } catch (err) { /* ... Error handling ... */
                  if (err.code === 'failed-precondition') { console.warn("Persistence failed (multiple tabs?). Operating online only."); showNotification("⚠️ لم يتم تمكين التخزين المحلي (ربما بسبب فتح علامات تبويب متعددة).", false, 'warning'); if (!db) db = getFirestore(app); }
                  else { console.error("Firebase init/persistence error:", err); showNotification("❌ خطأ فادح في تهيئة Firebase!", true); if (detailViewContainerEl.querySelector('.detail-placeholder')) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder" style="color: var(--danger);">فشل الاتصال بقاعدة البيانات.</div>'; } return; }
             }
 
              // Apply theme & update button icon
-             const isDarkMode = localStorage.getItem('darkMode') === 'true'; if (isDarkMode) document.body.classList.add('dark-mode');
+            const isDarkMode = localStorage.getItem('darkMode') === 'true'; if (isDarkMode) document.body.classList.add('dark-mode');
              const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
 
 
@@ -620,13 +633,17 @@
 
                  unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
                     latestSnapshotMetadata = snapshot.metadata; // Store metadata
-                    // Update UI status based on *current* browser status and *latest* metadata
-                    updateConnectionStatusUI(navigator.onLine);
+                    updateConnectionStatusUI(navigator.onLine); // Update UI status
 
-                    items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    // Process items (convert timestamps etc)
+                    items = snapshot.docs.map(doc => {
+                         const data = doc.data({ serverTimestamps: "estimate" }); // Use estimate for timestamps from cache
+                         return { id: doc.id, ...data };
+                     });
+
                     renderItemsList(); // Render based on new items and metadata
 
-                    // Update detail/edit view intelligently
+                    // Update detail/edit view if needed
                      if (currentViewItemId && !items.some(i => i.id === currentViewItemId)) { /* ... handle deletion ... */ currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تشاهده.</div>';}
                      else if (currentViewItemId && items.some(i => i.id === currentViewItemId)) { showItemDetails(currentViewItemId); } // Refresh viewed item
 
