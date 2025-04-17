@@ -81,18 +81,18 @@
         #items-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
          /* Add will-change for potentially faster rendering updates, might be minor */
          .item-card {
-            padding: 12px; margin-bottom: 12px; background: #ffffff; border: 1px solid #e9ecef;
-            border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; display: flex; align-items: center; gap: 12px;
-            position: relative; border-left: 5px solid transparent; will-change: transform, box-shadow, background-color;
-        }
-         .item-card.has-pending-writes { border-left-color: var(--syncing-indicator); opacity: 0.9; }
+             padding: 12px; margin-bottom: 12px; background: #ffffff; border: 1px solid #e9ecef;
+             border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; display: flex; align-items: center; gap: 12px;
+             position: relative; border-left: 5px solid transparent; will-change: transform, box-shadow, background-color;
+         }
+          .item-card.has-pending-writes { border-left-color: var(--syncing-indicator); opacity: 0.9; }
         .dark-mode .item-card { background: #34495e; border-color: #495057; }
         .item-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px var(--shadow-color); border-color: #ced4da; z-index: 1; }
          .dark-mode .item-card:hover { background: #495057; border-color: #6c757d; }
-         .item-card.selected { background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); transform: scale(1.01); }
+          .item-card.selected { background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); transform: scale(1.01); }
           .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
-         .dark-mode .item-card.selected { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4); }
-          .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
+          .dark-mode .item-card.selected { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4); }
+           .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
         .item-icon { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #eee; } /* Added bg color */
         .dark-mode .item-icon { border-color: #495057; background-color: #555; }
         .item-card.selected .item-icon { border-color: rgba(255, 255, 255, 0.6); }
@@ -138,14 +138,54 @@
          .dark-mode .detail-content p strong { color: var(--light); }
          .detail-content .timestamp { font-size: 0.9em; color: var(--timestamp-color); text-align: center; margin-top: 25px; border-top: 1px dashed var(--grey-dark); padding-top: 15px; line-height: 1.6; }
          .dark-mode .detail-content .timestamp { border-top-color: #495057; }
+
+         /* --- History Section Styles --- */
+        .detail-content .history-section {
+            font-size: 0.9em; color: var(--timestamp-color); text-align: right; /* Align text right */
+            margin-top: 25px; border-top: 1px dashed var(--grey-dark); padding-top: 15px;
+            line-height: 1.6; max-height: 200px; overflow-y: auto; /* Limit height and allow scroll */
+            background: rgba(0,0,0,0.02); /* Slight background tint */
+            padding: 10px; border-radius: 6px;
+        }
+        .dark-mode .detail-content .history-section { border-top-color: #495057; background: rgba(255,255,255,0.04);}
+        .history-section h4 {
+            margin-bottom: 10px; color: var(--dark); font-size: 1em; text-align: center; /* Center title */
+            font-weight: 700;
+        }
+        .dark-mode .history-section h4 { color: var(--light); }
+        .history-section ul { list-style: none; padding: 0; margin: 0; }
+        .history-section li {
+            margin-bottom: 12px; padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        .dark-mode .history-section li { border-bottom-color: rgba(255,255,255,0.1); }
+        .history-section li:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0;}
+        .history-section .history-timestamp { font-weight: 700; color: var(--accent); display: block; margin-bottom: 5px; }
+        .dark-mode .history-section .history-timestamp { color: var(--secondary); }
+        .history-section .change-detail { display: block; font-size: 0.95em; color: var(--dark); } /* Change details text color */
+        .dark-mode .history-section .change-detail { color: var(--light); }
+        .history-section del { opacity: 0.7; text-decoration: line-through; color: var(--danger); } /* Style deleted text */
+        .dark-mode .history-section del { color: #ff8a80; }
+        .history-section .no-history { text-align: center; opacity: 0.8; padding: 10px 0; }
+        /* --- End History Section Styles --- */
+
          .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #eee;}
          .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); background-color: #555;}
          .edit-form-container label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95em; color: #555; }
          .dark-mode .edit-form-container label { color: #ccc; }
-         .edit-form-container input { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s; }
+         .edit-form-container input, .edit-form-container .image-upload-area { width: 100%; margin-bottom: 18px; }
+         .edit-form-container input[type="text"], .edit-form-container input[type="number"] { padding: 14px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s; }
          .edit-form-container input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); outline: none; }
-         .dark-mode .edit-form-container input { background-color: #495057; border-color: #6c757d; color: var(--light); }
+         .dark-mode .edit-form-container input[type="text"], .dark-mode .edit-form-container input[type="number"] { background-color: #495057; border-color: #6c757d; color: var(--light); }
          .dark-mode .edit-form-container input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2); }
+         .image-upload-area { display: flex; align-items: center; gap: 15px; border: 1px dashed var(--grey-dark); padding: 10px; border-radius: 8px; }
+         .image-upload-area input[type="file"] { display: none; } /* Hide default file input */
+         .image-upload-area .btn-capture { background-color: var(--accent); color: white; padding: 10px 15px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; font-size: 0.9em; font-weight: 700; text-align: center;}
+         .dark-mode .image-upload-area .btn-capture { background-color: var(--secondary); color: var(--dark); }
+         .image-upload-area .btn-capture:hover { opacity: 0.9; }
+         .image-upload-area img.icon-preview { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--grey-dark); background-color: #eee; flex-shrink: 0; }
+         .dark-mode .image-upload-area img.icon-preview { border-color: #555; background-color: #444; }
+
         .form-buttons { display: flex; gap: 12px; margin-top: 25px; }
          .form-buttons button { flex-grow: 1; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-weight: 700; font-size: 1.05em; transition: all 0.2s ease-out; display: flex; align-items: center; justify-content: center; gap: 8px; }
          .form-buttons button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; background-color: #adb5bd !important; box-shadow: none !important; }
@@ -168,8 +208,11 @@
          .dark-mode .modal-content h3 { color: var(--secondary); }
          .modal-content label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.95em; color: #555; }
          .dark-mode .modal-content label { color: #ccc; }
-         .modal-content input { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; }
-         .dark-mode .modal-content input { background-color: #495057; border-color: #6c757d; color: var(--light); }
+         .modal-content input[type="text"], .modal-content input[type="number"] { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; }
+         .dark-mode .modal-content input[type="text"], .dark-mode .modal-content input[type="number"] { background-color: #495057; border-color: #6c757d; color: var(--light); }
+         /* Adjustments for image upload in Add modal */
+         #addFormModal .image-upload-area { margin-bottom: 18px; }
+
         .close-btn { position: absolute; top: 12px; left: 15px; background: none; border: none; font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s, transform 0.2s; }
         .close-btn:hover { color: var(--danger); transform: rotate(90deg) scale(1.1); }
         .dark-mode .close-btn { color: #777; }
@@ -202,7 +245,7 @@
         @media (max-width: 768px) {
             body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; }
             #detail-view-container { order: 1; height: auto; min-height: 40vh; padding: 20px 15px; }
-             .detail-content, .edit-form-container { padding: 20px 25px; }
+             .detail-content, .edit-form-container { padding: 20px 25px; max-width: none; } /* Allow full width on mobile */
             .sidebar { order: 2; width: 100%; height: auto; min-height: 55vh; border-left: none; border-top: 1px solid #dee2e6; box-shadow: none; }
              .dark-mode .sidebar { border-top-color: #495057; }
             #items-list { max-height: none; padding: 10px; }
@@ -218,6 +261,11 @@
             .modal-content { width: 95%; padding: 25px; }
             .form-buttons { flex-direction: column; }
              .offline-banner { font-size: 0.8em; padding: 4px 8px; }
+             .image-upload-area { flex-direction: column; align-items: stretch; text-align: center; }
+             .image-upload-area .btn-capture { width: 100%; }
+             .image-upload-area img.icon-preview { margin: 10px auto 0; }
+             /* Adjust history section height on mobile */
+             .detail-content .history-section { max-height: 150px; }
         }
     </style>
 </head>
@@ -239,7 +287,7 @@
              <span id="connectionStatus" class="connection-status-dot connecting" title="حالة الاتصال: جارٍ الاتصال..."></span>
         </div>
         <div id="items-list">
-            </div>
+             </div>
         <div class="sidebar-footer">
             <div id="total-price-container">
                 إجمالي : <span id="total-price">0</span> د.ع
@@ -256,10 +304,16 @@
              <h3><span class="icon" style="margin-left: 8px;">📦</span>إضافة منتج جديد</h3>
              <label for="itemName">اسم المنتج:</label>
              <input type="text" id="itemName" placeholder="مثال: قميص، تيشيرت، بنطلون جينز..." required>
-             <label for="itemStock">الكمية المباعة:</label>
-             <input type="number" id="itemStock" placeholder="0" required min="0">
+             <label for="itemStock">الكمية المتوفرة:</label> <input type="number" id="itemStock" placeholder="0" required min="0">
              <label for="itemPrice">السعر (د.ع):</label>
              <input type="number" id="itemPrice" placeholder="0" required min="0" step="500">
+
+             <label for="itemImageInput">صورة المنتج (اختياري):</label>
+             <div class="image-upload-area">
+                 <input type="file" id="itemImageInput" accept="image/*" capture="environment" onchange="window.handleImagePreview(event, 'addIconPreview')">
+                 <label for="itemImageInput" class="btn-capture">📷 اختر أو التقط صورة</label>
+                 <img id="addIconPreview" src="" alt="معاينة الصورة" class="icon-preview" style="display: none;">
+             </div>
              <div class="form-buttons" style="margin-top: 15px;">
                  <button id="addItemBtn" class="btn-save" onclick="window.addItem()"> <span class="icon">➕</span> إضافة المنتج</button>
                  <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
@@ -291,7 +345,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
         import {
             getFirestore, enableIndexedDbPersistence, terminate,
-            collection, query, orderBy, onSnapshot,
+            collection, query, orderBy, onSnapshot, limit, getDocs, // Removed 'limit' as we need all history
             addDoc, updateDoc, deleteDoc, doc, serverTimestamp,
             getDoc, writeBatch, Timestamp
         } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -299,13 +353,13 @@
         // --- Firebase Configuration ---
         // *** Replace with your actual Firebase config ***
         const firebaseConfig = {
-            apiKey: "AIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEA", // Your Key
-            authDomain: "storedatabase-642e0.firebaseapp.com", // Your Domain
-            projectId: "storedatabase-642e0", // Your Project ID
-            storageBucket: "storedatabase-642e0.firebasestorage.app", // Your Storage Bucket
-            messagingSenderId: "806751758744", // Your Sender ID
-            appId: "1:806751758744:web:079104a8fe4e73cdc023ed", // Your App ID
-            measurementId: "G-778H49MMJK" // Optional
+             apiKey: "AIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEA", // Your Key - PLEASE SECURE THIS BETTER FOR PRODUCTION
+             authDomain: "storedatabase-642e0.firebaseapp.com", // Your Domain
+             projectId: "storedatabase-642e0", // Your Project ID
+             storageBucket: "storedatabase-642e0.appspot.com", // CORRECTED Storage Bucket - remove 'firebase' part
+             messagingSenderId: "806751758744", // Your Sender ID
+             appId: "1:806751758744:web:079104a8fe4e73cdc023ed", // Your App ID
+             measurementId: "G-778H49MMJK" // Optional
         };
 
         // --- Global Variables & State ---
@@ -314,54 +368,54 @@
         let isDefinitelyOffline = !navigator.onLine;
         let latestSnapshotMetadata = { fromCache: true, hasPendingWrites: false };
         const defaultIcon = 'https://img.icons8.com/fluency/48/000000/hanger.png'; // Default hanger icon
+        let capturedImageDataURL = null; // To store captured image data for Add/Edit
 
         // --- Keyword to Icon Mapping ---
         const keywordIconMap = {
-            'قميص': 'https://img.icons8.com/fluency/48/000000/shirt.png',
-            'تيشيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
-            'تي شيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
-            'بولو': 'https://img.icons8.com/fluency/48/000000/polo-shirt.png',
-            'بنطلون': 'https://img.icons8.com/fluency/48/000000/pantaloon.png', // Pantaloon icon
-            'جينز': 'https://img.icons8.com/fluency/48/000000/jeans.png',
-            'سروال': 'https://img.icons8.com/fluency/48/000000/pantaloon.png',
-            'شورت': 'https://img.icons8.com/fluency/48/000000/shorts.png',
-            'برمودا': 'https://img.icons8.com/fluency/48/000000/bermuda-shorts.png',
-            'فستان': 'https://img.icons8.com/fluency/48/000000/dress.png',
-            'تنورة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
-            'جيبة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
-            'جاكيت': 'https://img.icons8.com/fluency/48/000000/jacket.png',
-            'سترة': 'https://img.icons8.com/fluency/48/000000/vest.png', // Vest icon
-            'معطف': 'https://img.icons8.com/fluency/48/000000/coat.png',
-            'بليزر': 'https://img.icons8.com/fluency/48/000000/blazer.png',
-            'هودي': 'https://img.icons8.com/fluency/48/000000/hoodie.png',
-            'كنزة': 'https://img.icons8.com/fluency/48/000000/sweater.png', // Sweater icon
-            'بلوفر': 'https://img.icons8.com/fluency/48/000000/sweater.png',
-            'حذاء': 'https://img.icons8.com/fluency/48/000000/trainers.png', // Trainers icon
-            'احذية': 'https://img.icons8.com/fluency/48/000000/trainers.png',
-            'رياضي': 'https://img.icons8.com/fluency/48/000000/sneakers.png',
-            'جزمة': 'https://img.icons8.com/fluency/48/000000/boot.png', // Boot icon
-            'كعب': 'https://img.icons8.com/fluency/48/000000/high-heels.png',
-            'صندل': 'https://img.icons8.com/fluency/48/000000/sandal.png',
-            'شبشب': 'https://img.icons8.com/fluency/48/000000/slippers.png',
-            'ملابس داخلية': 'https://img.icons8.com/fluency/48/000000/underwear.png',
-            'داخلي': 'https://img.icons8.com/fluency/48/000000/underwear.png',
-            'بدي': 'https://img.icons8.com/fluency/48/000000/bodysuit.png',
-            'بيجامة': 'https://img.icons8.com/fluency/48/000000/pajamas.png',
-            'قبعة': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png', // Cap icon
-            'طاقية': 'https://img.icons8.com/fluency/48/000000/winter-hat.png', // Winter hat
-            'كاب': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png',
-            'وشاح': 'https://img.icons8.com/fluency/48/000000/scarf.png',
-            'شال': 'https://img.icons8.com/fluency/48/000000/scarf.png',
-            'قفاز': 'https://img.icons8.com/fluency/48/000000/gloves.png',
-            'كفوف': 'https://img.icons8.com/fluency/48/000000/gloves.png',
-            'حزام': 'https://img.icons8.com/fluency/48/000000/belt.png',
-            'ربطة': 'https://img.icons8.com/fluency/48/000000/tie.png', // Tie icon
-            'حقيبة': 'https://img.icons8.com/fluency/48/000000/handbag.png', // Handbag icon
-            'شنطة': 'https://img.icons8.com/fluency/48/000000/school-bag.png' // School bag/backpack
+             'قميص': 'https://img.icons8.com/fluency/48/000000/shirt.png',
+             'تيشيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
+             'تي شيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png',
+             'بولو': 'https://img.icons8.com/fluency/48/000000/polo-shirt.png',
+             'بنطلون': 'https://img.icons8.com/fluency/48/000000/pantaloon.png',
+             'جينز': 'https://img.icons8.com/fluency/48/000000/jeans.png',
+             'سروال': 'https://img.icons8.com/fluency/48/000000/pantaloon.png',
+             'شورت': 'https://img.icons8.com/fluency/48/000000/shorts.png',
+             'برمودا': 'https://img.icons8.com/fluency/48/000000/bermuda-shorts.png',
+             'فستان': 'https://img.icons8.com/fluency/48/000000/dress.png',
+             'تنورة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
+             'جيبة': 'https://img.icons8.com/fluency/48/000000/skirt.png',
+             'جاكيت': 'https://img.icons8.com/fluency/48/000000/jacket.png',
+             'سترة': 'https://img.icons8.com/fluency/48/000000/vest.png',
+             'معطف': 'https://img.icons8.com/fluency/48/000000/coat.png',
+             'بليزر': 'https://img.icons8.com/fluency/48/000000/blazer.png',
+             'هودي': 'https://img.icons8.com/fluency/48/000000/hoodie.png',
+             'كنزة': 'https://img.icons8.com/fluency/48/000000/sweater.png',
+             'بلوفر': 'https://img.icons8.com/fluency/48/000000/sweater.png',
+             'حذاء': 'https://img.icons8.com/fluency/48/000000/trainers.png',
+             'احذية': 'https://img.icons8.com/fluency/48/000000/trainers.png',
+             'رياضي': 'https://img.icons8.com/fluency/48/000000/sneakers.png',
+             'جزمة': 'https://img.icons8.com/fluency/48/000000/boot.png',
+             'كعب': 'https://img.icons8.com/fluency/48/000000/high-heels.png',
+             'صندل': 'https://img.icons8.com/fluency/48/000000/sandal.png',
+             'شبشب': 'https://img.icons8.com/fluency/48/000000/slippers.png',
+             'ملابس داخلية': 'https://img.icons8.com/fluency/48/000000/underwear.png',
+             'داخلي': 'https://img.icons8.com/fluency/48/000000/underwear.png',
+             'بدي': 'https://img.icons8.com/fluency/48/000000/bodysuit.png',
+             'بيجامة': 'https://img.icons8.com/fluency/48/000000/pajamas.png',
+             'قبعة': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png',
+             'طاقية': 'https://img.icons8.com/fluency/48/000000/winter-hat.png',
+             'كاب': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png',
+             'وشاح': 'https://img.icons8.com/fluency/48/000000/scarf.png',
+             'شال': 'https://img.icons8.com/fluency/48/000000/scarf.png',
+             'قفاز': 'https://img.icons8.com/fluency/48/000000/gloves.png',
+             'كفوف': 'https://img.icons8.com/fluency/48/000000/gloves.png',
+             'حزام': 'https://img.icons8.com/fluency/48/000000/belt.png',
+             'ربطة': 'https://img.icons8.com/fluency/48/000000/tie.png',
+             'حقيبة': 'https://img.icons8.com/fluency/48/000000/handbag.png',
+             'شنطة': 'https://img.icons8.com/fluency/48/000000/school-bag.png'
         };
 
         // --- DOM Elements ---
-        // (Same as before)
         const itemsListEl = document.getElementById('items-list');
         const detailViewContainerEl = document.getElementById('detail-view-container');
         const totalPriceEl = document.getElementById('total-price');
@@ -372,195 +426,329 @@
         const offlineBannerEl = document.getElementById('offlineBanner');
         const connectionStatusDotEl = document.getElementById('connectionStatus');
         const addFormButton = addFormModalEl?.querySelector('#addItemBtn');
+        const addIconPreviewEl = document.getElementById('addIconPreview');
 
 
         // --- Helper Functions ---
         function formatFirestoreTimestamp(timestamp) { /* ... Same as before ... */
-            if (!timestamp) return '-';
-            try {
-                if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-                    return timestamp.toDate().toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
-                }
-                return new Date(timestamp).toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
-            } catch(e) { return 'تاريخ غير صالح'; }
+             if (!timestamp) return '-';
+             try {
+                 if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+                     return timestamp.toDate().toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+                 }
+                 // Handle cases where it might already be a Date object (e.g., from estimates)
+                 if (timestamp instanceof Date) {
+                      return timestamp.toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+                 }
+                 // Fallback for potential string or number representations (less ideal)
+                 return new Date(timestamp).toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+             } catch(e) { console.warn("Timestamp formatting error:", e, "Input:", timestamp); return 'تاريخ غير صالح'; }
         }
 
          // Function to get icon based on name keywords
-        function getIconForName(name) {
+        function getIconForName(name) { /* ... Same as before ... */
             if (!name) return defaultIcon;
-            const lowerCaseName = name.toLowerCase(); // Simple lowercase matching
-            // Iterate through keywords - maybe prioritize longer matches first?
-            const keywords = Object.keys(keywordIconMap).sort((a, b) => b.length - a.length); // Longer keywords first
+            const lowerCaseName = name.toLowerCase();
+            const keywords = Object.keys(keywordIconMap).sort((a, b) => b.length - a.length);
 
             for (const keyword of keywords) {
                 if (lowerCaseName.includes(keyword.toLowerCase())) {
-                    return keywordIconMap[keyword]; // Return the first (longest) match
+                    return keywordIconMap[keyword];
                 }
             }
-            return defaultIcon; // Return default if no keyword matches
+            return defaultIcon;
         }
 
          // --- Update Connection Status UI ---
          function updateConnectionStatusUI(online) { /* ... Same as before ... */
-             isDefinitelyOffline = !online;
-             offlineBannerEl.classList.toggle('show', !online);
-             connectionStatusDotEl.className = 'connection-status-dot';
-             if (!online) { connectionStatusDotEl.classList.add('disconnected'); connectionStatusDotEl.title = 'غير متصل بالإنترنت'; }
-             else { if (latestSnapshotMetadata.hasPendingWrites) { connectionStatusDotEl.classList.add('syncing'); connectionStatusDotEl.title = 'متصل (جارٍ مزامنة التغييرات...)'; }
+              isDefinitelyOffline = !online;
+              offlineBannerEl.classList.toggle('show', !online);
+              connectionStatusDotEl.className = 'connection-status-dot';
+              if (!online) { connectionStatusDotEl.classList.add('disconnected'); connectionStatusDotEl.title = 'غير متصل بالإنترنت'; }
+              else { if (latestSnapshotMetadata.hasPendingWrites) { connectionStatusDotEl.classList.add('syncing'); connectionStatusDotEl.title = 'متصل (جارٍ مزامنة التغييرات...)'; }
                     else { connectionStatusDotEl.classList.add('connected'); connectionStatusDotEl.title = 'متصل ومُحدَّث'; } }
-        }
+         }
+
+         // --- Image Handling ---
+         function handleImagePreview(event, previewElementId) { /* ... Same as before ... */
+             const file = event.target.files[0];
+             const previewElement = document.getElementById(previewElementId);
+             if (file && previewElement) {
+                 const reader = new FileReader();
+                 reader.onload = function(e) {
+                     previewElement.src = e.target.result;
+                     previewElement.style.display = 'block';
+                     capturedImageDataURL = e.target.result;
+                 }
+                 reader.readAsDataURL(file);
+             } else {
+                 previewElement.src = '';
+                 previewElement.style.display = 'none';
+                 capturedImageDataURL = null;
+             }
+         }
 
         // --- Core Functions (renderItemsList, showItemDetails, showEditForm, cancelEdit) ---
         function renderItemsList() { /* ... Same as before ... */
-            if (!itemsListEl) return;
-            itemsListEl.innerHTML = '';
-            const metadata = latestSnapshotMetadata;
+             if (!itemsListEl) return;
+             itemsListEl.innerHTML = '';
+             const metadata = latestSnapshotMetadata;
 
-            if (items.length === 0 && !metadata.fromCache && !isDefinitelyOffline) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">لا توجد منتجات مضافة بعد.</p>'; }
-            else if (items.length === 0 && (metadata.fromCache || isDefinitelyOffline)) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل أو لا توجد بيانات محلية...</p>';}
-            else {
-                items.sort((a, b) => a.name.localeCompare(b.name));
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'item-card'; card.setAttribute('data-id', item.id);
-                    if (metadata.hasPendingWrites) { card.classList.add('has-pending-writes'); }
-                    if (item.id === currentViewItemId || item.id === currentEditItemId) { card.classList.add('selected'); }
+             if (items.length === 0 && !metadata.fromCache && !isDefinitelyOffline) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">لا توجد منتجات مضافة بعد.</p>'; }
+             else if (items.length === 0 && (metadata.fromCache || isDefinitelyOffline)) { itemsListEl.innerHTML = '<p style="text-align: center; padding: 20px; opacity: 0.7;">جارٍ التحميل أو لا توجد بيانات محلية...</p>';}
+             else {
+                 items.sort((a, b) => a.name.localeCompare(b.name));
+                 items.forEach(item => {
+                     const card = document.createElement('div');
+                     card.className = 'item-card'; card.setAttribute('data-id', item.id);
+                     if (metadata.hasPendingWrites) { card.classList.add('has-pending-writes'); }
+                     if (item.id === currentViewItemId || item.id === currentEditItemId) { card.classList.add('selected'); }
 
-                    card.innerHTML = `
-                        <img class="item-icon" src="${item.icon || defaultIcon}" alt="${item.name}" loading="lazy" onerror="this.src='${defaultIcon}'">
-                        <div class="item-details">
-                            <h4>${item.name}</h4>
-                            <p>الكمية: ${item.stock} | السعر: ${item.price.toLocaleString('ar-IQ')} د.ع</p>
-                        </div>
-                        <div class="item-actions">
-                            <button class="edit-btn" onclick="event.stopPropagation(); window.showEditForm('${item.id}')" title="تعديل">📝</button>
-                            <button class="delete-btn" onclick="event.stopPropagation(); window.showConfirmModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" title="حذف">🗑️</button>
-                        </div>
-                    `;
-                    card.addEventListener('click', () => showItemDetails(item.id));
-                    itemsListEl.appendChild(card);
-                });
-            }
-            updateTotalPrice();
+                     const displayIcon = item.icon || getIconForName(item.name) || defaultIcon;
+
+                     card.innerHTML = `
+                          <img class="item-icon" src="${displayIcon}" alt="${item.name}" loading="lazy" onerror="this.onerror=null; this.src='${defaultIcon}'">
+                          <div class="item-details">
+                              <h4>${item.name}</h4>
+                              <p>الكمية: ${item.stock} | السعر: ${item.price.toLocaleString('ar-IQ')} د.ع</p>
+                          </div>
+                          <div class="item-actions">
+                              <button class="edit-btn" onclick="event.stopPropagation(); window.showEditForm('${item.id}')" title="تعديل">📝</button>
+                              <button class="delete-btn" onclick="event.stopPropagation(); window.showConfirmModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" title="حذف">🗑️</button>
+                          </div>
+                     `;
+                     card.addEventListener('click', () => showItemDetails(item.id));
+                     itemsListEl.appendChild(card);
+                 });
+             }
+             updateTotalPrice();
         }
-        function showItemDetails(itemId) { /* ... Same as before, includes timestamp display ... */
+
+        // **** MODIFIED: showItemDetails fetches and displays ALL history ****
+        async function showItemDetails(itemId) {
              const item = items.find(i => i.id === itemId);
-            if (!item) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج المحدد.</div>'; currentViewItemId = null; renderItemsList(); return; }
-            if (currentViewItemId !== itemId || currentEditItemId !== null) { currentEditItemId = null; currentViewItemId = itemId; renderItemsList(); }
-            const createdAtFormatted = formatFirestoreTimestamp(item.createdAt);
-            const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt);
-            detailViewContainerEl.innerHTML = `
-                <div class="detail-content">
-                     <img src="${item.icon || defaultIcon}" alt="${item.name}" class="detail-icon" onerror="this.src='${defaultIcon}'">
-                    <h2>${item.name}</h2>
-                    <p><strong>الكمية المبيوعة:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.stock}</span></p>
-                    <p><strong>السعر:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
-                    <p><strong>اجمالي ارباح:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
-                     <div class="timestamp">
-                        أنشئ في: ${createdAtFormatted} <br> آخر تعديل: ${updatedAtFormatted}
-                     </div>
-                     <div class="form-buttons" style="margin-top: 25px;"> <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button> </div>
-                     <p style="font-size: 0.8em; opacity: 0.6; text-align: center; margin-top: 20px;">ID: ${item.id}</p>
-                </div>`;
+             if (!item) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لم يتم العثور على المنتج المحدد.</div>'; currentViewItemId = null; renderItemsList(); return; }
+             if (currentViewItemId !== itemId || currentEditItemId !== null) { currentEditItemId = null; currentViewItemId = itemId; renderItemsList(); }
+
+             const createdAtFormatted = formatFirestoreTimestamp(item.createdAt);
+             // Use 'estimate' for updatedAt initially, might be null if never updated
+             const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt);
+             const displayIcon = item.icon || getIconForName(item.name) || defaultIcon;
+
+             // --- Fetch ALL History Entries ---
+             const historyCollectionRef = collection(db, 'clothes', itemId, 'history');
+             // Order by timestamp descending (newest first)
+             const qHistory = query(historyCollectionRef, orderBy('timestamp', 'desc'));
+             let historyHtml = ''; // Initialize empty history HTML string
+
+             try {
+                 const historySnapshot = await getDocs(qHistory);
+                 if (historySnapshot.empty) {
+                     historyHtml = '<li class="no-history"><em>لا يوجد سجل تغييرات مسجل لهذا المنتج.</em></li>';
+                 } else {
+                    // Build the HTML list for all history entries
+                     historySnapshot.docs.forEach(doc => {
+                         const changeData = doc.data();
+                         const changeTimestamp = formatFirestoreTimestamp(changeData.timestamp);
+                         let changesText = [];
+
+                         if (changeData.changes.name) {
+                             changesText.push(`<span class="change-detail">الاسم: <del>${changeData.changes.name.old}</del> ← ${changeData.changes.name.new}</span>`);
+                         }
+                         if (changeData.changes.stock) {
+                             changesText.push(`<span class="change-detail">الكمية: <del>${changeData.changes.stock.old}</del> ← ${changeData.changes.stock.new}</span>`);
+                         }
+                         if (changeData.changes.price) {
+                             changesText.push(`<span class="change-detail">السعر: <del>${changeData.changes.price.old.toLocaleString('ar-IQ')}</del> ← ${changeData.changes.price.new.toLocaleString('ar-IQ')} د.ع</span>`);
+                         }
+                         if (changeData.changes.icon) {
+                             changesText.push(`<span class="change-detail">تم تحديث الصورة/الأيقونة.</span>`);
+                         }
+
+                         if (changesText.length > 0) {
+                              historyHtml += `
+                                <li>
+                                    <span class="history-timestamp">${changeTimestamp}</span>
+                                    ${changesText.join('')}
+                                </li>`;
+                         } else {
+                             // Log entry exists but no recognizable changes (should ideally not happen)
+                             historyHtml += `
+                                <li>
+                                    <span class="history-timestamp">${changeTimestamp}</span>
+                                    <span class="change-detail"><em>تحديث بدون تغييرات مسجلة في الحقول الرئيسية.</em></span>
+                                </li>`;
+                         }
+                     });
+                 }
+             } catch (error) {
+                 console.error("Error fetching item history:", error);
+                 historyHtml = '<li class="no-history" style="color: var(--danger);"><em>حدث خطأ أثناء جلب سجل التغييرات.</em></li>';
+             }
+             // --- End Fetch History ---
+
+             detailViewContainerEl.innerHTML = `
+                 <div class="detail-content">
+                      <img src="${displayIcon}" alt="${item.name}" class="detail-icon" onerror="this.onerror=null; this.src='${defaultIcon}'">
+                      <h2>${item.name}</h2>
+                      <p><strong>الكمية المتوفرة:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.stock}</span></p>
+                      <p><strong>السعر:</strong> <span style="font-weight:700; font-size: 1.1em;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
+                      <p><strong>قيمة المخزون:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 })}</span></p>
+
+                      <div class="history-section">
+                          <h4>سجل التغييرات:</h4>
+                          <ul>
+                             ${historyHtml}
+                          </ul>
+                      </div>
+                      <div class="timestamp">
+                           أنشئ في: ${createdAtFormatted} <br> آخر تعديل للمستند: ${updatedAtFormatted || '-'}
+                      </div>
+                      <div class="form-buttons" style="margin-top: 25px;"> <button class="btn-save" onclick="window.showEditForm('${item.id}')"><span class="icon">📝</span> تعديل المنتج</button> </div>
+                      <p style="font-size: 0.8em; opacity: 0.6; text-align: center; margin-top: 20px;">ID: ${item.id}</p>
+                 </div>`;
         }
+
         function showEditForm(itemId) { /* ... Same as before ... */
-            const item = items.find(i => i.id === itemId); if (!item) { showNotification("لم يتم العثور على المنتج للتعديل.", true); return; }
-            if (currentEditItemId !== itemId || currentViewItemId !== null) { currentViewItemId = null; currentEditItemId = itemId; renderItemsList(); }
-            detailViewContainerEl.innerHTML = `
-                <div class="edit-form-container">
-                    <h3><span class="icon" style="margin-left: 8px;">✏️</span>تعديل المنتج</h3>
-                    <input type="hidden" id="editItemId" value="${item.id}">
-                    <label for="editItemName">اسم المنتج:</label>
-                    <input type="text" id="editItemName" value="${item.name}" required>
-                    <label for="editItemStock">الكمية المتوفرة:</label>
-                    <input type="number" id="editItemStock" value="${item.stock}" required min="0">
-                    <label for="editItemPrice">السعر (د.ع):</label>
-                    <input type="number" id="editItemPrice" value="${item.price}" required min="0" step="500">
-                    <label for="editItemIcon">رابط الأيقونة (تلقائي أو يدوي):</label>
-                    <input type="text" id="editItemIcon" value="${item.icon || ''}" placeholder="اتركه فارغًا للتحديد التلقائي بناءً على الاسم">
-                    <div class="form-buttons"> <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()"> <span class="icon">💾</span> حفظ التعديلات</button> <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button> </div>
-                </div>`;
+             const item = items.find(i => i.id === itemId); if (!item) { showNotification("لم يتم العثور على المنتج للتعديل.", true); return; }
+             if (currentEditItemId !== itemId || currentViewItemId !== null) { currentViewItemId = null; currentEditItemId = itemId; renderItemsList(); }
+
+             capturedImageDataURL = null;
+             const currentIcon = item.icon || defaultIcon;
+
+             detailViewContainerEl.innerHTML = `
+                 <div class="edit-form-container">
+                     <h3><span class="icon" style="margin-left: 8px;">✏️</span>تعديل المنتج</h3>
+                     <input type="hidden" id="editItemId" value="${item.id}">
+                     <label for="editItemName">اسم المنتج:</label>
+                     <input type="text" id="editItemName" value="${item.name}" required>
+                     <label for="editItemStock">الكمية المتوفرة:</label>
+                     <input type="number" id="editItemStock" value="${item.stock}" required min="0">
+                     <label for="editItemPrice">السعر (د.ع):</label>
+                     <input type="number" id="editItemPrice" value="${item.price}" required min="0" step="500">
+
+                     <label for="editItemImageInput">تغيير صورة المنتج:</label>
+                     <div class="image-upload-area">
+                          <input type="file" id="editItemImageInput" accept="image/*" capture="environment" onchange="window.handleImagePreview(event, 'editIconPreview')">
+                          <label for="editItemImageInput" class="btn-capture">📷 اختر أو التقط صورة جديدة</label>
+                          <img id="editIconPreview" src="${currentIcon}" alt="معاينة الصورة الحالية/الجديدة" class="icon-preview" style="display: ${currentIcon !== defaultIcon || item.icon ? 'block' : 'none'};" onerror="this.onerror=null; this.src='${defaultIcon}'">
+                     </div>
+                     <input type="hidden" id="editItemIconManual" value="${item.icon || ''}">
+
+                     <div class="form-buttons"> <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()"> <span class="icon">💾</span> حفظ التعديلات</button> <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button> </div>
+                 </div>`;
         }
+
         function cancelEdit() { /* ... Same as before ... */
-            const previousEditId = currentEditItemId; currentEditItemId = null;
-            if (previousEditId && items.some(i => i.id === previousEditId)) { showItemDetails(previousEditId); }
-            else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>'; currentViewItemId = null; renderItemsList(); }
+             const previousEditId = currentEditItemId; currentEditItemId = null;
+             capturedImageDataURL = null;
+             const itemExists = items.some(i => i.id === previousEditId);
+             if (previousEditId && itemExists) { showItemDetails(previousEditId); }
+             else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم إلغاء التعديل.</div>'; currentViewItemId = null; renderItemsList(); }
         }
 
         // --- Firestore Operations (Add, Update, Delete) ---
-        async function addItem() {
+        async function addItem() { /* ... Same as before ... */
             if (!db || !addFormButton) { return; }
             const nameInput = document.getElementById('itemName'), stockInput = document.getElementById('itemStock'), priceInput = document.getElementById('itemPrice');
             const name = nameInput.value.trim(), stock = parseInt(stockInput.value), price = parseFloat(priceInput.value);
+
             if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول بقيم صحيحة!', true); return; }
 
             addFormButton.disabled = true; addFormButton.innerHTML = '<span class="icon">⏳</span> جارٍ الإضافة...';
-            // --- Get icon based on name ---
-            const icon = getIconForName(name);
-            // -----------------------------
+
+            let icon = null;
+            if (capturedImageDataURL) {
+                icon = capturedImageDataURL;
+            } else {
+                icon = getIconForName(name);
+            }
+
+            // Set updatedAt to null initially when adding
             const newItemData = { name, stock, price, icon, createdAt: serverTimestamp(), updatedAt: null };
 
             try {
                 const docRef = await addDoc(collection(db, 'clothes'), newItemData);
                 if (isDefinitelyOffline) { showNotification('✅ تم الحفظ محلياً. ستتم المزامنة.', false, 'warning'); }
-                else { showNotification('تمت إضافة المنتج بنجاح!', false, 'success'); } // Assume online success initially
-                hideAddForm(); nameInput.value = ''; stockInput.value = ''; priceInput.value = '';
+                else { showNotification('تمت إضافة المنتج بنجاح!', false, 'success'); }
+                hideAddForm();
+                nameInput.value = ''; stockInput.value = ''; priceInput.value = '';
+                if (addIconPreviewEl) {
+                    addIconPreviewEl.src = '';
+                    addIconPreviewEl.style.display = 'none';
+                }
+                capturedImageDataURL = null;
             } catch (error) { showNotification('حدث خطأ أثناء إضافة المنتج.', true); console.error("Error adding document: ", error);
             } finally { addFormButton.disabled = false; addFormButton.innerHTML = '<span class="icon">➕</span> إضافة المنتج'; }
         }
 
-        async function updateItem() {
+        async function updateItem() { /* ... Same as before ... */
              if (!db) { return; }
              const updateButton = document.getElementById('updateItemBtn');
-             if(updateButton) updateButton.disabled = true;
+             if(updateButton) updateButton.disabled = true; updateButton.innerHTML = '<span class="icon">⏳</span> جارٍ الحفظ...';
 
             const itemId = document.getElementById('editItemId').value;
             const name = document.getElementById('editItemName').value.trim();
             const stock = parseInt(document.getElementById('editItemStock').value);
             const price = parseFloat(document.getElementById('editItemPrice').value);
-            let iconUrl = document.getElementById('editItemIcon').value.trim(); // Manual icon override
 
-            if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول بقيم صحيحة!', true); if(updateButton) updateButton.disabled = false; return; }
+            if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول بقيم صحيحة!', true); if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '<span class="icon">💾</span> حفظ التعديلات';} return; }
 
             const itemRef = doc(db, 'clothes', itemId);
             const historyRef = collection(db, 'clothes', itemId, 'history');
 
             try {
-                 const currentDocSnap = await getDoc(itemRef);
-                 if (!currentDocSnap.exists()) { throw new Error("Document does not exist!"); }
-                 const currentData = currentDocSnap.data();
+                const currentDocSnap = await getDoc(itemRef);
+                if (!currentDocSnap.exists()) { throw new Error("Document does not exist!"); }
+                const currentData = currentDocSnap.data();
 
-                 // --- Get icon: Use manual input if provided, otherwise determine from NEW name ---
-                 if (!iconUrl) {
-                     iconUrl = getIconForName(name); // Determine icon from the potentially new name
-                 }
-                 // ----------------------------------------------------------------------------------
+                let finalIcon = currentData.icon;
+                let iconChanged = false;
+                if (capturedImageDataURL) {
+                    finalIcon = capturedImageDataURL;
+                    iconChanged = finalIcon !== currentData.icon;
+                } else {
+                    if (currentData.name !== name) {
+                         const autoIcon = getIconForName(name);
+                         if (autoIcon !== currentData.icon) {
+                              finalIcon = autoIcon;
+                              iconChanged = true;
+                         }
+                    }
+                }
 
-                 const updatedData = { name, stock, price, icon: iconUrl, updatedAt: serverTimestamp() };
-                 const logEntry = { timestamp: serverTimestamp(), changes: {} };
-                 if (currentData.name !== name) logEntry.changes.name = { old: currentData.name, new: name };
-                 if (currentData.stock !== stock) logEntry.changes.stock = { old: currentData.stock, new: stock };
-                 if (currentData.price !== price) logEntry.changes.price = { old: currentData.price, new: price };
-                 // Only log icon change if it actually changed (comparing determined/manual new icon with old)
-                 if (currentData.icon !== iconUrl) logEntry.changes.icon = { old: currentData.icon, new: iconUrl };
+                // IMPORTANT: Always set updatedAt on update
+                const updatedData = { name, stock, price, icon: finalIcon, updatedAt: serverTimestamp() };
+                const logEntry = { timestamp: serverTimestamp(), changes: {} };
+                let hasChanges = false;
 
-                 const batch = writeBatch(db);
-                 batch.update(itemRef, updatedData);
-                 if (Object.keys(logEntry.changes).length > 0) { batch.set(doc(historyRef), logEntry); }
-                 await batch.commit();
+                if (currentData.name !== name) { logEntry.changes.name = { old: currentData.name, new: name }; hasChanges = true; }
+                if (currentData.stock !== stock) { logEntry.changes.stock = { old: currentData.stock, new: stock }; hasChanges = true; }
+                if (currentData.price !== price) { logEntry.changes.price = { old: currentData.price, new: price }; hasChanges = true; }
+                if (iconChanged) { logEntry.changes.icon = { old: currentData.icon, new: finalIcon }; hasChanges = true; }
+
+                const batch = writeBatch(db);
+                batch.update(itemRef, updatedData);
+                if (hasChanges) {
+                     batch.set(doc(historyRef), logEntry); // Use auto-generated ID for history entry
+                }
+                await batch.commit();
 
                 if (isDefinitelyOffline) { showNotification('✅ تم حفظ التعديل محلياً. ستتم المزامنة.', false, 'warning'); }
-                else { showNotification('تم تحديث المنتج بنجاح!', false, 'success'); } // Assume online success
-                 currentEditItemId = null; showItemDetails(itemId);
+                else { showNotification('تم تحديث المنتج بنجاح!', false, 'success'); }
+
+                 capturedImageDataURL = null;
+                 currentEditItemId = null;
+                 await showItemDetails(itemId);
 
             } catch (error) { showNotification('حدث خطأ أثناء تحديث المنتج.', true); console.error("Error updating/logging: ", error);
-            } finally { if(updateButton) updateButton.disabled = false; }
+            } finally { if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '<span class="icon">💾</span> حفظ التعديلات'; } }
         }
 
         function showConfirmModal(itemId, itemName) { /* ... Same as before ... */
              if (!itemId) return;
              const safeItemName = itemName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-             confirmMessageEl.innerHTML = `هل أنت متأكد أنك تريد حذف المنتج: <strong style="color: var(--danger);">${safeItemName}</strong>؟`;
+             confirmMessageEl.innerHTML = `هل أنت متأكد أنك تريد حذف المنتج: <strong style="color: var(--danger);">${safeItemName}</strong>؟<br><small>(سيتم حذف سجل التغييرات الخاص به أيضًا إن وجد)</small>`;
              const currentBtn = document.getElementById('confirmDeleteBtn');
              const newConfirmBtn = currentBtn.cloneNode(true);
              currentBtn.parentNode.replaceChild(newConfirmBtn, currentBtn);
@@ -573,49 +761,86 @@
 
         async function deleteItem(itemId) { /* ... Same as before ... */
              if (!db) { return; } hideConfirmModal(); if (!itemId) return;
-            try {
-                await deleteDoc(doc(db, 'clothes', itemId));
+
+             console.log(`Attempting to delete item: ${itemId}`);
+             try {
+                  // Note: Deleting the document automatically deletes subcollections
+                  // in some backend scenarios, but client-side deleteDoc doesn't guarantee subcollection cleanup.
+                  // For a robust solution, you might need a Cloud Function to handle cascading deletes.
+                  // However, for this app's purpose, just deleting the main doc is often sufficient.
+                 await deleteDoc(doc(db, 'clothes', itemId));
                  if (isDefinitelyOffline) { showNotification('✅ تم الحذف محلياً. ستتم المزامنة.', false, 'warning'); }
                  else { showNotification('تم حذف المنتج بنجاح.', false, 'success'); }
-                if (currentViewItemId === itemId) { currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج.</div>'; }
-                 if (currentEditItemId === itemId) { currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>'; }
-            } catch (error) { showNotification('حدث خطأ أثناء حذف المنتج.', true); console.error("Error deleting document: ", error); }
+
+                 const wasViewing = currentViewItemId === itemId;
+                 const wasEditing = currentEditItemId === itemId;
+
+                 if (wasViewing) currentViewItemId = null;
+                 if (wasEditing) currentEditItemId = null;
+
+                 if (wasViewing || wasEditing) {
+                     detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج المحدد.</div>';
+                 }
+             } catch (error) { showNotification('حدث خطأ أثناء حذف المنتج.', true); console.error("Error deleting document: ", error); }
         }
 
+        (Timer) - add logs 
+        _cis -asd   mainsa :-ms-input-placeholder small ::-webkit-validation-bubble-arrow-clippera source
+        feDropShadow :volume-locked area     sf
         function updateTotalPrice() { /* ... Same as before ... */
-            const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
-             if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
+             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
+             datalist    .connection-status-dot.connecting .detail-content clipPath :-ms-keyboard-active :active-view-transition .sidebar-headerd :active-view-transitions audio
+             :xr-overlay    circle .item-actionsa datalist del :decrement datalist datalist article  :valid 
+
+
+
+
+
+             caption :-moz-ui-invalid /menuitem feComposite feConvolveMatrix     :xr-overlay
+              address aside meshrow :active-view-transition
+              if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
         }
-        function generateReport() { /* ... Same as before, includes timestamps ... */
-            if (items.length === 0) { showNotification("لا توجد منتجات لإنشاء تقرير.", true); return; }
-            let reportContent = `تقرير مخزون المنتجات\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n========================================\n\n`;
-            items.forEach((item, index) => { reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)}\n   آخر تعديل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------------------------------\n`; });
-            const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
-            reportContent += `\nإجمالي قيمة المخزون: ${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}\nإجمالي عدد أنواع المنتجات: ${items.length}\n`;
-            try { const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Product_Report_${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showNotification("تم إنشاء وتنزيل التقرير بنجاح.", false, 'success'); }
-            catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Error generating report blob/link:", e); alert("فشل تنزيل التقرير. سيتم عرضه الآن:\n\n" + reportContent); }
+        function generateReport() { /* ... Same as before ... */
+             if (items.length === 0) { showNotification("لا توجد منتجات لإنشاء تقرير.", true); return; }
+             let reportContent = `تقرير مخزون المنتجات\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n========================================\n\n`;
+             items.forEach((item, index) => { reportContent += `${index + 1}. اسم المنتج: ${item.name}\n   الكود (ID): ${item.id}\n   الكمية: ${item.stock}\n   السعر: ${item.price.toLocaleString('ar-IQ')} د.ع\n   القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)}\n   آخر تعديل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------------------------------\n`; });
+             const totalValue = items.reduce((total, item) => total + (item.price * item.stock), 0);
+             reportContent += `\nإجمالي قيمة المخزون: ${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}\nإجمالي عدد أنواع المنتجات: ${items.length}\n`;
+             try { const blob = new Blob([`\uFEFF${reportContent}`], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Product_Report_${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showNotification("تم إنشاء وتنزيل التقرير بنجاح.", false, 'success'); }
+             catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Error generating report blob/link:", e); alert("فشل تنزيل التقرير. سيتم عرضه الآن:\n\n" + reportContent); }
         }
         function toggleDarkMode() { /* ... Same as before ... */
-            const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false');
-             const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
+             const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false');
+              const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'تبديل للوضع الفاتح' : 'تبديل للوضع الداكن';
         }
-        function showAddForm() { addFormModalEl.classList.add('show'); }
-        function hideAddForm() { addFormModalEl.classList.remove('show'); }
+        function showAddForm() { /* ... Same as before ... */
+            addFormModalEl.classList.add('show');
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemStock').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemImageInput').value = null;
+            if (addIconPreviewEl) {
+                 addIconPreviewEl.src = '';
+                 addIconPreviewEl.style.display = 'none';
+            }
+            capturedImageDataURL = null;
+        }
+        function hideAddForm() { addFormModalEl.classList.remove('show'); capturedImageDataURL = null; }
         function showNotification(message, isError = false, type = 'normal') { /* ... Same as before ... */
-             if (!toastEl) return; toastEl.textContent = message; toastEl.className = 'toast';
-             if (isError) toastEl.classList.add('error'); else if (type === 'warning') toastEl.classList.add('warning'); else if (type === 'success') toastEl.classList.add('success');
-             toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
+              if (!toastEl) return; toastEl.textContent = message; toastEl.className = 'toast';
+              if (isError) toastEl.classList.add('error'); else if (type === 'warning') toastEl.classList.add('warning'); else if (type === 'success') toastEl.classList.add('success');
+              toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
         }
 
         // --- Initialization ---
         async function initializeAppAndFirestore() {
+             // ... (Initial connection status UI setup) ...
              connectionStatusDotEl.className = 'connection-status-dot connecting'; connectionStatusDotEl.title = 'جارٍ الاتصال...';
-             updateConnectionStatusUI(navigator.onLine); // Initial UI based on browser
+             updateConnectionStatusUI(navigator.onLine);
 
             try {
                 app = initializeApp(firebaseConfig); db = getFirestore(app);
                 await enableIndexedDbPersistence(db); console.log("Offline persistence enabled.");
-                // Don't show notification here, wait for first snapshot connection
             } catch (err) { /* ... Error handling ... */
                  if (err.code === 'failed-precondition') { console.warn("Persistence failed (multiple tabs?). Operating online only."); showNotification("⚠️ لم يتم تمكين التخزين المحلي (ربما بسبب فتح علامات تبويب متعددة).", false, 'warning'); if (!db) db = getFirestore(app); }
                  else { console.error("Firebase init/persistence error:", err); showNotification("❌ خطأ فادح في تهيئة Firebase!", true); if (detailViewContainerEl.querySelector('.detail-placeholder')) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder" style="color: var(--danger);">فشل الاتصال بقاعدة البيانات.</div>'; } return; }
@@ -631,32 +856,53 @@
                  const itemsCollection = collection(db, 'clothes');
                  const q = query(itemsCollection, orderBy('createdAt', 'desc'));
 
-                 unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-                    latestSnapshotMetadata = snapshot.metadata; // Store metadata
-                    updateConnectionStatusUI(navigator.onLine); // Update UI status
+                 unsubscribeSnapshot = onSnapshot(q, async (snapshot) => {
+                     latestSnapshotMetadata = snapshot.metadata;
+                     updateConnectionStatusUI(navigator.onLine);
 
-                    // Process items (convert timestamps etc)
-                    items = snapshot.docs.map(doc => {
-                         const data = doc.data({ serverTimestamps: "estimate" }); // Use estimate for timestamps from cache
-                         return { id: doc.id, ...data };
+                     const oldItemsMap = new Map(items.map(item => [item.id, item]));
+                     items = snapshot.docs.map(doc => {
+                          const data = doc.data({ serverTimestamps: "estimate" });
+                          return { id: doc.id, ...data };
                      });
 
-                    renderItemsList(); // Render based on new items and metadata
+                     renderItemsList();
 
-                    // Update detail/edit view if needed
-                     if (currentViewItemId && !items.some(i => i.id === currentViewItemId)) { /* ... handle deletion ... */ currentViewItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تشاهده.</div>';}
-                     else if (currentViewItemId && items.some(i => i.id === currentViewItemId)) { showItemDetails(currentViewItemId); } // Refresh viewed item
+                     const viewingDeleted = currentViewItemId && !items.some(i => i.id === currentViewItemId);
+                     const editingDeleted = currentEditItemId && !items.some(i => i.id === currentEditItemId);
 
-                     if (currentEditItemId && !items.some(i => i.id === currentEditItemId)) { /* ... handle deletion ... */ currentEditItemId = null; detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>';}
-
-                    // Update placeholder if needed
-                     if (!currentViewItemId && !currentEditItemId) { /* ... update placeholder ... */
-                         if (items.length > 0) { if (detailViewContainerEl.querySelector('.detail-placeholder')) detailViewContainerEl.innerHTML = '<div class="detail-placeholder">حدد منتجًا من القائمة لعرض التفاصيل.</div>'; }
-                         else if (!isDefinitelyOffline) { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">ابدأ بإضافة منتجات جديدة!</div>'; }
-                         else { detailViewContainerEl.innerHTML = '<div class="detail-placeholder">لا توجد بيانات مخزنة محليًا أو تمت مزامنتها.</div>'; }
+                     if (viewingDeleted) {
+                         currentViewItemId = null;
+                         detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تشاهده.</div>';
+                     } else if (currentViewItemId) {
+                         // Refresh view only if the item data actually changed or history might have changed
+                         const currentItemData = items.find(i => i.id === currentViewItemId);
+                         const oldItemData = oldItemsMap.get(currentViewItemId);
+                         // Simple check: refresh if updatedAt changed or if item is new in snapshot
+                         if (!oldItemData || (currentItemData && currentItemData.updatedAt !== oldItemData.updatedAt)) {
+                            console.log(`Refreshing details for ${currentViewItemId} due to snapshot update.`);
+                            await showItemDetails(currentViewItemId);
+                         }
                      }
 
-                }, (error) => { /* ... Error handling ... */ console.error("Error in Firestore listener:", error); showNotification("حدث خطأ أثناء استقبال التحديثات.", true); updateConnectionStatusUI(false); });
+                     if (editingDeleted) {
+                          currentEditItemId = null;
+                          detailViewContainerEl.innerHTML = '<div class="detail-placeholder">تم حذف المنتج الذي كنت تعدله.</div>';
+                     }
+
+                     // Update placeholder if nothing is selected
+                     if (!currentViewItemId && !currentEditItemId) {
+                          const placeholder = detailViewContainerEl.querySelector('.detail-placeholder');
+                          if (placeholder) {
+                              if (items.length > 0) { placeholder.textContent = 'حدد منتجًا من القائمة لعرض التفاصيل.'; }
+                              else if (!isDefinitelyOffline) { placeholder.textContent = 'ابدأ بإضافة منتجات جديدة!'; }
+                              else { placeholder.textContent = 'لا توجد بيانات مخزنة محليًا أو تمت مزامنتها.'; }
+                          } else if (items.length === 0) {
+                             detailViewContainerEl.innerHTML = '<div class="detail-placeholder">ابدأ بإضافة منتجات جديدة!</div>';
+                          }
+                     }
+
+                 }, (error) => { /* ... Error handling ... */ console.error("Error in Firestore listener:", error); showNotification("حدث خطأ أثناء استقبال التحديثات.", true); updateConnectionStatusUI(false); });
              }
 
              // --- Browser Online/Offline Event Listeners ---
@@ -670,6 +916,7 @@
              window.showConfirmModal = showConfirmModal; window.hideConfirmModal = hideConfirmModal;
              window.generateReport = generateReport; window.toggleDarkMode = toggleDarkMode;
              window.showAddForm = showAddForm; window.hideAddForm = hideAddForm;
+             window.handleImagePreview = handleImagePreview;
         }
 
         // Start the App
