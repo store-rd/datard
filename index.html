@@ -2,554 +2,1142 @@
 <html lang="ar" class="no-js" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>إدارة المنتجات فائقة السرعة</title>
+    <title>نظام إدارة المبيعات والمخزون الإحترافي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* --- CSS Styles remain largely the same as the previous optimized version --- */
-        /* (ضع هنا كل كود CSS من النسخة السابقة المحسنة) */
          :root {
-            --primary: #e74c3c; /* Stronger Red */
-            --secondary: #f1c40f; /* Yellow */
-            --accent: #3498db; /* Blue */
-            --info: #2ecc71; /* Green for Edit/Save */
-            --info-hover: #27ae60;
-            --danger: #e74c3c; /* Consistent Red */
-            --danger-hover: #c0392b;
-            --dark: #34495e; /* Dark Blue/Grey */
-            --light: #ecf0f1; /* Light Grey */
-            --grey-light: #f8f9fa;
-            --grey-dark: #bdc3c7; /* Lighter Grey */
-            --offline-indicator: #f39c12; /* Orange */
-            --syncing-indicator: var(--offline-indicator); /* Use same color for syncing dot */
-            --connecting-indicator: #adb5bd; /* Grey for connecting dot */
-            --timestamp-color: #7f8c8d; /* Grey for timestamps */
-            --shadow-color: rgba(0, 0, 0, 0.08); /* Softer shadow */
-            --shadow-color-darker: rgba(0, 0, 0, 0.12);
-            --font-primary: 'Tajawal', 'Changa', sans-serif;
-        }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: var(--font-primary); background: linear-gradient(135deg, var(--light), #ffffff);
-            color: var(--dark); display: flex; height: 100vh; overflow: hidden;
-            transition: background-color 0.5s, color 0.5s; font-size: 16px;
-            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-        }
-        body.dark-mode {
-            background: linear-gradient(135deg, #34495e, #2c3e50); color: var(--light);
-            --shadow-color: rgba(255, 255, 255, 0.06); --shadow-color-darker: rgba(255, 255, 255, 0.1);
-            --grey-light: #4a4a4a; --grey-dark: #5a5a5a; --light: #343a40; --dark: #ecf0f1;
-            --timestamp-color: #95a5a6;
-        }
-        .offline-banner {
-            position: fixed; top: 0; left: 0; right: 0; background-color: var(--offline-indicator);
-            color: white; text-align: center; padding: 6px 10px; font-size: 0.9em; z-index: 2001;
-            display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-weight: 700;
-            animation: slideDown 0.3s ease-out;
-        }
-        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .offline-banner.show { display: block; }
-        .sidebar {
-            width: 340px; min-width: 300px; background: white; height: 100%; display: flex; flex-direction: column;
-            border-left: 1px solid #dee2e6; box-shadow: -3px 0 12px var(--shadow-color); z-index: 10;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .dark-mode .sidebar { background: #2c3e50; border-left-color: #495057; box-shadow: -3px 0 12px var(--shadow-color-darker); }
-        .sidebar-header {
-            padding: 18px 22px; border-bottom: 1px solid #dee2e6; font-size: 1.4em; font-weight: 700;
-            color: var(--dark); flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: space-between;
-        }
-        .dark-mode .sidebar-header { border-bottom-color: #495057; color: var(--light); }
-        .connection-status-dot {
-            width: 12px; height: 12px; border-radius: 50%; background-color: var(--connecting-indicator);
-            display: inline-block; transition: background-color 0.5s, box-shadow 0.3s; flex-shrink: 0;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-        .connection-status-dot.connecting { background-color: var(--connecting-indicator); animation: pulse 1.5s infinite ease-in-out; }
-        .connection-status-dot.connected { background-color: #2ecc71; border-color: #27ae60; box-shadow: 0 0 5px rgba(46, 204, 113, 0.7); animation: none; }
-        .connection-status-dot.syncing { background-color: var(--syncing-indicator); border-color: #d35400; box-shadow: 0 0 5px rgba(243, 156, 18, 0.7); animation: pulse 1s infinite ease-in-out; }
-        .connection-status-dot.disconnected { background-color: #e74c3c; border-color: #c0392b; box-shadow: 0 0 5px rgba(231, 76, 60, 0.7); animation: none; }
-        .dark-mode .connection-status-dot { border-color: rgba(255,255,255,0.2); }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        #items-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
-         /* Style for placeholder when list is empty */
-         #items-list .empty-list-placeholder { text-align: center; padding: 20px; opacity: 0.7; color: var(--dark); }
-         .dark-mode #items-list .empty-list-placeholder { color: var(--light); }
+             /* Palette */
+             --primary: #D32F2F; --secondary: #FFA000; --accent: #1976D2; --info: #388E3C; --info-hover: #2E7D32; --danger: #D32F2F; --danger-hover: #C62828; --dark: #263238; --light: #ECEFF1; --grey-light: #FAFAFA; --grey-medium: #CFD8DC; --grey-dark: #78909C; --offline-indicator: #FFA000; --timestamp-color: #90A4AE;
+            /* Shadows */
+             --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.07); --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.1); --shadow-lg: 0 12px 25px rgba(0, 0, 0, 0.12); --shadow-inset: inset 0 1px 3px rgba(0,0,0,0.08);
+            /* Dark Shadows */
+             --shadow-dark-sm: 0 2px 5px rgba(0, 0, 0, 0.25); --shadow-dark-md: 0 6px 12px rgba(0, 0, 0, 0.3); --shadow-dark-lg: 0 12px 25px rgba(0, 0, 0, 0.35); --shadow-dark-inset: inset 0 1px 3px rgba(0,0,0,0.3);
+            /* Font */
+             --font-primary: 'Tajawal', 'Changa', sans-serif;
+            /* Transitions */
+             --transition-speed: 0.25s; --transition-ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Borders */
+             --border-radius-sm: 6px; --border-radius-md: 10px; --border-radius-lg: 16px;
+         }
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+         body { font-family: var(--font-primary); background: linear-gradient(145deg, #f9fafb, #eef2f7); color: #334155; display: flex; height: 100vh; overflow: hidden; transition: background var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease); font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; perspective: 1200px; }
+         body.dark-mode { background: linear-gradient(145deg, #303d4a, #1d252d); color: var(--light); --shadow-sm: var(--shadow-dark-sm); --shadow-md: var(--shadow-dark-md); --shadow-lg: var(--shadow-dark-lg); --shadow-inset: var(--shadow-dark-inset); --grey-light: #455A64; --grey-medium: #546E7A; --grey-dark: #78909C; --light: #CFD8DC; --dark: #37474F; --timestamp-color: #90A4AE; }
+         .offline-banner { position: fixed; top: 0; left: 0; right: 0; background-color: var(--offline-indicator); color: white; text-align: center; padding: 6px 10px; font-size: 0.9em; z-index: 2001; display: none; box-shadow: 0 3px 6px rgba(0,0,0,0.2); font-weight: 700; animation: slideDown 0.4s ease-out; }
+         @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+         .offline-banner.show { display: block; }
+         .sidebar { width: 360px; min-width: 320px; background: #ffffff; height: 100%; display: flex; flex-direction: column; border-left: 1px solid var(--grey-medium); box-shadow: -5px 0 20px rgba(0,0,0,0.1); z-index: 10; transition: all var(--transition-speed) var(--transition-ease); }
+         .dark-mode .sidebar { background: #263238; border-left-color: #37474F; box-shadow: -5px 0 20px rgba(0,0,0,0.2); }
+         .sidebar-header { padding: 20px 25px; border-bottom: 1px solid var(--grey-medium); font-size: 1.5em; font-weight: 700; color: var(--dark); flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0)); }
+          .dark-mode .sidebar-header { border-bottom-color: #37474F; color: var(--light); background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(255,255,255,0)); }
+           .connection-status-dot { width: 12px; height: 12px; border-radius: 50%; background-color: var(--connecting-indicator); display: inline-block; transition: background-color 0.5s, box-shadow 0.3s; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.1); } .connection-status-dot.connecting { background-color: var(--connecting-indicator); animation: pulse 1.5s infinite ease-in-out; } .connection-status-dot.connected { background-color: var(--info); border-color: var(--info-hover); box-shadow: 0 0 6px rgba(76, 175, 80, 0.7); animation: none; } .connection-status-dot.syncing { background-color: var(--offline-indicator); border-color: #d35400; box-shadow: 0 0 6px rgba(243, 156, 18, 0.7); animation: pulse 1s infinite ease-in-out; } .connection-status-dot.disconnected { background-color: var(--danger); border-color: var(--danger-hover); box-shadow: 0 0 6px rgba(231, 76, 60, 0.7); animation: none; } .dark-mode .connection-status-dot { border-color: rgba(255,255,255,0.2); } @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+         #items-list { flex-grow: 1; overflow-y: auto; padding: 15px 20px; }
+           #items-list .empty-list-placeholder { text-align: center; padding: 40px 20px; opacity: 0.6; color: var(--grey-dark); font-size: 1.1em; }
+           .dark-mode #items-list .empty-list-placeholder { color: var(--grey-dark); }
+         .item-card { padding: 15px; margin-bottom: 15px; background: #ffffff; border: 1px solid var(--grey-medium); border-radius: var(--border-radius-md); cursor: pointer; transition: all var(--transition-speed) var(--transition-ease); display: flex; align-items: center; gap: 15px; position: relative; border-left: 6px solid transparent; box-shadow: var(--shadow-sm); transform: translateZ(0); }
+         .item-card.has-pending-writes { border-left-color: var(--offline-indicator); /* Changed from --syncing-indicator */ }
+         .dark-mode .item-card { background: #37474F; border-color: #455A64; }
+         .item-card:hover { transform: scale(1.03) translateZ(10px); box-shadow: var(--shadow-md); z-index: 10; }
+         .item-card.selected { background: linear-gradient(135deg, var(--accent), #5dade2); color: white; border-color: var(--accent); box-shadow: 0 5px 15px rgba(30, 136, 229, 0.4); transform: scale(1.02) translateZ(5px); border-left-color: var(--accent); }
+           .item-card.selected.has-pending-writes { border-left-color: var(--secondary); }
+         .dark-mode .item-card.selected { background: linear-gradient(135deg, var(--primary), #f0625b); color: white; border-color: var(--primary); box-shadow: 0 5px 15px rgba(229, 57, 53, 0.4); border-left-color: var(--primary); }
+           .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--secondary); }
+         .item-icon { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 3px solid white; box-shadow: var(--shadow-sm); padding: 2px; background-color: var(--grey-light); transition: transform var(--transition-speed) var(--transition-ease); }
+         .item-card:hover .item-icon { transform: scale(1.1); }
+         .dark-mode .item-icon { border-color: var(--grey-dark); background-color: #455A64; }
+         .item-card.selected .item-icon { border-color: rgba(255, 255, 255, 0.8); background-color: transparent; }
+         .item-details { flex-grow: 1; overflow: hidden; }
+         .item-details h4 { margin: 0 0 5px 0; font-size: 1.2em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+         .item-details p { margin: 0; font-size: 0.95em; opacity: 0.9; white-space: nowrap; color: var(--dark); font-weight: 400; }
+         .dark-mode .item-details p { color: var(--light); opacity: 0.85; }
+         .item-card.selected h4, .item-card.selected p { color: white; opacity: 1; }
+         .item-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+         .item-actions button { background: transparent; border: 1px solid var(--grey-medium); color: var(--grey-dark); cursor: pointer; padding: 0; font-size: 1.1em; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; transition: all var(--transition-speed) var(--transition-ease); box-shadow: var(--shadow-sm); }
+         .dark-mode .item-actions button { border-color: var(--grey-dark); color: var(--grey-dark); }
+         .item-card.selected .item-actions button { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white; }
+         .item-actions button:hover { transform: scale(1.1); box-shadow: var(--shadow-md); }
+         .item-actions .edit-btn:hover { background-color: var(--info); color: white; border-color: transparent; }
+         .item-actions .delete-btn:hover { background-color: var(--danger); color: white; border-color: transparent; }
+         .sidebar-footer { padding: 20px; border-top: 1px solid var(--grey-medium); flex-shrink: 0; background: #F5F7FA; }
+         .dark-mode .sidebar-footer { border-top-color: #37474F; background: #2a353c; }
+         /* Footer Summary */
+         #footer-summary { text-align: center; margin-bottom: 15px; font-weight: bold; font-size: 1.1em; color: var(--dark); }
+         .dark-mode #footer-summary { color: var(--light); }
+         #footer-summary span { color: var(--info); font-weight: 700; }
+         .dark-mode #footer-summary span { color: var(--accent); }
 
-        .item-card {
-            padding: 12px; margin-bottom: 12px; background: #ffffff; border: 1px solid #e9ecef;
-            border-radius: 8px; cursor: pointer; transition: all 0.2s ease-out; display: flex; align-items: center; gap: 12px;
-            position: relative; border-left: 5px solid transparent; will-change: transform, box-shadow, background-color;
-        }
-        .item-card.has-pending-writes { border-left-color: var(--syncing-indicator); opacity: 0.9; }
-        .dark-mode .item-card { background: #34495e; border-color: #495057; }
-        .item-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px var(--shadow-color); border-color: #ced4da; z-index: 1; }
-        .dark-mode .item-card:hover { background: #495057; border-color: #6c757d; }
-        .item-card.selected { background-color: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); transform: scale(1.01); }
-        .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
-        .dark-mode .item-card.selected { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4); }
-        .dark-mode .item-card.selected.has-pending-writes { border-left-color: var(--syncing-indicator); }
-        .item-icon { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--light); box-shadow: 0 1px 3px rgba(0,0,0,0.1); background-color: #eee; }
-        .dark-mode .item-icon { border-color: #495057; background-color: #555; }
-        .item-card.selected .item-icon { border-color: rgba(255, 255, 255, 0.6); }
-        .item-details { flex-grow: 1; overflow: hidden; }
-        .item-details h4 { margin: 0 0 4px 0; font-size: 1.1em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-details p { margin: 0; font-size: 0.9em; opacity: 0.9; white-space: nowrap; color: #555; font-weight: 400; }
-        .dark-mode .item-details p { color: #adb5bd; }
-        .item-card.selected h4, .item-card.selected p { color: white; opacity: 1; }
-        .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-        .item-actions button { background: rgba(0,0,0,0.05); border: none; color: var(--dark); cursor: pointer; padding: 6px; font-size: 1.1em; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .dark-mode .item-actions button { background: rgba(255,255,255,0.1); color: var(--light); }
-        .item-card.selected .item-actions button { background: rgba(255,255,255,0.2); color: white; }
-        .item-actions button:hover { transform: scale(1.15); }
-        .item-actions .edit-btn:hover { background-color: var(--info); color: white; }
-        .item-actions .delete-btn:hover { background-color: var(--danger); color: white; }
-        .sidebar-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; flex-shrink: 0; background-color: #f8f9fa; }
-        .dark-mode .sidebar-footer { border-top-color: #495057; background-color: #212529; }
-        #total-price-container { text-align: center; font-weight: 700; margin-bottom: 12px; font-size: 1.15em; }
-        .report-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px 15px; background-color: var(--dark); color: white; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-size: 1.05em; transition: background-color 0.3s, transform 0.1s; font-weight: 700; }
-        .report-btn:hover { background-color: #555; transform: translateY(-1px); }
-        .dark-mode .report-btn { background-color: var(--grey-light); color: var(--dark); }
-        .dark-mode .report-btn:hover { background-color: var(--grey-dark); }
-        .report-btn .icon { font-size: 1.3em; }
-        #detail-view-container {
-            flex-grow: 1; height: 100%; padding: 35px 40px; overflow-y: auto; position: relative;
-            display: flex; align-items: center; justify-content: center; background-color: #ffffff;
-        }
-        .dark-mode #detail-view-container { background-color: #343a40; }
-        .detail-placeholder, .detail-error { text-align: center; padding: 20px; font-size: 1.2em; font-weight: 700; opacity: 0.8; }
-        .detail-placeholder { color: #6c757d; }
-        .dark-mode .detail-placeholder { color: #adb5bd; }
-        .detail-error { color: var(--danger); background-color: rgba(231, 76, 60, 0.1); border: 1px solid var(--danger); border-radius: 8px; }
-        .dark-mode .detail-error { background-color: rgba(231, 76, 60, 0.2); }
-        .detail-error strong { display: block; margin-bottom: 5px; }
-        .detail-content, .edit-form-container {
-            background: var(--light); padding: 30px 35px; border-radius: 12px; border: 1px solid #dee2e6;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); width: 100%; max-width: 550px; animation: fadeIn 0.3s ease-out;
-        }
-        .dark-mode .detail-content, .dark-mode .edit-form-container { background: #2c3e50; border-color: #495057; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .detail-content h2, .edit-form-container h3 { margin-top: 0; margin-bottom: 25px; color: var(--primary); text-align: center; font-weight: 700; }
-        .dark-mode .detail-content h2, .dark-mode .edit-form-container h3 { color: var(--secondary); }
-        .detail-content p { margin-bottom: 15px; font-size: 1.1em; line-height: 1.7; }
-        .detail-content p strong { color: var(--dark); font-weight: 700; margin-left: 5px; }
-        .dark-mode .detail-content p strong { color: var(--light); }
-        .detail-content .timestamp { font-size: 0.9em; color: var(--timestamp-color); text-align: center; margin-top: 25px; border-top: 1px dashed var(--grey-dark); padding-top: 15px; line-height: 1.6; }
-        .dark-mode .detail-content .timestamp { border-top-color: #495057; }
-        .detail-content .history-section {
-            font-size: 0.9em; color: var(--timestamp-color); text-align: right;
-            margin-top: 25px; border-top: 1px dashed var(--grey-dark); padding-top: 15px;
-            line-height: 1.6; max-height: 200px; overflow-y: auto;
-            background: rgba(0,0,0,0.02); padding: 10px; border-radius: 6px;
-        }
-        .dark-mode .detail-content .history-section { border-top-color: #495057; background: rgba(255,255,255,0.04);}
-        .history-section h4 { margin-bottom: 10px; color: var(--dark); font-size: 1em; text-align: center; font-weight: 700; }
-        .dark-mode .history-section h4 { color: var(--light); }
-        .history-section ul { list-style: none; padding: 0; margin: 0; }
-        .history-section li { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.08); }
-        .dark-mode .history-section li { border-bottom-color: rgba(255,255,255,0.1); }
-        .history-section li:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0;}
-        .history-section .history-timestamp { font-weight: 700; color: var(--accent); display: block; margin-bottom: 5px; }
-        .dark-mode .history-section .history-timestamp { color: var(--secondary); }
-        .history-section .change-detail { display: block; font-size: 0.95em; color: var(--dark); }
-        .dark-mode .history-section .change-detail { color: var(--light); }
-        .history-section del { opacity: 0.7; text-decoration: line-through; color: var(--danger); }
-        .dark-mode .history-section del { color: #ff8a80; }
-        .history-section .no-history { text-align: center; opacity: 0.8; padding: 10px 0; }
-        .detail-content img.detail-icon { display: block; width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 25px auto; border: 4px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: #eee;}
-        .dark-mode .detail-content img.detail-icon { border-color: var(--secondary); background-color: #555;}
-        .edit-form-container label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95em; color: #555; }
-        .dark-mode .edit-form-container label { color: #ccc; }
-        .edit-form-container input, .edit-form-container .image-upload-area { width: 100%; margin-bottom: 18px; }
-        .edit-form-container input[type="text"], .edit-form-container input[type="number"] { padding: 14px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; transition: border-color 0.2s, box-shadow 0.2s; }
-        .edit-form-container input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); outline: none; }
-        .dark-mode .edit-form-container input[type="text"], .dark-mode .edit-form-container input[type="number"] { background-color: #495057; border-color: #6c757d; color: var(--light); }
-        .dark-mode .edit-form-container input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.2); }
-        .image-upload-area { display: flex; align-items: center; gap: 15px; border: 1px dashed var(--grey-dark); padding: 10px; border-radius: 8px; }
-        .image-upload-area input[type="file"] { display: none; }
-        .image-upload-area .btn-capture { background-color: var(--accent); color: white; padding: 10px 15px; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; font-size: 0.9em; font-weight: 700; text-align: center;}
-        .image-upload-area .upload-progress { font-size: 0.85em; margin-right: 10px; color: var(--accent); font-weight: bold; }
-        .dark-mode .image-upload-area .upload-progress { color: var(--secondary); }
-        .dark-mode .image-upload-area .btn-capture { background-color: var(--secondary); color: var(--dark); }
-        .image-upload-area .btn-capture:hover { opacity: 0.9; }
-        .image-upload-area img.icon-preview { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--grey-dark); background-color: #eee; flex-shrink: 0; }
-        .dark-mode .image-upload-area img.icon-preview { border-color: #555; background-color: #444; }
-        .form-buttons { display: flex; gap: 12px; margin-top: 25px; }
-        .form-buttons button { flex-grow: 1; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-family: var(--font-primary); font-weight: 700; font-size: 1.05em; transition: all 0.2s ease-out; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .form-buttons button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; background-color: #adb5bd !important; box-shadow: none !important; }
-        .form-buttons .btn-save { background-color: var(--info); color: white; }
-        .form-buttons .btn-save:hover:not(:disabled) { background-color: var(--info-hover); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .form-buttons .btn-cancel { background-color: #adb5bd; color: #fff; }
-        .form-buttons .btn-cancel:hover { background-color: #6c757d; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
-        .dark-mode .form-buttons .btn-save { background-color: var(--accent); color: white; }
-        .dark-mode .form-buttons .btn-save:hover:not(:disabled) { background-color: #2980b9; }
-        .dark-mode .form-buttons .btn-cancel { background-color: #6c757d; color: white; }
-        .dark-mode .form-buttons .btn-cancel:hover { background-color: #5a6268; }
-        .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; backdrop-filter: blur(5px); }
-        .modal.show { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s linear 0s; }
-        .modal-content { background: white; padding: 35px; border-radius: 15px; width: 90%; max-width: 480px; box-shadow: 0 10px 35px rgba(0,0,0,0.15); position: relative; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .modal.show .modal-content { transform: scale(1); }
-        .dark-mode .modal-content { background: #34495e; color: var(--light); box-shadow: 0 10px 35px rgba(0,0,0,0.3); }
-        .modal-content h3 { margin-top: 0; margin-bottom: 25px; text-align: center; color: var(--primary); font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .dark-mode .modal-content h3 { color: var(--secondary); }
-        .modal-content label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.95em; color: #555; }
-        .dark-mode .modal-content label { color: #ccc; }
-        .modal-content input[type="text"], .modal-content input[type="number"] { width: 100%; padding: 14px; margin-bottom: 18px; border: 1px solid #ced4da; border-radius: 8px; font-family: var(--font-primary); font-size: 1em; }
-        .dark-mode .modal-content input[type="text"], .dark-mode .modal-content input[type="number"] { background-color: #495057; border-color: #6c757d; color: var(--light); }
-        #addFormModal .image-upload-area { margin-bottom: 18px; }
-        .close-btn { position: absolute; top: 12px; left: 15px; background: none; border: none; font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1; padding: 5px; transition: color 0.2s, transform 0.2s; }
-        .close-btn:hover { color: var(--danger); transform: rotate(90deg) scale(1.1); }
-        .dark-mode .close-btn { color: #777; }
-        .dark-mode .close-btn:hover { color: var(--primary); }
-        #confirmMessage { font-size: 1.1em; line-height: 1.6; }
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #34495e; color: white; padding: 12px 22px; border-radius: 8px; z-index: 2000; font-size: 0.95em; box-shadow: 0 4px 15px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease; font-weight: 700; }
-        #toast.show { opacity: 1; visibility: visible; bottom: 30px; transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease; }
-        #toast.error { background-color: var(--danger); }
-        #toast.warning { background-color: var(--offline-indicator); color: #333; }
-        #toast.success { background-color: var(--info); }
-        .dark-mode #toast { background: #495057; }
-        .dark-mode #toast.error { background-color: var(--danger-hover); }
-        .dark-mode #toast.warning { background-color: var(--secondary); color: var(--dark); }
-        .dark-mode #toast.success { background-color: var(--info-hover); }
-        .control-panel { position: fixed; bottom: 25px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 100; }
-        .btn-magic { background: var(--accent); border: none; width: 55px; height: 55px; border-radius: 50%; color: white; font-size: 1.8em; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4); display: flex; justify-content: center; align-items: center; }
-        .btn-magic:hover { background-color: #2980b9; transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5); }
-        .dark-mode .btn-magic { background: var(--secondary); color: var(--dark); box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3); }
-        .dark-mode .btn-magic:hover { background: #f39c12; }
-        @media (max-width: 768px) {
-            body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; }
-            #detail-view-container { order: 1; height: auto; min-height: 40vh; padding: 20px 15px; }
-            .detail-content, .edit-form-container { padding: 20px 25px; max-width: none; }
-            .sidebar { order: 2; width: 100%; height: auto; min-height: 55vh; border-left: none; border-top: 1px solid #dee2e6; box-shadow: none; }
-            .dark-mode .sidebar { border-top-color: #495057; }
-            #items-list { max-height: none; padding: 10px; }
-            .sidebar-header { padding: 15px; font-size: 1.3em; }
-            .sidebar-footer { padding: 15px; }
-            .control-panel { bottom: 20px; left: 20px; right: auto; transform: none; flex-direction: column; gap: 12px; background: transparent; box-shadow: none; }
-            .btn-magic { width: 50px; height: 50px; font-size: 1.6em; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-            .dark-mode .btn-magic { box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-            #toast { bottom: 90px; width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
-            .modal-content { width: 95%; padding: 25px; }
-            .form-buttons { flex-direction: column; }
-            .offline-banner { font-size: 0.8em; padding: 4px 8px; }
-            .image-upload-area { flex-direction: column; align-items: stretch; text-align: center; }
-            .image-upload-area .btn-capture { width: 100%; }
-            .image-upload-area img.icon-preview { margin: 10px auto 0; }
-            .image-upload-area .upload-progress { text-align: center; width: 100%; margin-top: 5px;} /* Center progress on mobile */
-            .detail-content .history-section { max-height: 150px; }
-        }
+         .report-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 12px 15px; background-color: var(--dark); color: white; border: none; border-radius: var(--border-radius-md); cursor: pointer; font-family: var(--font-primary); font-size: 1.05em; transition: all var(--transition-speed) var(--transition-ease); font-weight: 700; box-shadow: var(--shadow-sm); }
+         .report-btn:hover { background-color: #455A64; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+         .dark-mode .report-btn { background-color: var(--grey-dark); color: var(--dark); }
+         .dark-mode .report-btn:hover { background-color: #607D8B; }
+         .report-btn .icon, .report-btn i { margin-left: 5px; } /* RTL spacing for icon */
+
+         #detail-view-container { flex-grow: 1; height: 100%; padding: 40px; overflow-y: auto; position: relative; display: flex; align-items:center; justify-content: center; background-color: #ffffff; }
+         .dark-mode #detail-view-container { background-color: #303d4a; }
+         .detail-placeholder, .detail-error { text-align: center; padding: 30px; font-size: 1.25em; font-weight: 700; opacity: 0.7; }
+         .detail-placeholder { color: var(--grey-dark); }
+         .dark-mode .detail-placeholder { color: #90A4AE; }
+         .detail-error { color: var(--danger); background-color: rgba(229, 57, 53, 0.08); border: 1px solid rgba(229, 57, 53, 0.3); border-radius: var(--border-radius-md); }
+         .dark-mode .detail-error { background-color: rgba(229, 57, 53, 0.15); }
+         .detail-error strong { display: block; margin-bottom: 8px; }
+         .detail-content, .edit-form-container { background: #ffffff; padding: 35px 40px; border-radius: var(--border-radius-lg); border: 1px solid var(--grey-medium); box-shadow: var(--shadow-lg); width: 100%; max-width: 580px; animation: fadeIn 0.5s var(--transition-ease); transform: translateZ(0); }
+         .dark-mode .detail-content, .dark-mode .edit-form-container { background: #2C3E50; border-color: #455A64; box-shadow: var(--shadow-lg); }
+         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) translateZ(0); } to { opacity: 1; transform: translateY(0) translateZ(0); } }
+         .detail-content h2, .edit-form-container h3 { margin-top: 0; margin-bottom: 30px; color: var(--primary); text-align: center; font-weight: 700; font-size: 1.8em; }
+         .dark-mode .detail-content h2, .dark-mode .edit-form-container h3 { color: var(--secondary); }
+         .detail-content p { margin-bottom: 18px; font-size: 1.1em; line-height: 1.8; }
+         .detail-content p strong { color: var(--dark); font-weight: 700; margin-left: 8px; }
+         .dark-mode .detail-content p strong { color: var(--light); }
+         .detail-content .timestamp { font-size: 0.9em; color: var(--timestamp-color); text-align: center; margin-top: 30px; border-top: 1px dashed var(--grey-dark); padding-top: 20px; line-height: 1.7; }
+         .dark-mode .detail-content .timestamp { border-top-color: #455A64; }
+         .detail-content .history-section { font-size: 0.9em; color: var(--timestamp-color); text-align: right; margin-top: 30px; border-top: 1px dashed var(--grey-dark); padding-top: 20px; line-height: 1.7; max-height: 220px; overflow-y: auto; background: rgba(0,0,0,0.02); padding: 15px; border-radius: var(--border-radius-md); }
+         .dark-mode .detail-content .history-section { border-top-color: #455A64; background: rgba(255,255,255,0.04);}
+         .history-section h4 { margin-bottom: 12px; color: var(--dark); font-size: 1.05em; text-align: center; font-weight: 700; }
+         .dark-mode .history-section h4 { color: var(--light); }
+         .history-section ul { list-style: none; padding: 0; margin: 0; }
+         .history-section li { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+         .dark-mode .history-section li { border-bottom-color: rgba(255,255,255,0.08); }
+         .history-section li:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0;}
+         .history-section .history-timestamp { font-weight: 700; color: var(--accent); display: block; margin-bottom: 6px; font-size: 0.95em; }
+         .dark-mode .history-section .history-timestamp { color: var(--secondary); }
+         .history-section .change-detail { display: block; font-size: 1em; color: var(--dark); }
+         .dark-mode .history-section .change-detail { color: var(--light); }
+         .history-section del { opacity: 0.7; text-decoration: line-through; color: var(--danger); background-color: rgba(229, 57, 53, 0.05); padding: 0 2px; border-radius: 3px;}
+         .dark-mode .history-section del { color: #ff8a80; background-color: rgba(255, 138, 128, 0.1); }
+         .detail-content img.detail-icon { display: block; width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 30px auto; border: 5px solid white; box-shadow: var(--shadow-lg); background-color: var(--grey-light); object-fit: cover; }
+         .dark-mode .detail-content img.detail-icon { border-color: var(--grey-dark); background-color: #546E7A; }
+
+         /* Form Input Styling */
+         .edit-form-container label, .modal-content label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 1em; color: #455A64; }
+         .dark-mode .edit-form-container label, .dark-mode .modal-content label { color: #B0BEC5; }
+         .edit-form-container input[type="text"], .edit-form-container input[type="number"], .edit-form-container input[type="url"],
+         .modal-content input[type="text"], .modal-content input[type="number"], .modal-content input[type="url"], .modal-content select, .modal-content input[type="date"] {
+              width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid var(--grey-medium); border-radius: var(--border-radius-md); font-family: var(--font-primary); font-size: 1em; transition: border-color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease); box-shadow: var(--shadow-inset); background-color: #FFFFFF;
+         }
+         .edit-form-container input:focus, .modal-content input:focus, .modal-content select:focus, .modal-content input[type="date"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2), var(--shadow-inset); outline: none; }
+         .dark-mode .edit-form-container input[type="text"], .dark-mode .edit-form-container input[type="number"], .dark-mode .edit-form-container input[type="url"],
+         .dark-mode .modal-content input[type="text"], .dark-mode .modal-content input[type="number"], .dark-mode .modal-content input[type="url"], .dark-mode .modal-content select, .dark-mode .modal-content input[type="date"] { background-color: #455A64; border-color: #546E7A; color: var(--light); box-shadow: var(--shadow-dark-inset); }
+         .dark-mode .edit-form-container input:focus, .dark-mode .modal-content input:focus, .dark-mode .modal-content select:focus, .dark-mode .modal-content input[type="date"]:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.2), var(--shadow-dark-inset); }
+
+         /* Button Styling */
+         .form-buttons { display: flex; gap: 15px; margin-top: 30px; }
+         .form-buttons button, .modal-footer button { /* Apply common styles also to modal footer buttons */
+             flex-grow: 1; padding: 15px; border: none; border-radius: var(--border-radius-md); cursor: pointer; font-family: var(--font-primary); font-weight: 700; font-size: 1.1em; transition: all var(--transition-speed) var(--transition-ease); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: var(--shadow-sm);
+         }
+         .form-buttons button:hover:not(:disabled), .modal-footer button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+         .form-buttons button:active:not(:disabled), .modal-footer button:active:not(:disabled) { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+         .form-buttons button:disabled, .modal-footer button:disabled { opacity: 0.6; cursor: not-allowed; background-color: #B0BEC5 !important; box-shadow: none !important; transform: none !important; }
+         .form-buttons .btn-save, .modal-footer .btn-save { /* Apply save styles */
+             background: linear-gradient(135deg, var(--info), var(--info-hover)); color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+         .form-buttons .btn-save:hover:not(:disabled), .modal-footer .btn-save:hover:not(:disabled) { background: linear-gradient(135deg, var(--info-hover), var(--info)); }
+         .form-buttons .btn-cancel, .modal-footer .btn-cancel { /* Apply cancel styles */
+             background: linear-gradient(135deg, #B0BEC5, #90A4AE); color: #37474F; }
+         .form-buttons .btn-cancel:hover:not(:disabled), .modal-footer .btn-cancel:hover:not(:disabled) { background: linear-gradient(135deg, #90A4AE, #78909C); }
+
+         /* Dark Mode Button Styles */
+         .dark-mode .form-buttons .btn-save, .dark-mode .modal-footer .btn-save { background: linear-gradient(135deg, var(--accent), #4fa8e1); }
+         .dark-mode .form-buttons .btn-save:hover:not(:disabled), .dark-mode .modal-footer .btn-save:hover:not(:disabled) { background: linear-gradient(135deg, #4fa8e1, var(--accent)); }
+         .dark-mode .form-buttons .btn-cancel, .dark-mode .modal-footer .btn-cancel { background: linear-gradient(135deg, #546E7A, #455A64); color: var(--light); }
+         .dark-mode .form-buttons .btn-cancel:hover:not(:disabled), .dark-mode .modal-footer .btn-cancel:hover:not(:disabled) { background: linear-gradient(135deg, #455A64, #37474F); }
+
+         /* Modal Styling */
+         .modal { position: fixed; inset: 0; background: rgba(38, 50, 56, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.4s var(--transition-ease), visibility 0s linear 0.4s; backdrop-filter: blur(8px); }
+         .modal.show { opacity: 1; visibility: visible; transition-delay: 0s; }
+         .modal-content { background: #ffffff; padding: 40px; border-radius: var(--border-radius-lg); width: 90%; max-width: 550px; box-shadow: var(--shadow-lg); position: relative; transform: scale(0.9) translateY(20px); transition: transform 0.4s var(--transition-ease); }
+         .modal.show .modal-content { transform: scale(1) translateY(0); }
+         .dark-mode .modal-content { background: #37474F; color: var(--light); box-shadow: var(--shadow-lg); }
+         .modal-content h3 { margin-top: 0; margin-bottom: 30px; text-align: center; color: var(--primary); font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.6em; }
+         .dark-mode .modal-content h3 { color: var(--secondary); }
+         .close-btn { position: absolute; top: 15px; left: 20px; background: none; border: none; font-size: 2.5em; color: var(--grey-dark); cursor: pointer; line-height: 1; padding: 5px; transition: color var(--transition-speed) var(--transition-ease), transform var(--transition-speed) var(--transition-ease); z-index: 10; /* Ensure it's above potential overlays */ }
+         .close-btn:hover { color: var(--danger); transform: rotate(90deg) scale(1.15); }
+         .dark-mode .close-btn { color: #78909C; }
+         .dark-mode .close-btn:hover { color: var(--primary); }
+         #confirmMessage { font-size: 1.15em; line-height: 1.7; }
+
+         /* Log Sale Modal Specific Styles */
+         #logSaleModal .modal-content { max-width: 650px; }
+         #logSaleModal .sale-item-entry { display: grid; grid-template-columns: 1fr auto auto auto; gap: 10px; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--grey-medium); }
+         .dark-mode #logSaleModal .sale-item-entry { border-bottom-color: var(--grey-dark); }
+         #logSaleModal .sale-item-entry label { display: none; }
+         #logSaleModal .sale-item-entry select, #logSaleModal .sale-item-entry input { margin-bottom: 0; font-size: 0.95em; }
+         #logSaleModal .sale-item-entry input[type="number"] { width: 90px; text-align: center; }
+         #logSaleModal .sale-item-entry .remove-sale-item-btn { background: transparent; border: none; color: var(--danger); font-size: 1.4em; cursor: pointer; padding: 0 5px; transition: color 0.2s; }
+         #logSaleModal .sale-item-entry .remove-sale-item-btn:hover { color: var(--danger-hover); }
+         #add-sale-item-btn { display: block; width: auto; margin: 15px auto 0 auto; padding: 10px 20px; background-color: var(--accent); color: white; border: none; border-radius: var(--border-radius-md); cursor: pointer; font-weight: bold; box-shadow: var(--shadow-sm); transition: all var(--transition-speed) var(--transition-ease); }
+         #add-sale-item-btn:hover { background-color: #1565C0; box-shadow: var(--shadow-md); transform: translateY(-2px);}
+         .dark-mode #add-sale-item-btn { background-color: var(--secondary); color: var(--dark); }
+         .dark-mode #add-sale-item-btn:hover { background-color: #FF8F00; }
+
+           /* Sales Report & Log Modal Styles */
+         #salesReportModal .modal-content, #salesLogModal .modal-content { max-width: 850px; /* Wider modal */ }
+         .report-controls { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--grey-medium); align-items: flex-end; }
+         .dark-mode .report-controls { border-bottom-color: var(--grey-dark); }
+         .report-controls > div { display: flex; flex-direction: column; flex-grow: 1; }
+         .report-controls label { margin-bottom: 5px; font-size: 0.9em; font-weight: 600; }
+         .report-controls input[type="date"], .report-controls select { width: auto; min-width: 130px; margin-bottom: 0; padding: 10px 12px; font-size: 0.95em; }
+         .report-controls button { padding: 10px 15px; font-size: 0.95em; margin-top: auto; /* Align button bottom */ flex-grow: 0 !important; /* Prevent report type buttons from growing */ }
+
+
+         #salesReportArea, #salesLogArea { margin-top: 20px; max-height: 60vh; /* Increased height */ overflow-y: auto; }
+         #salesReportArea h4, #salesLogArea h4 { margin-bottom: 15px; text-align: center; color: var(--primary); font-size: 1.3em; }
+         .dark-mode #salesReportArea h4, .dark-mode #salesLogArea h4 { color: var(--secondary); }
+         #salesReportArea table, #salesLogTable { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+         #salesReportArea th, #salesReportArea td, #salesLogTable th, #salesLogTable td { border: 1px solid var(--grey-medium); padding: 10px 12px; text-align: right; vertical-align: middle; }
+         #salesReportArea th, #salesLogTable th { background-color: var(--grey-light); font-weight: 700; position: sticky; top: 0; /* Sticky header */ z-index: 1;}
+         #salesReportArea td.number-cell, #salesLogTable td.number-cell { text-align: left; font-feature-settings: "tnum"; font-weight: 600; } /* Align numbers left */
+         .dark-mode #salesReportArea th, .dark-mode #salesLogTable th { background-color: var(--grey-dark); }
+         .dark-mode #salesReportArea th, .dark-mode #salesReportArea td, .dark-mode #salesLogTable th, .dark-mode #salesLogTable td { border-color: var(--grey-medium); }
+         #salesReportArea .report-summary p { font-size: 1.1em; font-weight: bold; margin-bottom: 10px; padding: 5px; border-bottom: 1px solid var(--grey-medium); }
+         .dark-mode #salesReportArea .report-summary p { border-bottom-color: var(--grey-dark); }
+         #salesReportArea .report-summary span { color: var(--info); font-size: 1.05em; }
+         .dark-mode #salesReportArea .report-summary span { color: var(--accent); }
+           /* Remove profit style as cost is removed */
+
+           /* Sales Log Table Specific */
+           #salesLogTable .delete-sale-log-entry { background: transparent; border: none; color: var(--danger); cursor: pointer; padding: 0 5px; font-size: 1.1em; opacity: 0.7; transition: opacity 0.2s; }
+           #salesLogTable .delete-sale-log-entry:hover { opacity: 1; }
+           #salesLogModal .modal-footer { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--grey-medium); display: flex; justify-content: space-between; /* Align buttons apart */ align-items: center; flex-wrap: wrap; /* Allow wrapping on small screens */ gap: 10px; }
+           .dark-mode #salesLogModal .modal-footer { border-top-color: var(--grey-dark); }
+
+           /* --- START: Style Refinement for Clear Log Button --- */
+           #salesLogModal #clear-log-btn {
+                background: linear-gradient(135deg, var(--danger), var(--danger-hover)); /* Use gradient for consistency */
+                color: white;
+                flex-grow: 0; /* Don't let it grow excessively */
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Add shadow like others */
+                font-size: 1em; /* Slightly smaller font to fit better */
+                padding: 12px 18px; /* Adjust padding */
+           }
+           #salesLogModal #clear-log-btn:hover:not(:disabled) {
+                background: linear-gradient(135deg, var(--danger-hover), var(--danger));
+                transform: translateY(-3px); /* Keep hover effect */
+                box-shadow: var(--shadow-md);
+           }
+           #salesLogModal #clear-log-btn:active:not(:disabled) {
+                transform: translateY(-1px); /* Keep active effect */
+                box-shadow: var(--shadow-sm);
+           }
+           .dark-mode #salesLogModal #clear-log-btn {
+                background: linear-gradient(135deg, #e57373, var(--danger)); /* Slightly different red for dark */
+           }
+           .dark-mode #salesLogModal #clear-log-btn:hover:not(:disabled) {
+                background: linear-gradient(135deg, var(--danger), #e57373);
+           }
+           /* --- END: Style Refinement for Clear Log Button --- */
+
+           /* Ensure close button in footer doesn't grow */
+           #salesLogModal .modal-footer .btn-cancel {
+                flex-grow: 0;
+                font-size: 1em;
+                padding: 12px 18px;
+           }
+
+         /* Toast Styles */
+         #toast { /* Styles remain similar */ position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #263238; color: white; padding: 14px 25px; border-radius: var(--border-radius-md); z-index: 2000; font-size: 1em; box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease; font-weight: 700; } #toast.show { opacity: 1; visibility: visible; bottom: 30px; transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease; } #toast.error { background-color: var(--danger); } #toast.warning { background-color: var(--offline-indicator); color: #212121; } #toast.success { background-color: var(--info); } .dark-mode #toast { background: #CFD8DC; color: #263238; } .dark-mode #toast.error { background-color: var(--danger-hover); color: white; } .dark-mode #toast.warning { background-color: var(--secondary); color: #424242; } .dark-mode #toast.success { background-color: var(--info-hover); color: white;}
+
+         /* Control Panel Styles */
+         .control-panel { position: fixed; bottom: 30px; left: 30px; display: flex; flex-direction: column; gap: 18px; z-index: 100; }
+         .btn-magic { background: linear-gradient(145deg, var(--accent), #5dade2); border: none; width: 60px; height: 60px; border-radius: 50%; color: white; font-size: 1.8em; cursor: pointer; transition: all var(--transition-speed) var(--transition-ease); box-shadow: var(--shadow-md); display: flex; justify-content: center; align-items: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+           .btn-magic i { line-height: 1; }
+         .btn-magic:hover { background: linear-gradient(145deg, #5dade2, var(--accent)); transform: translateY(-4px) scale(1.08); box-shadow: var(--shadow-lg); }
+         .btn-magic:active { transform: translateY(-1px) scale(1.02); }
+         .dark-mode .btn-magic { background: linear-gradient(145deg, var(--secondary), #ffca28); color: #3a3a3a; box-shadow: var(--shadow-md); text-shadow: none; }
+         .dark-mode .btn-magic:hover { background: linear-gradient(145deg, #ffca28, var(--secondary)); }
+
+         /* Responsive Design */
+         @media (max-width: 768px) {
+              body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; perspective: none; }
+              #detail-view-container { order: 1; height: auto; min-height: 40vh; padding: 25px 15px; }
+              .detail-content, .edit-form-container { padding: 25px; max-width: none; }
+              .sidebar { order: 2; width: 100%; height: auto; min-height: 55vh; border-left: none; border-top: 1px solid var(--grey-medium); box-shadow: none; }
+              .dark-mode .sidebar { border-top-color: #37474F; }
+              #items-list { max-height: none; padding: 10px; }
+              .sidebar-header { padding: 18px 15px; font-size: 1.35em; }
+              .sidebar-footer { padding: 18px 15px; }
+              .control-panel { bottom: 20px; left: auto; right: 20px; transform: none; flex-direction: row; /* Side by side */ gap: 10px; background: transparent; box-shadow: none; width: calc(100% - 40px); justify-content: space-around; }
+              .btn-magic { width: 48px; height: 48px; font-size: 1.4em; box-shadow: var(--shadow-md); flex-shrink: 1; } /* Smaller on mobile */
+                .dark-mode .btn-magic { box-shadow: var(--shadow-dark-md); }
+              #toast { bottom: 85px; /* Adjust based on control panel height */ width: calc(100% - 30px); left: 15px; transform: none; text-align: center; }
+              .modal-content { width: 95%; padding: 30px 25px; max-width: 95%; }
+              .form-buttons { flex-direction: column; gap: 15px;}
+                .detail-content .history-section { max-height: 180px; }
+                #logSaleModal .sale-item-entry { grid-template-columns: 1fr auto; row-gap: 5px; }
+                #logSaleModal .sale-item-entry input[type="number"] { width: 100%; }
+                #logSaleModal .sale-item-entry .remove-sale-item-btn { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+                #salesReportModal .report-controls, #salesLogModal .report-controls { flex-direction: column; gap: 10px; } /* Adjust gap for mobile */
+                #salesReportModal .report-controls > div, #salesLogModal .report-controls > div { display: flex; flex-direction: column; width: 100%;}
+                #salesReportModal .report-controls button { width: 100%; margin-top: 5px; } /* Full width buttons on mobile */
+                #salesReportArea, #salesLogArea { font-size: 0.85em; }
+                #salesReportArea th, #salesReportArea td, #salesLogTable th, #salesLogTable td { padding: 6px 8px; }
+                #salesLogModal .modal-footer { justify-content: space-around; } /* Space out buttons better on mobile */
+         }
+
     </style>
 </head>
 <body>
 
-    <div id="offlineBanner" class="offline-banner">
-        ⚠️ أنت غير متصل بالإنترنت. التغييرات ستُحفظ محلياً وتُزامن لاحقاً.
-    </div>
+    <div id="offlineBanner" class="offline-banner">أنت غير متصل حالياً. قد تكون بعض البيانات غير محدثة.</div>
 
     <div id="detail-view-container">
-        <div class="detail-placeholder" id="main-placeholder">
-             🔄 جارٍ تهيئة التطبيق والاتصال بقاعدة البيانات...
-        </div>
+        <div class="detail-placeholder" id="main-placeholder">🔄 تهيئة النظام...</div>
     </div>
 
     <div class="sidebar">
         <div class="sidebar-header">
-             إدارة المخزون
-             <span id="connectionStatus" class="connection-status-dot connecting" title="حالة الاتصال: جارٍ الاتصال..."></span>
+              <span><i class="fas fa-store"></i> المنتجات والمبيعات</span>
+              <span id="connectionStatus" class="connection-status-dot connecting" title="حالة الاتصال"></span>
         </div>
         <div id="items-list">
-            <div class="empty-list-placeholder" id="list-placeholder" style="display: none;">
-                 جارٍ تحميل المنتجات...
-             </div>
+            <div class="empty-list-placeholder" id="list-placeholder" style="display: none;">جارٍ تحميل المنتجات...</div>
         </div>
         <div class="sidebar-footer">
-            <div id="total-price-container">
-                إجمالي : <span id="total-price">0</span> د.ع
-            </div>
-            <button class="report-btn" onclick="window.generateReport()" title="تنزيل تقرير المنتجات">
-                <span class="icon">📄</span> تقرير المخزون
-            </button>
+              <div id="footer-summary" style="text-align: center; margin-bottom: 15px; font-weight: bold;">
+                  <span id="daily-sales-summary">مبيعات اليوم: جار التحميل...</span>
+              </div>
+              <button class="report-btn" onclick="window.generateInventoryReport()" title="تنزيل تقرير المنتجات الحالية">
+                  <i class="fas fa-boxes"></i> تقرير المنتجات
+             </button>
         </div>
     </div>
 
     <div id="addFormModal" class="modal">
          <div class="modal-content">
-             <button class="close-btn" onclick="window.hideAddForm()" title="إغلاق">&times;</button>
-             <h3><span class="icon">📦</span>إضافة منتج جديد</h3>
-             <label for="itemName">اسم المنتج:</label>
-             <input type="text" id="itemName" placeholder="مثال: قميص..." required>
-             <label for="itemStock">الكمية:</label>
-             <input type="number" id="itemStock" placeholder="0" required min="0">
-             <label for="itemPrice">السعر (د.ع):</label>
-             <input type="number" id="itemPrice" placeholder="0" required min="0" step="500">
-             <label for="itemImageInput">الصورة (اختياري):</label>
-             <div class="image-upload-area">
-                 <input type="file" id="itemImageInput" accept="image/*" capture="environment" onchange="window.handleImagePreview(event, 'addIconPreview')">
-                 <label for="itemImageInput" class="btn-capture">📷 اختر/التقط صورة</label>
-                 <img id="addIconPreview" src="" alt="معاينة" class="icon-preview" style="display: none;">
-                  <span id="addUploadProgress" class="upload-progress"></span>
+              <button class="close-btn" onclick="window.hideAddForm()" title="إغلاق">&times;</button>
+              <h3><i class="fas fa-box-open"></i> إضافة منتج</h3>
+              <label for="itemName">اسم المنتج:</label>
+              <input type="text" id="itemName" placeholder="مثال: قميص..." required>
+              <label for="itemPrice">سعر البيع (د.ع):</label>
+              <input type="number" id="itemPrice" placeholder="مثال: 25000" required min="0" step="500">
+              <label for="itemIconUrl">رابط الأيقونة (اختياري):</label>
+              <input type="url" id="itemIconUrl" placeholder="اتركه فارغاً للأيقونة التلقائية">
+              <div class="form-buttons">
+                   <button id="addItemBtn" class="btn-save" onclick="window.addItem()"><i class="fas fa-plus"></i> إضافة المنتج</button>
+                   <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
+              </div>
+         </div>
+    </div>
+
+    <div id="logSaleModal" class="modal">
+         <div class="modal-content">
+              <button class="close-btn" onclick="window.hideLogSaleModal()" title="إغلاق">&times;</button>
+              <h3><i class="fas fa-cash-register"></i> تسجيل مبيعات</h3>
+              <label for="saleDate">تاريخ البيع:</label>
+              <input type="date" id="saleDate" required>
+              <div id="sale-items-list">
+                  <div class="sale-item-entry">
+                       <select class="sale-product-select" required onchange="window.handleProductSelectionChange(this)">
+                           <option value="" disabled selected>-- اختر المنتج --</option>
+                       </select>
+                       <input type="number" class="sale-quantity-input" placeholder="الكمية" min="1" required>
+                       <input type="number" class="sale-price-input" placeholder="سعر البيع" min="0" step="500" required>
+                       <button type="button" class="remove-sale-item-btn" title="إزالة" onclick="window.removeSaleItem(this)">&times;</button>
+                  </div>
+              </div>
+              <button type="button" id="add-sale-item-btn" onclick="window.addSaleItemEntry()"><i class="fas fa-plus"></i> إضافة بند آخر</button>
+              <div class="form-buttons">
+                   <button id="saveSaleBtn" class="btn-save" onclick="window.saveSales()"><i class="fas fa-save"></i> حفظ المبيعات</button>
+                   <button class="btn-cancel" onclick="window.hideLogSaleModal()">إلغاء</button>
+              </div>
+         </div>
+      </div>
+
+      <div id="salesReportModal" class="modal">
+         <div class="modal-content">
+             <button class="close-btn" onclick="window.hideSalesReportModal()" title="إغلاق">&times;</button>
+             <h3><i class="fas fa-chart-line"></i> تقارير المبيعات</h3>
+             <div class="report-controls">
+                  <div> <label for="reportStartDate">من:</label> <input type="date" id="reportStartDate" required> </div>
+                  <div> <label for="reportEndDate">إلى:</label> <input type="date" id="reportEndDate" required> </div>
+                  <div> <label>&nbsp;</label> <button class="btn-save" onclick="window.generateSalesReport('summary')"><i class="fas fa-calculator"></i> ملخص</button> </div>
+                  <div> <label>&nbsp;</label> <button class="btn-save" onclick="window.generateSalesReport('bestSellerQty')"><i class="fas fa-star"></i> الأكثر (كمية)</button> </div>
+                  <div> <label>&nbsp;</label> <button class="btn-save" onclick="window.generateSalesReport('bestSellerValue')"><i class="fas fa-dollar-sign"></i> الأكثر (قيمة)</button> </div>
+                  <div> <label>&nbsp;</label> <button class="btn-save" onclick="window.exportSalesToCSV()"><i class="fas fa-file-csv"></i> تصدير CSV</button> </div>
              </div>
-             <div class="form-buttons" style="margin-top: 15px;">
-                 <button id="addItemBtn" class="btn-save" onclick="window.addItem()">➕ إضافة المنتج</button>
-                 <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
+             <div id="salesReportArea">
+                 <p class="detail-placeholder">اختر فترة زمنية ونوع التقرير.</p>
+             </div>
+         </div>
+     </div>
+
+      <div id="salesLogModal" class="modal">
+         <div class="modal-content"> <button class="close-btn" onclick="window.hideSalesLogModal()" title="إغلاق">&times;</button>
+             <h3><i class="fas fa-history"></i> سجل المبيعات</h3>
+             <div id="salesLogArea" style="max-height: 60vh; overflow-y: auto;">
+                  <p class="detail-placeholder">جارٍ تحميل السجل...</p>
+                  <table id="salesLogTable" style="display: none;">
+                       <thead>
+                           <tr>
+                               <th>التاريخ والوقت</th>
+                               <th>اسم المنتج</th>
+                               <th>الكمية</th>
+                               <th>سعر الوحدة</th>
+                               <th>الإجمالي</th>
+                               <th>إجراء</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                            </tbody>
+                  </table>
+             </div>
+              <div class="modal-footer"> <button id="clear-log-btn" onclick="window.confirmClearSalesLog()"> <i class="fas fa-exclamation-triangle"></i> مسح كل السجل
+                    </button>
+                   <button class="btn-cancel" onclick="window.hideSalesLogModal()">إغلاق</button>
+              </div>
+         </div>
+     </div>
+
+    <div id="confirmModal" class="modal">
+         <div class="modal-content">
+             <button class="close-btn" onclick="window.hideConfirmModal()" title="إغلاق">&times;</button>
+             <h3 id="confirmTitle"><i class="fas fa-exclamation-triangle"></i> تأكيد الإجراء</h3>
+             <p id="confirmMessage" style="text-align: center; margin-bottom: 25px; font-size: 1.1em;">هل أنت متأكد؟</p>
+             <div class="form-buttons">
+                  <button id="confirmActionBtn" class="btn-save" style="background: var(--danger);"><i class="fas fa-check"></i> نعم، تأكيد</button> <button class="btn-cancel" onclick="window.hideConfirmModal()">إلغاء</button>
              </div>
          </div>
     </div>
-    <div id="confirmModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="window.hideConfirmModal()" title="إغلاق">&times;</button>
-            <h3><span class="icon">🗑️</span>تأكيد الحذف</h3>
-            <p id="confirmMessage" style="text-align: center; margin-bottom: 25px; font-size: 1.1em;">هل أنت متأكد أنك تريد حذف هذا المنتج؟</p>
-            <div class="form-buttons">
-                <button id="confirmDeleteBtn" class="btn-save" style="background-color: var(--danger);">✔️ نعم، احذف</button>
-                <button class="btn-cancel" onclick="window.hideConfirmModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
+
     <div id="toast"></div>
+
     <div class="control-panel">
-        <button class="btn-magic" onclick="window.toggleDarkMode()" title="تبديل الوضع">💡</button>
-        <button class="btn-magic" onclick="window.showAddForm()" title="إضافة منتج جديد">➕</button>
+        <button class="btn-magic" onclick="window.toggleDarkMode()" title="تبديل الوضع"><i class="fas fa-lightbulb"></i></button>
+        <button class="btn-magic" onclick="window.showAddForm()" title="إضافة منتج"><i class="fas fa-plus"></i></button>
+        <button class="btn-magic" onclick="window.showLogSaleModal()" title="تسجيل مبيعات"><i class="fas fa-cash-register"></i></button>
+        <button class="btn-magic" onclick="window.showSalesLogModal()" title="عرض سجل المبيعات"><i class="fas fa-history"></i></button>
+        <button class="btn-magic" onclick="window.showSalesReportModal()" title="تقارير المبيعات"><i class="fas fa-chart-line"></i></button>
     </div>
 
     <script type="module">
         // --- Firebase SDK Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
         import {
-            getFirestore, enableIndexedDbPersistence, terminate,
-            collection, query, orderBy, onSnapshot, getDocs, limit,
-            addDoc, updateDoc, deleteDoc, doc, serverTimestamp,
-            getDoc, writeBatch, Timestamp
+            getFirestore, enableIndexedDbPersistence, collection, query, orderBy, onSnapshot,
+            getDocs, limit, where, addDoc, updateDoc, deleteDoc, doc,
+            serverTimestamp, Timestamp, getDoc, writeBatch, runTransaction // Keep runTransaction just in case
         } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-        // **** Import Firebase Storage SDK ****
-        import {
-            getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject
-        } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+        // Storage SDK NOT needed
 
         // --- Firebase Configuration ---
         // ========================================================================
         // ==== 🔥🔥🔥 هام جداً: استبدل هذه القيم بالإعدادات الحقيقية لمشروعك 🔥🔥🔥 ====
         // ========================================================================
-        const firebaseConfig = {
-             apiKey: "AIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEA", // <--- استبدل
-             authDomain: "storedatabase-642e0.firebaseapp.com", // <--- استبدل
-             projectId: "storedatabase-642e0", // <--- استبدل
-             storageBucket: "storedatabase-642e0.firebasestorage.app", // <--- استبدل
-             messagingSenderId: "806751758744", // <--- استبدل
-             appId: "1:806751758744:web:079104a8fe4e73cdc023ed", // <--- استبدل
-             measurementId: "G-778H49MMJK" // <--- اختياري
+        const firebaseConfig = { /* --- YOUR CONFIG HERE --- */
+            apiKey: "AIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEAAIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEA",
+            authDomain: "storedatabase-642e0.firebaseapp.com",
+            projectId: "storedatabase-642e0",
+            storageBucket: "storedatabase-642e0.appspot.com", // Corrected bucket name format
+            messagingSenderId: "806751758744",
+            appId: "1:806751758744:web:079104a8fe4e73cdc023ed",
+            measurementId: "G-778H49MMJK"
         };
 
         // --- Global Variables & State ---
-        let app; let db; let storage;
-        let unsubscribeSnapshot = null;
+        let app; let db;
+        let unsubscribeItems = null;
         let itemsMap = new Map();
         let currentEditItemId = null; let currentViewItemId = null;
         let isDefinitelyOffline = !navigator.onLine;
         let latestSnapshotMetadata = { fromCache: true, hasPendingWrites: false };
         let firstLoadComplete = false;
         const defaultIcon = 'https://img.icons8.com/fluency/48/000000/hanger.png';
-        let capturedImageFile = null; // Store File object
-        const HISTORY_LIMIT = 15;
+        const HISTORY_LIMIT = 15; // For product edit history
+        const SALES_LOG_LIMIT = 100; // Increased limit for initial sales log display
+        const CLEAR_LOG_PASSWORD = "0750"; // Password to clear log
 
         // --- Keyword to Icon Mapping ---
         const keywordIconMap = { /* ... mapping ... */
              'قميص': 'https://img.icons8.com/fluency/48/000000/shirt.png','تيشيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png','تي شيرت': 'https://img.icons8.com/fluency/48/000000/t-shirt.png','بولو': 'https://img.icons8.com/fluency/48/000000/polo-shirt.png','بنطلون': 'https://img.icons8.com/fluency/48/000000/pantaloon.png','جينز': 'https://img.icons8.com/fluency/48/000000/jeans.png','سروال': 'https://img.icons8.com/fluency/48/000000/pantaloon.png','شورت': 'https://img.icons8.com/fluency/48/000000/shorts.png','برمودا': 'https://img.icons8.com/fluency/48/000000/bermuda-shorts.png','فستان': 'https://img.icons8.com/fluency/48/000000/dress.png','تنورة': 'https://img.icons8.com/fluency/48/000000/skirt.png','جيبة': 'https://img.icons8.com/fluency/48/000000/skirt.png','جاكيت': 'https://img.icons8.com/fluency/48/000000/jacket.png','سترة': 'https://img.icons8.com/fluency/48/000000/vest.png','معطف': 'https://img.icons8.com/fluency/48/000000/coat.png','بليزر': 'https://img.icons8.com/fluency/48/000000/blazer.png','هودي': 'https://img.icons8.com/fluency/48/000000/hoodie.png','كنزة': 'https://img.icons8.com/fluency/48/000000/sweater.png','بلوفر': 'https://img.icons8.com/fluency/48/000000/sweater.png','حذاء': 'https://img.icons8.com/fluency/48/000000/trainers.png','احذية': 'https://img.icons8.com/fluency/48/000000/trainers.png','رياضي': 'https://img.icons8.com/fluency/48/000000/sneakers.png','جزمة': 'https://img.icons8.com/fluency/48/000000/boot.png','كعب': 'https://img.icons8.com/fluency/48/000000/high-heels.png','صندل': 'https://img.icons8.com/fluency/48/000000/sandal.png','شبشب': 'https://img.icons8.com/fluency/48/000000/slippers.png','ملابس داخلية': 'https://img.icons8.com/fluency/48/000000/underwear.png','داخلي': 'https://img.icons8.com/fluency/48/000000/underwear.png','بدي': 'https://img.icons8.com/fluency/48/000000/bodysuit.png','بيجامة': 'https://img.icons8.com/fluency/48/000000/pajamas.png','قبعة': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png','طاقية': 'https://img.icons8.com/fluency/48/000000/winter-hat.png','كاب': 'https://img.icons8.com/fluency/48/000000/baseball-cap.png','وشاح': 'https://img.icons8.com/fluency/48/000000/scarf.png','شال': 'https://img.icons8.com/fluency/48/000000/scarf.png','قفاز': 'https://img.icons8.com/fluency/48/000000/gloves.png','كفوف': 'https://img.icons8.com/fluency/48/000000/gloves.png','حزام': 'https://img.icons8.com/fluency/48/000000/belt.png','ربطة': 'https://img.icons8.com/fluency/48/000000/tie.png','حقيبة': 'https://img.icons8.com/fluency/48/000000/handbag.png','شنطة': 'https://img.icons8.com/fluency/48/000000/school-bag.png'
-        };
+         };
 
         // --- DOM Elements ---
         const itemsListEl = document.getElementById('items-list');
         const listPlaceholderEl = document.getElementById('list-placeholder');
         const detailViewContainerEl = document.getElementById('detail-view-container');
         const mainPlaceholderEl = document.getElementById('main-placeholder');
-        const totalPriceEl = document.getElementById('total-price');
+        // const totalPriceEl = document.getElementById('total-price'); // Removed usage
+        const footerSummaryEl = document.getElementById('footer-summary');
         const addFormModalEl = document.getElementById('addFormModal');
+        const logSaleModalEl = document.getElementById('logSaleModal');
+        const salesReportModalEl = document.getElementById('salesReportModal');
+        const salesLogModalEl = document.getElementById('salesLogModal');
         const confirmModalEl = document.getElementById('confirmModal');
         const confirmMessageEl = document.getElementById('confirmMessage');
+        const confirmTitleEl = document.getElementById('confirmTitle'); // Get reference to title
+        const confirmActionBtnEl = document.getElementById('confirmActionBtn'); // Get reference to action button
         const toastEl = document.getElementById('toast');
         const offlineBannerEl = document.getElementById('offlineBanner');
         const connectionStatusDotEl = document.getElementById('connectionStatus');
         const addFormButton = addFormModalEl?.querySelector('#addItemBtn');
-        const addIconPreviewEl = document.getElementById('addIconPreview');
-        const addUploadProgressEl = document.getElementById('addUploadProgress');
+        const saleItemsListContainer = document.getElementById('sale-items-list');
+        const salesReportArea = document.getElementById('salesReportArea');
+        const salesLogTableBody = salesLogModalEl?.querySelector('#salesLogTable tbody');
+        // START: Added references for buttons in sales log modal footer
+        const clearLogBtn = document.getElementById('clear-log-btn');
+        const salesLogCloseBtn = salesLogModalEl?.querySelector('.modal-footer .btn-cancel');
+        const salesLogModalCloseIconBtn = salesLogModalEl?.querySelector('.close-btn'); // Added reference to the 'X' close button
+        // END: Added references
+
 
         // --- Helper Functions ---
-        function formatFirestoreTimestamp(timestamp) { /* ... */
-             if (!timestamp) return '-'; try { if (timestamp.toDate && typeof timestamp.toDate === 'function') { return timestamp.toDate().toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } if (timestamp instanceof Date) { return timestamp.toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } return new Date(timestamp).toLocaleString('ar-IQ', { day: '2-digit', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } catch(e) { console.warn("Timestamp formatting error:", e, "Input:", timestamp); return 'تاريخ غير صالح'; }
-        }
-        function getIconForName(name) { /* ... */
-            if (!name) return defaultIcon; const lowerCaseName = name.toLowerCase(); const keywords = Object.keys(keywordIconMap).sort((a, b) => b.length - a.length); for (const keyword of keywords) { if (lowerCaseName.includes(keyword.toLowerCase())) { return keywordIconMap[keyword]; } } return defaultIcon;
-        }
-        function updateConnectionStatusUI(online) { /* ... */
-             isDefinitelyOffline = !online; offlineBannerEl.classList.toggle('show', !online); connectionStatusDotEl.className = 'connection-status-dot'; if (!online) { connectionStatusDotEl.classList.add('disconnected'); connectionStatusDotEl.title = 'غير متصل'; } else { if (latestSnapshotMetadata.hasPendingWrites) { connectionStatusDotEl.classList.add('syncing'); connectionStatusDotEl.title = 'متصل (مزامنة...)'; } else { connectionStatusDotEl.classList.add('connected'); connectionStatusDotEl.title = 'متصل'; } }
-        }
-        function handleImagePreview(event, previewElementId) { /* Stores File */
-             const file = event.target.files[0];
-             const previewElement = document.getElementById(previewElementId);
-             const progressElement = document.getElementById(previewElementId.replace('Preview', 'UploadProgress'));
-             if (progressElement) progressElement.textContent = '';
-
-             if (file && previewElement) {
-                 if (!file.type.startsWith('image/')) { showNotification('يرجى اختيار ملف صورة صالح.', true); previewElement.src = ''; previewElement.style.display = 'none'; capturedImageFile = null; event.target.value = null; return; }
-                 const reader = new FileReader();
-                 reader.onload = (e) => { previewElement.src = e.target.result; previewElement.style.display = 'block'; }
-                 reader.readAsDataURL(file);
-                 capturedImageFile = file; // Store File object
-                 console.log("Image file selected:", capturedImageFile.name);
-             } else {
-                 previewElement.src = ''; previewElement.style.display = 'none'; capturedImageFile = null;
-             }
+        function formatFirestoreTimestamp(timestamp) { /* Unchanged */
+             if (!timestamp) return '-'; try { if (timestamp.toDate && typeof timestamp.toDate === 'function') { return timestamp.toDate().toLocaleString('ar-IQ', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } if (timestamp instanceof Date) { return timestamp.toLocaleString('ar-IQ', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } return new Date(timestamp).toLocaleString('ar-IQ', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); } catch(e) { console.warn("Timestamp formatting error:", e, "Input:", timestamp); return 'تاريخ غير صالح'; }
          }
-        function updateMainViewStatus(message, isError = false) { /* ... */
-            if (!detailViewContainerEl) return; if (isError) { detailViewContainerEl.innerHTML = `<div class="detail-error"><strong>❌ خطأ:</strong> ${message}</div>`; } else { if (!currentViewItemId && !currentEditItemId) { detailViewContainerEl.innerHTML = `<div class="detail-placeholder">${message}</div>`; } }
-        }
+        function getIconForName(name) { /* Unchanged */
+             if (!name) return defaultIcon; const lowerCaseName = name.toLowerCase(); const keywords = Object.keys(keywordIconMap).sort((a, b) => b.length - a.length); for (const keyword of keywords) { if (lowerCaseName.includes(keyword.toLowerCase())) { return keywordIconMap[keyword]; } } return defaultIcon;
+         }
+        function updateConnectionStatusUI(online) { /* Unchanged */
+              isDefinitelyOffline = !online; offlineBannerEl.classList.toggle('show', !online); connectionStatusDotEl.className = 'connection-status-dot'; if (!online) { connectionStatusDotEl.classList.add('disconnected'); connectionStatusDotEl.title = 'غير متصل'; } else { if (latestSnapshotMetadata.hasPendingWrites) { connectionStatusDotEl.classList.add('syncing'); connectionStatusDotEl.title = 'متصل (مزامنة...)'; } else { connectionStatusDotEl.classList.add('connected'); connectionStatusDotEl.title = 'متصل'; } }
+         }
+        function updateMainViewStatus(message, isError = false) { /* Unchanged */
+             if (!detailViewContainerEl) return; if (isError) { detailViewContainerEl.innerHTML = `<div class="detail-error"><strong>❌ خطأ:</strong> ${message}</div>`; } else { if (!currentViewItemId && !currentEditItemId) { detailViewContainerEl.innerHTML = `<div class="detail-placeholder">${message}</div>`; } }
+         }
         function generateUniqueId() { return Date.now().toString(36) + Math.random().toString(36).substring(2); }
+        // Removed image processing/preview functions
 
-        // --- Core Functions ---
-        function renderItemCard(itemData) { /* ... */
+        // --- Core Functions (Product/Inventory Side - Simplified) ---
+        function renderItemCard(itemData) { /* Simplified - No stock */
              const existingCard = itemsListEl.querySelector(`.item-card[data-id="${itemData.id}"]`);
              const displayIcon = itemData.icon || getIconForName(itemData.name) || defaultIcon;
-             const cardHTML = ` <img class="item-icon" src="${displayIcon}" alt="${itemData.name}" loading="lazy" onerror="this.onerror=null; this.src='${defaultIcon}'"> <div class="item-details"> <h4>${itemData.name}</h4> <p>الكمية: ${itemData.stock} | السعر: ${itemData.price.toLocaleString('ar-IQ')} د.ع</p> </div> <div class="item-actions"> <button class="edit-btn" onclick="event.stopPropagation(); window.showEditForm('${itemData.id}')" title="تعديل">📝</button> <button class="delete-btn" onclick="event.stopPropagation(); window.showConfirmModal('${itemData.id}')" title="حذف">🗑️</button> </div> `;
-             if (existingCard) {
+             const cardHTML = ` <img class="item-icon" src="${displayIcon}" alt="${itemData.name}" loading="lazy" onerror="this.onerror=null; this.src='${defaultIcon}'"> <div class="item-details"> <h4>${itemData.name}</h4> <p>السعر: ${itemData.price.toLocaleString('ar-IQ')} د.ع</p> </div> <div class="item-actions"> <button class="edit-btn" onclick="event.stopPropagation(); window.showEditForm('${itemData.id}')" title="تعديل"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="event.stopPropagation(); window.showConfirmModal('${itemData.id}', 'product')" title="حذف المنتج"><i class="fas fa-trash-alt"></i></button> </div> `; // Pass type 'product'
+             if (existingCard) { /* Update existing */
                  existingCard.innerHTML = cardHTML; existingCard.classList.toggle('selected', itemData.id === currentViewItemId || itemData.id === currentEditItemId); existingCard.classList.toggle('has-pending-writes', latestSnapshotMetadata.hasPendingWrites && !latestSnapshotMetadata.fromCache); console.debug(`Updated card: ${itemData.id}`);
-             } else {
+             } else { /* Create new */
                  const card = document.createElement('div'); card.className = 'item-card'; card.setAttribute('data-id', itemData.id); card.innerHTML = cardHTML; card.classList.toggle('selected', itemData.id === currentViewItemId || itemData.id === currentEditItemId); card.classList.toggle('has-pending-writes', latestSnapshotMetadata.hasPendingWrites && !latestSnapshotMetadata.fromCache); card.addEventListener('click', () => showItemDetails(itemData.id));
                  let inserted = false; const cards = itemsListEl.querySelectorAll('.item-card');
-                 for (let i = 0; i < cards.length; i++) { const currentCardId = cards[i].getAttribute('data-id'); const currentCardData = itemsMap.get(currentCardId); if (currentCardData && itemData.name.localeCompare(currentCardData.name) < 0) { itemsListEl.insertBefore(card, cards[i]); inserted = true; break; } } if (!inserted) { itemsListEl.appendChild(card); } console.debug(`Added card: ${itemData.id}`);
+                 // Insert sorted by name
+                 const newItemNameLower = itemData.name.toLowerCase();
+                 for (let i = 0; i < cards.length; i++) { const currentCardId = cards[i].getAttribute('data-id'); const currentCardData = itemsMap.get(currentCardId); const currentCardNameLower = currentCardData?.name?.toLowerCase() ?? ''; if (newItemNameLower.localeCompare(currentCardNameLower, 'ar') < 0) { itemsListEl.insertBefore(card, cards[i]); inserted = true; break; } } if (!inserted) { itemsListEl.appendChild(card); } console.debug(`Added card: ${itemData.id}`);
              }
-             listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block';
-        }
-        function removeItemCard(itemId) { /* ... */
-             const cardToRemove = itemsListEl.querySelector(`.item-card[data-id="${itemId}"]`); if (cardToRemove) { cardToRemove.remove(); console.debug(`Removed card: ${itemId}`); } listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block';
-        }
-        async function showItemDetails(itemId) { /* Uses Map, limited history */
+             listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : (firstLoadComplete ? 'block' : 'none');
+             if (firstLoadComplete && itemsMap.size === 0) {
+                 listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر على زر (+) للإضافة.";
+             }
+         }
+        function removeItemCard(itemId) { /* Unchanged */
+             const cardToRemove = itemsListEl.querySelector(`.item-card[data-id="${itemId}"]`); if (cardToRemove) { cardToRemove.remove(); console.debug(`Removed card: ${itemId}`); } listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block'; if (itemsMap.size === 0) listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر على زر (+) للإضافة.";
+         }
+        async function showItemDetails(itemId) { /* Simplified */
              console.debug(`Showing details for ${itemId}`); const item = itemsMap.get(itemId); if (!item) { updateMainViewStatus(`لم يتم العثور على المنتج (ID: ${itemId}).`, true); currentViewItemId = null; return; } if (currentViewItemId === itemId && !currentEditItemId) { console.debug(`Already viewing ${itemId}.`); return; }
              currentEditItemId = null; currentViewItemId = itemId; itemsListEl.querySelectorAll('.item-card').forEach(card => { card.classList.toggle('selected', card.getAttribute('data-id') === itemId); });
              const createdAtFormatted = formatFirestoreTimestamp(item.createdAt); const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt); const displayIcon = item.icon || getIconForName(item.name) || defaultIcon;
+             // Simplified History Fetch (only product edits)
              const historyCollectionRef = collection(db, 'clothes', itemId, 'history'); const qHistory = query(historyCollectionRef, orderBy('timestamp', 'desc'), limit(HISTORY_LIMIT)); let historyHtml = '';
              try {
-                 console.debug(`Workspaceing history (max ${HISTORY_LIMIT}) for ${itemId}...`); const historySnapshot = await getDocs(qHistory); console.debug(`History received for ${itemId}. Empty: ${historySnapshot.empty}`);
-                 if (historySnapshot.empty) { historyHtml = '<li class="no-history"><em>لا سجل.</em></li>'; }
-                 else { historySnapshot.docs.forEach(doc => { const d = doc.data(); const ts = formatFirestoreTimestamp(d.timestamp); let c = []; if (d.changes.name) { c.push(`<span class="change-detail">الاسم: <del>${d.changes.name.old}</del> ← ${d.changes.name.new}</span>`); } if (d.changes.stock) { c.push(`<span class="change-detail">الكمية: <del>${d.changes.stock.old}</del> ← ${d.changes.stock.new}</span>`); } if (d.changes.price) { c.push(`<span class="change-detail">السعر: <del>${d.changes.price.old.toLocaleString('ar-IQ')}</del> ← ${d.changes.price.new.toLocaleString('ar-IQ')} د.ع</span>`); } if (d.changes.icon) { c.push(`<span class="change-detail">تحديث الصورة.</span>`); } if (c.length > 0) { historyHtml += `<li><span class="history-timestamp">${ts}</span>${c.join('')}</li>`; } else { historyHtml += `<li><span class="history-timestamp">${ts}</span><span class="change-detail"><em>تحديث.</em></span></li>`; } }); if (historySnapshot.docs.length >= HISTORY_LIMIT) { historyHtml += `<li class="no-history"><em>(أحدث ${HISTORY_LIMIT})</em></li>`; } }
+                 const historySnapshot = await getDocs(qHistory);
+                 if (historySnapshot.empty) { historyHtml = '<li class="no-history"><em>لا يوجد سجل تعديلات لهذا المنتج.</em></li>'; }
+                 else { historySnapshot.docs.forEach(doc => { const d = doc.data(); const ts = formatFirestoreTimestamp(d.timestamp); let c = []; if (d.changes.name) c.push(`<span class="change-detail">الاسم: <del>${d.changes.name.old}</del> ← ${d.changes.name.new}</span>`); if (d.changes.price) c.push(`<span class="change-detail">السعر: <del>${d.changes.price.old.toLocaleString('ar-IQ')}</del> ← ${d.changes.price.new.toLocaleString('ar-IQ')} د.ع</span>`); if (d.changes.icon) c.push(`<span class="change-detail">تحديث رابط الأيقونة.</span>`); if (c.length > 0) { historyHtml += `<li><span class="history-timestamp">${ts}</span>${c.join('')}</li>`; } else { historyHtml += `<li><span class="history-timestamp">${ts}</span><span class="change-detail"><em>تحديث.</em></span></li>`; } }); if (historySnapshot.docs.length >= HISTORY_LIMIT) { historyHtml += `<li class="no-history"><em>(أحدث ${HISTORY_LIMIT})</em></li>`; } }
              } catch (error) { console.error("History fetch error:", error); historyHtml = '<li class="no-history" style="color: var(--danger);"><em>خطأ جلب السجل.</em></li>'; }
-             detailViewContainerEl.innerHTML = ` <div class="detail-content"> <img src="${displayIcon}" alt="${item.name}" class="detail-icon" onerror="this.onerror=null; this.src='${defaultIcon}'"> <h2>${item.name}</h2> <p><strong>الكمية:</strong> <span style="font-weight:700;">${item.stock}</span></p> <p><strong>السعر:</strong> <span style="font-weight:700;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}</span></p> <p><strong>القيمة:</strong> <span style="font-weight:700;">${(item.price * item.stock).toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}</span></p> <div class="history-section"><h4>السجل</h4><ul>${historyHtml}</ul></div> <div class="timestamp">أنشئ: ${createdAtFormatted} | تعدل: ${updatedAtFormatted || '-'}</div> <div class="form-buttons"><button class="btn-save" onclick="window.showEditForm('${item.id}')">📝 تعديل</button></div> <p style="font-size:0.8em;opacity:0.6;text-align:center;margin-top:15px;">ID: ${item.id}</p> </div>`; console.debug(`Details displayed for ${itemId}`);
-        }
-        function showEditForm(itemId) { /* Uses Map */
-             console.debug(`Showing edit form for ${itemId}`); const item = itemsMap.get(itemId); if (!item) { showNotification("المنتج غير موجود للتعديل.", true); return; } currentViewItemId = null; currentEditItemId = itemId; capturedImageFile = null;
-             itemsListEl.querySelectorAll('.item-card').forEach(card => card.classList.toggle('selected', card.getAttribute('data-id') === itemId));
-             const currentIcon = item.icon || defaultIcon; const editUploadProgressId = `editUploadProgress_${itemId}`;
-             detailViewContainerEl.innerHTML = ` <div class="edit-form-container"> <h3><span class="icon">✏️</span>تعديل المنتج</h3> <input type="hidden" id="editItemId" value="${item.id}"> <label for="editItemName">الاسم:</label> <input type="text" id="editItemName" value="${item.name}" required> <label for="editItemStock">الكمية:</label> <input type="number" id="editItemStock" value="${item.stock}" required min="0"> <label for="editItemPrice">السعر:</label> <input type="number" id="editItemPrice" value="${item.price}" required min="0" step="500"> <label for="editItemImageInput">تغيير الصورة:</label> <div class="image-upload-area"> <input type="file" id="editItemImageInput" accept="image/*" capture="environment" onchange="window.handleImagePreview(event, 'editIconPreview')"> <label for="editItemImageInput" class="btn-capture">📷 اختر/التقط صورة</label> <img id="editIconPreview" src="${currentIcon}" alt="معاينة" class="icon-preview" style="display: ${currentIcon !== defaultIcon ? 'block' : 'none'};" onerror="this.onerror=null; this.src='${defaultIcon}'"> <span id="${editUploadProgressId}" class="upload-progress"></span> </div> <input type="hidden" id="editItemIconCurrentUrl" value="${item.icon || ''}"> <div class="form-buttons"> <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()">💾 حفظ</button> <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button> </div> </div>`;
-        }
-        function cancelEdit() { /* Uses Map */
-             console.debug("Cancelling edit..."); const previousEditId = currentEditItemId; currentEditItemId = null; capturedImageFile = null; const card = itemsListEl.querySelector(`.item-card[data-id="${previousEditId}"]`); if (card) card.classList.remove('selected'); const itemExists = itemsMap.has(previousEditId); if (previousEditId && itemExists) { showItemDetails(previousEditId); } else { updateMainViewStatus("تم إلغاء التعديل."); currentViewItemId = null; }
-        }
 
-        // --- Firestore Operations (Add, Update, Delete) ---
-        async function addItem() { /* Uses Storage */
-             if (!db || !storage || !addFormButton) { showNotification('الخدمة غير جاهزة.', true); return; }
-             const nameInput = document.getElementById('itemName'), stockInput = document.getElementById('itemStock'), priceInput = document.getElementById('itemPrice');
-             const name = nameInput.value.trim(), stock = parseInt(stockInput.value), price = parseFloat(priceInput.value);
-             if (!name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول!', true); return; }
-             addFormButton.disabled = true; addFormButton.innerHTML = '<span class="icon">⏳</span> جارٍ الإضافة...'; addUploadProgressEl.textContent = '';
-             let iconUrl = null;
-             try {
-                 if (capturedImageFile) {
-                     addUploadProgressEl.textContent = '⏳ رفع الصورة...'; const imageName = `product_icons/${generateUniqueId()}_${capturedImageFile.name}`; const storageRef = ref(storage, imageName); console.log(`Uploading ${capturedImageFile.name} to ${imageName}...`); const uploadTask = uploadBytesResumable(storageRef, capturedImageFile);
-                     await new Promise((resolve, reject) => { uploadTask.on('state_changed', (s) => { const p = Math.round((s.bytesTransferred / s.totalBytes) * 100); addUploadProgressEl.textContent = `⏳ (${p}%)`; }, (e) => { console.error("Upload failed:", e); reject(e); }, async () => { console.log("Upload ok. Getting URL..."); try { iconUrl = await getDownloadURL(uploadTask.snapshot.ref); console.log('URL:', iconUrl); addUploadProgressEl.textContent = '✅ تم'; resolve(); } catch (e) { console.error("Get URL failed:", e); reject(e); } } ); });
-                 } else { iconUrl = getIconForName(name); }
-                 const newItemData = { name, stock, price, icon: iconUrl, createdAt: serverTimestamp(), updatedAt: null }; console.log("Adding doc:", newItemData); const docRef = await addDoc(collection(db, 'clothes'), newItemData); console.log("Doc written:", docRef.id);
-                 if (isDefinitelyOffline) { showNotification('✅ حفظ محلي (بدون صورة). مزامنة لاحقة.', false, 'warning'); } else { showNotification('✅ تم الإضافة بنجاح!', false, 'success'); }
-                 hideAddForm(); // Reset form
-             } catch (error) { showNotification(`خطأ الإضافة: ${error.message}`, true); console.error("Add item error: ", error); addUploadProgressEl.textContent = '❌ فشل';
-             } finally { addFormButton.disabled = false; addFormButton.innerHTML = '➕ إضافة المنتج'; }
+             detailViewContainerEl.innerHTML = ` <div class="detail-content"> <img src="${displayIcon}" alt="${item.name}" class="detail-icon" onerror="this.onerror=null; this.src='${defaultIcon}'"> <h2>${item.name}</h2> <p><strong>سعر البيع:</strong> <span style="font-weight:700;">${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span></p> <div class="history-section"><h4>سجل تعديلات المنتج</h4><ul>${historyHtml}</ul></div> <div class="timestamp">أنشئ: ${createdAtFormatted} | تعدل: ${updatedAtFormatted || '-'}</div> <div class="form-buttons"><button class="btn-save" onclick="window.showEditForm('${item.id}')"><i class="fas fa-edit"></i> تعديل المنتج</button></div> <p style="font-size:0.8em;opacity:0.6;text-align:center;margin-top:15px;">ID: ${item.id}</p> </div>`; console.debug(`Details displayed for ${itemId}`);
          }
-        async function updateItem() { /* Uses Storage */
-             if (!db || !storage) { showNotification('الخدمة غير جاهزة.', true); return; }
-             const updateButton = document.getElementById('updateItemBtn'); if(updateButton) updateButton.disabled = true; updateButton.innerHTML = '<span class="icon">⏳</span> جارٍ الحفظ...';
-            const itemId = document.getElementById('editItemId').value; const name = document.getElementById('editItemName').value.trim(); const stock = parseInt(document.getElementById('editItemStock').value); const price = parseFloat(document.getElementById('editItemPrice').value); const currentIconUrl = document.getElementById('editItemIconCurrentUrl').value; const progressElement = document.getElementById(`editUploadProgress_${itemId}`); if (progressElement) progressElement.textContent = '';
-            if (!itemId || !name || isNaN(stock) || stock < 0 || isNaN(price) || price < 0) { showNotification('يرجى ملء الحقول!', true); if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '💾 حفظ';} return; }
-            const itemRef = doc(db, 'clothes', itemId); const historyRef = collection(db, 'clothes', itemId, 'history'); let newIconUrl = currentIconUrl; let iconChanged = false;
-            try {
-                if (capturedImageFile) {
-                     if (progressElement) progressElement.textContent = '⏳ رفع الصورة...'; const imageName = `product_icons/${itemId}/${generateUniqueId()}_${capturedImageFile.name}`; const storageRef = ref(storage, imageName); console.log(`Uploading new image ${capturedImageFile.name} to ${imageName}...`); const uploadTask = uploadBytesResumable(storageRef, capturedImageFile);
-                     await new Promise((resolve, reject) => { uploadTask.on('state_changed', (s) => { const p = Math.round((s.bytesTransferred / s.totalBytes) * 100); if (progressElement) progressElement.textContent = `⏳ (${p}%)`; }, (e) => { console.error("Upload failed:", e); reject(e); }, async () => { console.log("Upload ok. Getting URL..."); try { newIconUrl = await getDownloadURL(uploadTask.snapshot.ref); iconChanged = true; if (progressElement) progressElement.textContent = '✅ تم'; console.log('New URL:', newIconUrl); if (currentIconUrl && currentIconUrl.includes('firebasestorage.googleapis.com')) { try { await deleteObject(ref(storage, currentIconUrl)); console.log("Old image deleted:", currentIconUrl); } catch (e) { console.warn("Could not delete old image:", e); } } resolve(); } catch (e) { console.error("Get URL failed:", e); reject(e); } } ); });
-                }
-                const currentDocSnap = await getDoc(itemRef); if (!currentDocSnap.exists()) { throw new Error("المستند غير موجود!"); } const currentData = currentDocSnap.data();
-                if (!capturedImageFile && currentData.name !== name) { const autoIcon = getIconForName(name); if (autoIcon !== currentData.icon) { newIconUrl = autoIcon; iconChanged = true; } }
-                const updatedData = { name, stock, price, icon: newIconUrl, updatedAt: serverTimestamp() }; const logEntry = { timestamp: serverTimestamp(), changes: {} }; let hasChanges = false;
-                if (currentData.name !== name) { logEntry.changes.name = { old: currentData.name, new: name }; hasChanges = true; } if (currentData.stock !== stock) { logEntry.changes.stock = { old: currentData.stock, new: stock }; hasChanges = true; } if (currentData.price !== price) { logEntry.changes.price = { old: currentData.price, new: price }; hasChanges = true; } if (iconChanged) { logEntry.changes.icon = { old: currentData.icon, new: newIconUrl }; hasChanges = true; }
-                const batch = writeBatch(db); batch.update(itemRef, updatedData); if (hasChanges) { batch.set(doc(historyRef), logEntry); } console.log("Committing updates..."); await batch.commit(); console.log("Commit ok.");
-                if (isDefinitelyOffline) { showNotification('✅ حفظ محلي. مزامنة لاحقة.', false, 'warning'); } else { showNotification('✅ تم التحديث بنجاح!', false, 'success'); }
-                capturedImageFile = null; currentEditItemId = null; await showItemDetails(itemId);
-            } catch (error) { showNotification(`خطأ التحديث: ${error.message}`, true); console.error("Update item error: ", error); if (progressElement) progressElement.textContent = '❌ فشل';
-            } finally { if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '💾 حفظ'; } }
-        }
-        function showConfirmModal(itemId) { /* Uses Map */
-             if (!itemId) return; const item = itemsMap.get(itemId); if (!item) { showNotification('المنتج غير موجود للحذف!', true); return; } const safeItemName = item.name.replace(/</g, "&lt;").replace(/>/g, "&gt;"); confirmMessageEl.innerHTML = `متأكد من حذف: <strong style="color: var(--danger);">${safeItemName}</strong>؟<br><small>(سيتم حذف صورته وسجله)</small>`; const currentBtn = document.getElementById('confirmDeleteBtn'); const newConfirmBtn = currentBtn.cloneNode(true); currentBtn.parentNode.replaceChild(newConfirmBtn, currentBtn); newConfirmBtn.onclick = () => deleteItem(itemId, item.icon); newConfirmBtn.style.backgroundColor = 'var(--danger)'; newConfirmBtn.innerHTML = '✔️ نعم، احذف'; confirmModalEl.classList.add('show');
-        }
-        function hideConfirmModal() { confirmModalEl.classList.remove('show'); }
-        async function deleteItem(itemId, iconUrl) { /* Uses Storage */
-             if (!db || !storage) { showNotification('الخدمة غير جاهزة.', true); return; } hideConfirmModal(); if (!itemId) return; console.log(`Deleting item: ${itemId}`);
-             try {
-                 await deleteDoc(doc(db, 'clothes', itemId)); console.log(`Doc ${itemId} deleted.`);
-                 if (iconUrl && iconUrl.includes('firebasestorage.googleapis.com')) { try { await deleteObject(ref(storage, iconUrl)); console.log("Image deleted:", iconUrl); } catch (e) { console.warn(`Could not delete image ${iconUrl}:`, e.code || e.message); if (e.code !== 'storage/object-not-found') { showNotification('تم حذف المنتج، فشل حذف الصورة.', false, 'warning'); } } }
-                 if (isDefinitelyOffline) { showNotification('✅ حذف محلي. مزامنة لاحقة.', false, 'warning'); } else { showNotification('✅ تم الحذف بنجاح.', false, 'success'); }
-             } catch (error) { showNotification(`خطأ الحذف: ${error.message}`, true); console.error("Delete error: ", error); updateMainViewStatus(`فشل الحذف: ${error.message}`, true); }
-        }
+        function showEditForm(itemId) { /* Simplified Form */
+             console.debug(`Showing edit form for ${itemId}`); const item = itemsMap.get(itemId); if (!item) { showNotification("المنتج غير موجود للتعديل.", true); return; } currentViewItemId = null; currentEditItemId = itemId;
+             itemsListEl.querySelectorAll('.item-card').forEach(card => card.classList.toggle('selected', card.getAttribute('data-id') === itemId));
+             const currentIcon = item.icon || '';
+             detailViewContainerEl.innerHTML = ` <div class="edit-form-container"> <h3><i class="fas fa-edit"></i> تعديل المنتج</h3> <input type="hidden" id="editItemId" value="${item.id}"> <label for="editItemName">الاسم:</label> <input type="text" id="editItemName" value="${item.name}" required> <label for="editItemPrice">سعر البيع:</label> <input type="number" id="editItemPrice" value="${item.price}" required min="0" step="500"> <label for="editItemIcon">رابط الأيقونة:</label> <input type="url" id="editItemIcon" value="${currentIcon}" placeholder="اتركه فارغاً للأيقونة الافتراضية"> <div class="form-buttons"> <button id="updateItemBtn" class="btn-save" onclick="window.updateItem()"><i class="fas fa-save"></i> حفظ</button> <button class="btn-cancel" onclick="window.cancelEdit()">إلغاء</button> </div> </div>`;
+         }
+        function cancelEdit() { /* Unchanged */
+             console.debug("Cancelling edit..."); const previousEditId = currentEditItemId; currentEditItemId = null; const card = itemsListEl.querySelector(`.item-card[data-id="${previousEditId}"]`); if (card) card.classList.remove('selected'); const itemExists = itemsMap.has(previousEditId); if (previousEditId && itemExists) { showItemDetails(previousEditId); } else { updateMainViewStatus("تم إلغاء التعديل."); currentViewItemId = null; }
+         }
 
-        function updateTotalPrice() { /* Uses Map */
-             let totalValue = 0; itemsMap.forEach(item => { totalValue += (item.price * item.stock); }); if (totalPriceEl) { totalPriceEl.textContent = totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0 }); }
-        }
-        function generateReport() { /* Uses Map */
-             if (itemsMap.size === 0) { showNotification("لا توجد منتجات للتقرير.", true); return; } let reportContent = `تقرير المخزون\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n================\n\n`; let index = 0; itemsMap.forEach((item) => { index++; reportContent += `${index}. ${item.name} (ID: ${item.id})\n   الكمية: ${item.stock} | السعر: ${item.price.toLocaleString('ar-IQ')} د.ع | القيمة: ${(item.price * item.stock).toLocaleString('ar-IQ')} د.ع\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)} | تعدل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------\n`; }); let totalValue = 0; itemsMap.forEach(item => { totalValue += (item.price * item.stock); }); reportContent += `\nإجمالي القيمة: ${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD' })}\nعدد الأنواع: ${itemsMap.size}\n`; try { const blob = new Blob([`\uFEFF${reportContent}`], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Product_Report_${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showNotification("✅ تم إنشاء التقرير.", false, 'success'); } catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Report error:", e); alert("فشل التنزيل. المحتوى:\n\n" + reportContent); }
-        }
-        function toggleDarkMode() { /* ... */
-             const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false'); const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'فاتح' : 'داكن';
-        }
-        function showAddForm() { /* ... */
-            addFormModalEl.classList.add('show'); document.getElementById('itemName').value = ''; document.getElementById('itemStock').value = ''; document.getElementById('itemPrice').value = ''; document.getElementById('itemImageInput').value = null; if (addIconPreviewEl) { addIconPreviewEl.src = ''; addIconPreviewEl.style.display = 'none'; } if (addUploadProgressEl) addUploadProgressEl.textContent = ''; capturedImageFile = null;
-        }
-        function hideAddForm() { addFormModalEl.classList.remove('show'); capturedImageFile = null; }
-        function showNotification(message, isError = false, type = 'normal') { /* ... */
-             if (!toastEl) return; toastEl.textContent = message; toastEl.className = 'toast'; if (isError) toastEl.classList.add('error'); else if (type === 'warning') toastEl.classList.add('warning'); else if (type === 'success') toastEl.classList.add('success'); toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
-        }
+        // --- Product/Inventory Firestore Operations (Simplified) ---
+        async function addItem() { /* Simplified */
+             if (!db || !addFormButton) { showNotification('الخدمة غير جاهزة.', true); return; }
+             const nameInput = document.getElementById('itemName'); const priceInput = document.getElementById('itemPrice'); const iconUrlInput = document.getElementById('itemIconUrl');
+             const name = nameInput.value.trim(); const price = parseFloat(priceInput.value); const iconUrl = iconUrlInput.value.trim();
+             if (!name || isNaN(price) || price < 0) { showNotification('يرجى إدخال الاسم والسعر بشكل صحيح!', true); return; }
+             addFormButton.disabled = true; addFormButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span> جارٍ الإضافة...';
+             let finalIconUrl = iconUrl ? iconUrl : getIconForName(name); finalIconUrl = finalIconUrl || defaultIcon;
+             // Simplified newItemData (no stock, cost, category)
+             const newItemData = { name, price, icon: finalIconUrl, createdAt: serverTimestamp(), updatedAt: null };
+             try {
+                 console.log("Adding product doc:", newItemData); const docRef = await addDoc(collection(db, 'clothes'), newItemData); console.log("Product doc written:", docRef.id);
+                 showNotification('✅ تم إضافة المنتج!', false, 'success'); hideAddForm();
+                 nameInput.value = ''; priceInput.value = ''; iconUrlInput.value = '';
+             } catch (error) { showNotification(`خطأ الإضافة: ${error.message}`, true); console.error("Add item error: ", error);
+             } finally { addFormButton.disabled = false; addFormButton.innerHTML = '<i class="fas fa-plus"></i> إضافة المنتج'; }
+          }
+        async function updateItem() { /* Simplified */
+             if (!db) { showNotification('الخدمة غير جاهزة.', true); return; }
+             const updateButton = document.getElementById('updateItemBtn'); if(updateButton) updateButton.disabled = true; updateButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span> جارٍ الحفظ...';
+             const itemId = document.getElementById('editItemId').value; const name = document.getElementById('editItemName').value.trim(); const price = parseFloat(document.getElementById('editItemPrice').value); let newIconUrl = document.getElementById('editItemIcon').value.trim();
+             if (!itemId || !name || isNaN(price) || price < 0) { showNotification('يرجى ملء الاسم والسعر بشكل صحيح!', true); if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '<i class="fas fa-save"></i> حفظ';} return; }
+
+             const itemRef = doc(db, 'clothes', itemId); const historyRef = collection(db, 'clothes', itemId, 'history');
+             let iconChanged = false;
+
+             try {
+                 const currentDocSnap = await getDoc(itemRef); if (!currentDocSnap.exists()) { throw new Error("المستند غير موجود!"); } const currentData = currentDocSnap.data();
+                 const currentIcon = currentData.icon || defaultIcon; // Use default if current icon is empty/null
+
+                 if (newIconUrl === '') {
+                     // If input is empty, determine if it should revert to automatic or keep existing non-default
+                     const autoIcon = getIconForName(name);
+                     if (currentIcon !== autoIcon && currentIcon !== defaultIcon) {
+                         // If current icon is custom and not default, user likely wants auto icon by clearing it
+                         newIconUrl = autoIcon;
+                     } else {
+                         // Keep the current icon (which might be default or auto)
+                         newIconUrl = currentIcon;
+                     }
+                 }
+                 newIconUrl = newIconUrl || defaultIcon; // Ensure it's never empty
+
+                 iconChanged = newIconUrl !== currentIcon;
+
+                 const updatedData = { name, price, icon: newIconUrl, updatedAt: serverTimestamp() };
+                 const logEntry = { timestamp: serverTimestamp(), changes: {} }; let hasChanges = false;
+                 if (currentData.name !== name) { logEntry.changes.name = { old: currentData.name, new: name }; hasChanges = true; }
+                 if (currentData.price !== price) { logEntry.changes.price = { old: currentData.price, new: price }; hasChanges = true; }
+                 if (iconChanged) { logEntry.changes.icon = { old: currentData.icon, new: newIconUrl }; hasChanges = true; }
+
+                 if (hasChanges) {
+                      const batch = writeBatch(db); batch.update(itemRef, updatedData); batch.set(doc(historyRef), logEntry); console.log("Committing product updates..."); await batch.commit(); console.log("Commit ok.");
+                      showNotification('✅ تم التحديث بنجاح!', false, 'success');
+                 } else { showNotification('لم يتم العثور على تغييرات للحفظ.', false, 'info'); }
+                   currentEditItemId = null;
+                   // Ensure details are shown even if no changes were saved (to exit edit mode)
+                   await showItemDetails(itemId);
+             } catch (error) { showNotification(`خطأ التحديث: ${error.message}`, true); console.error("Update item error: ", error);
+             } finally { if(updateButton) { updateButton.disabled = false; updateButton.innerHTML = '<i class="fas fa-save"></i> حفظ'; } }
+          }
+        // *** UPDATED: showConfirmModal now handles different types ***
+        function showConfirmModal(id, type = 'product') {
+             if (!id && type !== 'clearSales') return; // ID required unless clearing all sales
+
+             let message = "هل أنت متأكد من الحذف؟";
+             let title = "<i class='fas fa-trash-alt'></i> تأكيد الحذف";
+             let action = () => {};
+             let confirmButtonText = '<i class="fas fa-check"></i> نعم، تأكيد';
+             let confirmButtonClass = 'btn-save'; // Default to green-ish for save/confirm
+             let confirmButtonBg = 'var(--danger)'; // Default background is red for delete
+
+             if (type === 'product') {
+                 const item = itemsMap.get(id);
+                 if (!item) { showNotification('المنتج غير موجود للحذف!', true); return; }
+                 const safeItemName = item.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                 message = `متأكد من حذف المنتج: <strong style="color: var(--danger);">${safeItemName}</strong>؟<br><small>(لن يؤثر على المبيعات المسجلة)</small>`;
+                 action = () => deleteItem(id);
+             } else if (type === 'saleEntry') {
+                 title = "<i class='fas fa-eraser'></i> تأكيد حذف السجل";
+                 message = `هل أنت متأكد من حذف سجل البيع المحدد؟`;
+                 action = () => deleteSalesLogEntry(id);
+             } else if (type === 'clearSales') {
+                 title = "<i class='fas fa-exclamation-triangle'></i> تأكيد مسح السجل";
+                 message = `تحذير! سيتم حذف **جميع** سجلات المبيعات نهائياً.<br>لا يمكن التراجع عن هذا الإجراء. هل أنت متأكد تمامًا؟`;
+                 action = () => executeClearSalesLog(); // The actual deletion function
+             } else {
+                 console.error("Unknown confirmation type:", type);
+                 return;
+             }
+
+             confirmTitleEl.innerHTML = title;
+             confirmMessageEl.innerHTML = message;
+
+             // --- Use Data Attribute and Single Listener ---
+             // confirmActionBtnEl.dataset.actionId = id; // Store ID if needed (for single entry delete) - Not strictly necessary as ID is passed to action via closure
+             // confirmActionBtnEl.dataset.actionType = type;
+             confirmActionBtnEl.onclick = action; // Assign the correct function directly
+             // --- End Refactor ---
+
+             confirmActionBtnEl.className = confirmButtonClass; // Reset class
+             confirmActionBtnEl.style.background = confirmButtonBg; // Set background
+             confirmActionBtnEl.innerHTML = confirmButtonText;
+
+             confirmModalEl.classList.add('show');
+         }
+        function hideConfirmModal() { confirmModalEl.classList.remove('show'); }
+        async function deleteItem(itemId) { /* Simplified - No Storage Delete */
+             if (!db) { showNotification('الخدمة غير جاهزة.', true); return; } hideConfirmModal(); if (!itemId) return; console.log(`Deleting item: ${itemId}`);
+             showNotification(`⏳ جارٍ حذف المنتج...`, false, 'info'); // Add progress notification
+             try {
+                 // Delete history subcollection first
+                 const historyCollectionRef = collection(db, 'clothes', itemId, 'history');
+                 const historySnapshot = await getDocs(query(historyCollectionRef, limit(500))); // Limit batch size potential
+                 const historyDeleteBatch = writeBatch(db);
+                 historySnapshot.docs.forEach(doc => historyDeleteBatch.delete(doc.ref));
+                 await historyDeleteBatch.commit();
+                 console.log(`History for ${itemId} deleted.`);
+
+                 // Now delete the main item document
+                 await deleteDoc(doc(db, 'clothes', itemId));
+                 console.log(`Doc ${itemId} deleted.`);
+                 showNotification('✅ تم حذف المنتج بنجاح.', false, 'success');
+                 // State is updated automatically by the onSnapshot listener removing the item card and view
+             } catch (error) { showNotification(`خطأ الحذف: ${error.message}`, true); console.error("Delete item error: ", error); updateMainViewStatus(`فشل حذف المنتج: ${error.message}`, true); }
+          }
+
+        // Removed updateTotalPrice (was inventory based)
+        function generateInventoryReport() { /* Simplified */
+             if (itemsMap.size === 0) { showNotification("لا توجد منتجات حالياً لإنشاء تقرير.", true, 'warning'); return; } let reportContent = `تقرير المنتجات الحالية\nتاريخ: ${new Date().toLocaleString('ar-IQ')}\n================\n\n`; let index = 0;
+             // Sort items by name for the report
+             const sortedItems = Array.from(itemsMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+
+             sortedItems.forEach((item) => { index++; reportContent += `${index}. ${item.name} (ID: ${item.id})\n   سعر البيع: ${item.price.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}\n   أنشئ: ${formatFirestoreTimestamp(item.createdAt)} | آخر تعديل: ${formatFirestoreTimestamp(item.updatedAt)}\n----------------\n`; });
+             reportContent += `\nإجمالي عدد أنواع المنتجات: ${itemsMap.size}\n`; try { const blob = new Blob([`\uFEFF${reportContent}`], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `Products_List_${new Date().toISOString().slice(0,10)}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showNotification("✅ تم إنشاء تقرير المنتجات.", false, 'success'); } catch (e) { showNotification("فشل إنشاء التقرير.", true); console.error("Report error:", e); alert("فشل التنزيل. المحتوى:\n\n" + reportContent); }
+         }
+        function toggleDarkMode() { /* Unchanged */
+              const isDarkMode = document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', isDarkMode ? 'true' : 'false'); const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; if(themeButton) themeButton.title = isDarkMode ? 'الوضع الفاتح' : 'الوضع الداكن';
+         }
+        function showAddForm() { /* Clears URL input */
+             addFormModalEl.classList.add('show'); document.getElementById('itemName').value = ''; document.getElementById('itemPrice').value = '';
+             const iconUrlInput = document.getElementById('itemIconUrl'); if (iconUrlInput) iconUrlInput.value = '';
+             // Ensure button is enabled
+              if (addFormButton) { addFormButton.disabled = false; addFormButton.innerHTML = '<i class="fas fa-plus"></i> إضافة المنتج'; }
+         }
+        function hideAddForm() { addFormModalEl.classList.remove('show'); }
+        function showNotification(message, isError = false, type = 'normal') { /* Unchanged */
+             if (!toastEl) return; toastEl.textContent = message; toastEl.className = 'toast'; if (isError) toastEl.classList.add('error'); else if (type === 'warning') toastEl.classList.add('warning'); else if (type === 'success') toastEl.classList.add('success'); else if (type === 'info') {} /* No extra class needed for info */ toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 3500);
+         }
+
+        // --- Sales Logging & Reporting Functions ---
+        function populateProductSelect(selectElement) { /* Simplified - no stock */
+             if (!selectElement) return;
+             const currentValue = selectElement.value; // Preserve selection if already made
+             selectElement.innerHTML = '<option value="" disabled selected>-- اختر المنتج --</option>';
+             const sortedItems = Array.from(itemsMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+             sortedItems.forEach(item => { const option = document.createElement('option'); option.value = item.id; option.textContent = `${item.name}`; option.dataset.price = item.price; if (item.id === currentValue) { option.selected = true; } selectElement.appendChild(option); });
+             // If a value was preserved, re-trigger change handler to update price
+             if (currentValue) {
+                 handleProductSelectionChange(selectElement);
+             }
+         }
+        function handleProductSelectionChange(selectElement) { /* Unchanged */
+             const selectedOption = selectElement.options[selectElement.selectedIndex]; const priceInput = selectElement.closest('.sale-item-entry').querySelector('.sale-price-input'); if (selectedOption && priceInput && selectedOption.dataset.price) { priceInput.value = selectedOption.dataset.price; priceInput.placeholder = `السعر: ${selectedOption.dataset.price}`; } else if (priceInput) { priceInput.value = ''; priceInput.placeholder = 'سعر البيع'; }
+         }
+        function showLogSaleModal() { /* Unchanged */
+             logSaleModalEl.classList.add('show'); document.getElementById('saleDate').valueAsDate = new Date();
+             saleItemsListContainer.innerHTML = ` <div class="sale-item-entry"> <select class="sale-product-select" required onchange="window.handleProductSelectionChange(this)"> <option value="" disabled selected>-- اختر المنتج --</option> </select> <input type="number" class="sale-quantity-input" placeholder="الكمية" min="1" required> <input type="number" class="sale-price-input" placeholder="سعر البيع" min="0" step="500" required> <button type="button" class="remove-sale-item-btn" title="إزالة" onclick="window.removeSaleItem(this)">&times;</button> </div>`;
+             populateProductSelect(saleItemsListContainer.querySelector('.sale-product-select'));
+             // Ensure save button is enabled
+             const saveButton = document.getElementById('saveSaleBtn');
+             if (saveButton) { saveButton.disabled = false; saveButton.innerHTML = '<i class="fas fa-save"></i> حفظ المبيعات'; }
+         }
+        function addSaleItemEntry() { /* Unchanged */
+             const template = saleItemsListContainer.querySelector('.sale-item-entry'); if (template) { const newEntry = template.cloneNode(true); newEntry.querySelector('.sale-product-select').value = ''; newEntry.querySelector('.sale-quantity-input').value = ''; const priceInput = newEntry.querySelector('.sale-price-input'); priceInput.value = ''; priceInput.placeholder = 'سعر البيع'; populateProductSelect(newEntry.querySelector('.sale-product-select')); saleItemsListContainer.appendChild(newEntry); }
+         }
+        function removeSaleItem(button) { /* Unchanged */
+             const entry = button.closest('.sale-item-entry'); if (saleItemsListContainer.querySelectorAll('.sale-item-entry').length > 1) { entry.remove(); } else { showNotification('يجب أن يكون هناك بند واحد على الأقل.', true, 'warning'); }
+         }
+        function hideLogSaleModal() { logSaleModalEl.classList.remove('show'); saleItemsListContainer.innerHTML = ''; }
+
+        async function saveSales() { /* Simplified - No Cost/Category */
+             if (!db) { showNotification("الخدمة غير جاهزة.", true); return; }
+             const saleDateInput = document.getElementById('saleDate'); const saleEntries = saleItemsListContainer.querySelectorAll('.sale-item-entry'); const saveButton = document.getElementById('saveSaleBtn'); saveButton.disabled = true; saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الحفظ...';
+             const saleDate = saleDateInput.valueAsDate; if (!saleDate) { showNotification('يرجى تحديد تاريخ البيع!', true, 'warning'); saveButton.disabled = false; saveButton.innerHTML = '<i class="fas fa-save"></i> حفظ المبيعات'; return; }
+             // Adjust saleTimestamp to keep selected date but use current time
+             const now = new Date();
+             const saleTimestamp = new Date(saleDate.getFullYear(), saleDate.getMonth(), saleDate.getDate(), now.getHours(), now.getMinutes(), now.getSeconds());
+
+
+             const batch = writeBatch(db); const salesToLog = []; let isValid = true;
+
+             saleEntries.forEach(entry => {
+                 const productSelect = entry.querySelector('.sale-product-select'); const quantityInput = entry.querySelector('.sale-quantity-input'); const priceInput = entry.querySelector('.sale-price-input');
+                 const productId = productSelect.value; const quantitySold = parseInt(quantityInput.value); const pricePerUnitAtSale = parseFloat(priceInput.value);
+                 let entryValid = true;
+                 // Reset border first
+                 entry.style.border = 'none';
+                 productSelect.style.borderColor = ''; // Reset specific input borders
+                 quantityInput.style.borderColor = '';
+                 priceInput.style.borderColor = '';
+
+                 if (!productId) { entryValid = false; productSelect.style.borderColor = 'var(--danger)';}
+                 if (isNaN(quantitySold) || quantitySold <= 0) { entryValid = false; quantityInput.style.borderColor = 'var(--danger)';}
+                 if (isNaN(pricePerUnitAtSale) || pricePerUnitAtSale < 0) { entryValid = false; priceInput.style.borderColor = 'var(--danger)';}
+
+                 if (!entryValid) {
+                     isValid = false;
+                     entry.style.border = '1px solid var(--danger)'; // Highlight whole entry if any part is invalid
+                 } else {
+                      const productData = itemsMap.get(productId); if (productData) { salesToLog.push({ productId: productId, productName: productData.name, quantitySold: quantitySold, pricePerUnitAtSale: pricePerUnitAtSale, totalSaleAmount: quantitySold * pricePerUnitAtSale, saleTimestamp: Timestamp.fromDate(saleTimestamp) // Use adjusted timestamp
+                         });
+                     } else { isValid = false; entry.style.border = '1px solid var(--danger)'; productSelect.style.borderColor = 'var(--danger)'; console.error(`Product data not found for ID: ${productId}`); }
+                 }
+             });
+
+             if (!isValid || salesToLog.length === 0) { showNotification('يرجى مراجعة بنود البيع والتأكد من صحة البيانات.', true); saveButton.disabled = false; saveButton.innerHTML = '<i class="fas fa-save"></i> حفظ المبيعات'; return; }
+             try {
+                 salesToLog.forEach(saleData => { batch.set(doc(collection(db, 'sales')), saleData); });
+                 console.log(`Committing batch of ${salesToLog.length} sales...`); await batch.commit(); console.log("Sales batch committed.");
+                 showNotification(`✅ تم تسجيل ${salesToLog.length} ${salesToLog.length === 1 ? 'عملية بيع' : 'عمليات بيع'}!`, false, 'success'); hideLogSaleModal();
+                 fetchAndDisplayDailySalesSummary(); // Refresh footer summary
+             } catch (error) { showNotification(`خطأ حفظ المبيعات: ${error.message}`, true); console.error("Error saving sales: ", error);
+             } finally { saveButton.disabled = false; saveButton.innerHTML = '<i class="fas fa-save"></i> حفظ المبيعات'; }
+          }
+
+        // --- Sales Reporting Functions (Simplified) ---
+        function showSalesReportModal() { /* Simplified - Removed Category Filter */
+             salesReportModalEl.classList.add('show');
+             const today = new Date(); const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+             document.getElementById('reportStartDate').valueAsDate = startOfMonth; document.getElementById('reportEndDate').valueAsDate = today;
+             // Removed category filter population
+             salesReportArea.innerHTML = '<p class="detail-placeholder">اختر فترة زمنية ونوع التقرير.</p>';
+         }
+        function hideSalesReportModal() { salesReportModalEl.classList.remove('show'); }
+
+        async function generateSalesReport(reportType) { /* Simplified - No Cost/Profit/Category */
+             if (!db) { showNotification("الخدمة غير جاهزة.", true); return; }
+             const startDateInput = document.getElementById('reportStartDate'); const endDateInput = document.getElementById('reportEndDate'); const startDate = startDateInput.valueAsDate; const endDate = endDateInput.valueAsDate;
+             if (!startDate || !endDate || endDate < startDate) { showNotification('يرجى تحديد فترة صحيحة.', true, 'warning'); return; }
+             const endOfDay = new Date(endDate); endOfDay.setHours(23, 59, 59, 999);
+             salesReportArea.innerHTML = '<p class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل التقرير...</p>';
+
+             try {
+                 const salesRef = collection(db, 'sales');
+                 let q = query(salesRef, where('saleTimestamp', '>=', Timestamp.fromDate(startDate)), where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay)), orderBy('saleTimestamp', 'desc'));
+                 // Removed category filter query
+
+                 const salesSnapshot = await getDocs(q); console.log(`Found ${salesSnapshot.docs.length} sales records.`);
+                 if (salesSnapshot.empty) { salesReportArea.innerHTML = '<p class="detail-placeholder">لا توجد مبيعات في هذه الفترة.</p>'; return; }
+
+                 let reportHtml = ''; const salesData = salesSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                 const dateRangeText = `${startDate.toLocaleDateString('ar-IQ')} - ${endDate.toLocaleDateString('ar-IQ')}`;
+
+                 if (reportType === 'summary') {
+                     let totalValue = 0; let totalQuantity = 0;
+                     salesData.forEach(sale => { totalValue += sale.totalSaleAmount || 0; totalQuantity += sale.quantitySold || 0; });
+                     reportHtml = `<h4>ملخص المبيعات <br><small>(${dateRangeText})</small></h4> <div class="report-summary"> <p>إجمالي قيمة المبيعات: <span>${totalValue.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span></p> <p>إجمالي الكمية المباعة: <span>${totalQuantity.toLocaleString('ar-IQ')}</span> قطعة</p> </div> <br><h4>تفاصيل المبيعات:</h4> <table><thead><tr><th>التاريخ</th><th>المنتج</th><th>الكمية</th><th>سعر الوحدة</th><th>الإجمالي</th></tr></thead><tbody> ${salesData.map(s => `<tr><td>${formatFirestoreTimestamp(s.saleTimestamp)}</td><td>${s.productName || '?'}</td><td class="number-cell">${s.quantitySold.toLocaleString('ar-IQ')}</td><td class="number-cell">${s.pricePerUnitAtSale.toLocaleString('ar-IQ')}</td><td class="number-cell">${s.totalSaleAmount.toLocaleString('ar-IQ')}</td></tr>`).join('')} </tbody></table>`;
+                 } else if (reportType === 'bestSellerQty' || reportType === 'bestSellerValue') {
+                     const productSales = {};
+                     salesData.forEach(sale => { if (!productSales[sale.productId]) productSales[sale.productId] = { name: sale.productName, qty: 0, value: 0 }; productSales[sale.productId].qty += sale.quantitySold; productSales[sale.productId].value += sale.totalSaleAmount; });
+                     const sortedProducts = Object.values(productSales).sort((a, b) => (reportType === 'bestSellerQty' ? b.qty - a.qty : b.value - a.value));
+                     reportHtml = `<h4>الأكثر مبيعاً ${reportType === 'bestSellerQty' ? '(حسب الكمية)' : '(حسب القيمة)'} <br><small>(${dateRangeText})</small></h4> <table><thead><tr><th>المنتج</th><th>الكمية المباعة</th><th>إجمالي قيمة المبيعات</th></tr></thead><tbody> ${sortedProducts.map(p => `<tr><td>${p.name || '?'}</td><td class="number-cell">${p.qty.toLocaleString('ar-IQ')}</td><td class="number-cell">${p.value.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td></tr>`).join('')} </tbody></table>`;
+                 } else { reportHtml = '<p class="detail-placeholder">نوع التقرير غير معروف.</p>'; }
+                 salesReportArea.innerHTML = reportHtml;
+             } catch (error) { console.error("Error generating sales report:", error); salesReportArea.innerHTML = `<p class="detail-error">خطأ إنشاء التقرير: ${error.message}</p>`; }
+         }
+
+        function exportSalesToCSV() { /* Simplified - No Cost/Category */
+             const startDateInput = document.getElementById('reportStartDate'); const endDateInput = document.getElementById('reportEndDate'); const startDate = startDateInput.valueAsDate; const endDate = endDateInput.valueAsDate;
+             if (!startDate || !endDate || endDate < startDate) { showNotification('يرجى تحديد فترة صحيحة للتصدير.', true, 'warning'); return; }
+             const endOfDay = new Date(endDate); endOfDay.setHours(23, 59, 59, 999);
+              showNotification('⏳ تحضير التصدير...', false, 'info');
+              const salesRef = collection(db, 'sales');
+              let q = query(salesRef, where('saleTimestamp', '>=', Timestamp.fromDate(startDate)), where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay)), orderBy('saleTimestamp', 'desc'));
+              // Removed category filter
+
+              getDocs(q).then(salesSnapshot => {
+                  if (salesSnapshot.empty) { showNotification('لا توجد بيانات للتصدير في هذه الفترة.', false, 'warning'); return; }
+                  let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // BOM for Excel UTF-8 support
+                  csvContent += "التاريخ,الوقت,معرف المنتج,اسم المنتج,الكمية,سعر الوحدة,الإجمالي\r\n"; // Simplified Header
+                  salesSnapshot.docs.forEach(doc => {
+                      const sale = doc.data();
+                      const saleDate = sale.saleTimestamp.toDate();
+                      const dateStr = saleDate.toLocaleDateString('ar-IQ', { year: 'numeric', month: '2-digit', day: '2-digit' });
+                      const timeStr = saleDate.toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }); // Use 24hr for simpler sorting
+                      const productName = `"${(sale.productName || '').replace(/"/g, '""')}"`; // Escape quotes
+                      const row = [ dateStr, timeStr, sale.productId, productName, sale.quantitySold, sale.pricePerUnitAtSale, sale.totalSaleAmount ].join(',');
+                      csvContent += row + "\r\n";
+                  });
+                  const encodedUri = encodeURI(csvContent); const link = document.createElement("a"); link.setAttribute("href", encodedUri); const dateString = `${startDate.toISOString().slice(0,10)}_to_${endDate.toISOString().slice(0,10)}`;
+                  link.setAttribute("download", `sales_report_${dateString}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); showNotification('✅ تم تحضير ملف CSV.', false, 'success');
+              }).catch(error => { console.error("Error exporting sales:", error); showNotification(`خطأ في التصدير: ${error.message}`, true); });
+         }
+
+        // --- Sales Log Modal Functions ---
+        function showSalesLogModal() {
+             salesLogModalEl.classList.add('show');
+             loadSalesLog(); // Load log data when modal opens
+             // Ensure buttons are enabled initially
+             if (clearLogBtn) clearLogBtn.disabled = false;
+             if (salesLogCloseBtn) salesLogCloseBtn.disabled = false;
+             if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = false;
+         }
+        function hideSalesLogModal() {
+             salesLogModalEl.classList.remove('show');
+             if (salesLogTableBody) salesLogTableBody.innerHTML = ''; // Clear log on close to ensure fresh load next time
+         }
+
+        async function loadSalesLog() {
+             if (!db || !salesLogTableBody) return;
+             salesLogTableBody.innerHTML = '<tr><td colspan="6" class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل السجل...</td></tr>'; // Updated colspan
+             salesLogTableBody.parentElement.style.display = 'table';
+
+             try {
+                 const salesRef = collection(db, 'sales');
+                 const q = query(salesRef, orderBy('saleTimestamp', 'desc'), limit(SALES_LOG_LIMIT));
+                 const salesSnapshot = await getDocs(q);
+
+                 if (salesSnapshot.empty) {
+                     salesLogTableBody.innerHTML = '<tr><td colspan="6" class="detail-placeholder">لا توجد عمليات بيع مسجلة بعد.</td></tr>';
+                     return;
+                 }
+
+                 let logHtml = '';
+                 salesSnapshot.docs.forEach(doc => {
+                     const sale = { id: doc.id, ...doc.data() }; // Include doc id
+                     logHtml += `
+                         <tr data-sale-id="${sale.id}">
+                             <td>${formatFirestoreTimestamp(sale.saleTimestamp)}</td>
+                             <td>${sale.productName || 'غير معروف'}</td>
+                             <td class="number-cell">${sale.quantitySold.toLocaleString('ar-IQ')}</td>
+                             <td class="number-cell">${sale.pricePerUnitAtSale.toLocaleString('ar-IQ')}</td>
+                             <td class="number-cell">${sale.totalSaleAmount.toLocaleString('ar-IQ')}</td>
+                             <td>
+                                 <button class="delete-sale-log-entry" onclick="window.confirmDeleteSalesLogEntry('${sale.id}', this)" title="حذف هذا السجل">
+                                     <i class="fas fa-times-circle"></i>
+                                 </button>
+                             </td>
+                         </tr>
+                     `;
+                 });
+                 salesLogTableBody.innerHTML = logHtml;
+                if (salesSnapshot.docs.length >= SALES_LOG_LIMIT) {
+                     salesLogTableBody.insertAdjacentHTML('beforeend', `<tr><td colspan="6" style="text-align: center; font-size: 0.9em; opacity: 0.7;">(عرض أحدث ${SALES_LOG_LIMIT} سجل)</td></tr>`);
+                 }
+
+
+             } catch (error) {
+                  console.error("Error loading sales log:", error);
+                  salesLogTableBody.innerHTML = '<tr><td colspan="6" class="detail-error">حدث خطأ أثناء تحميل السجل.</td></tr>';
+             }
+         }
+
+        // --- Functions to Delete Sales Log Entries ---
+        function confirmDeleteSalesLogEntry(saleId, buttonElement) {
+             if (!saleId || !buttonElement) return;
+             // Use the generic confirm modal
+             showConfirmModal(saleId, 'saleEntry');
+         }
+
+        async function deleteSalesLogEntry(saleId) {
+             if (!db || !saleId) return;
+             console.log(`Attempting to delete sale log entry: ${saleId}`);
+             hideConfirmModal(); // Hide confirmation first
+             showNotification('⏳ جارٍ حذف السجل...', false, 'info');
+
+             // Disable delete button on the row temporarily
+             const buttonToDelete = salesLogTableBody?.querySelector(`tr[data-sale-id="${saleId}"] .delete-sale-log-entry`);
+             if (buttonToDelete) buttonToDelete.disabled = true;
+
+
+             try {
+                 await deleteDoc(doc(db, 'sales', saleId));
+                 console.log(`Sale log entry ${saleId} deleted.`);
+                 showNotification('✅ تم حذف سجل البيع.', false, 'success');
+                 // Remove row from the visible log table smoothly
+                 const rowToRemove = salesLogTableBody?.querySelector(`tr[data-sale-id="${saleId}"]`);
+                 if (rowToRemove) {
+                     rowToRemove.style.transition = 'opacity 0.3s ease-out';
+                     rowToRemove.style.opacity = '0';
+                     setTimeout(() => {
+                        rowToRemove.remove();
+                        // Check if table is empty after removal
+                        if (salesLogTableBody && salesLogTableBody.rows.length === 0) {
+                           loadSalesLog(); // Reload to show empty message
+                        }
+                     }, 300);
+                 } else {
+                      loadSalesLog(); // Reload log if row wasn't found
+                 }
+                   fetchAndDisplayDailySalesSummary(); // Update daily summary after deletion
+             } catch (error) {
+                 console.error(`Error deleting sale log entry ${saleId}:`, error);
+                 showNotification(`❌ فشل حذف السجل: ${error.message}`, true);
+                 // Re-enable button if deletion failed
+                 if (buttonToDelete) buttonToDelete.disabled = false;
+             }
+         }
+
+        // --- Functions to Clear Entire Sales Log ---
+        function confirmClearSalesLog() {
+             // Check if button exists and is enabled
+             if (!clearLogBtn || clearLogBtn.disabled) return;
+
+             const password = prompt(`للتأكيد، الرجاء إدخال كلمة السر (${CLEAR_LOG_PASSWORD}) لمسح السجل بالكامل:`);
+             if (password === null) return; // User cancelled
+
+             if (password !== CLEAR_LOG_PASSWORD) {
+                 showNotification("كلمة السر غير صحيحة!", true);
+                 return;
+             }
+             // Use the generic confirm modal for final confirmation
+             showConfirmModal(null, 'clearSales'); // Pass null ID, type 'clearSales'
+         }
+
+        async function executeClearSalesLog() {
+              if (!db) { showNotification("الخدمة غير جاهزة.", true); return; }
+              console.warn("Attempting to clear ALL sales log entries!");
+              hideConfirmModal(); // Hide confirmation first
+
+              // START: Disable buttons during operation
+              if (clearLogBtn) clearLogBtn.disabled = true;
+              if (salesLogCloseBtn) salesLogCloseBtn.disabled = true;
+              if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = true; // Disable X button too
+              showNotification("⏳⏳ جارٍ مسح جميع سجلات المبيعات (قد يستغرق بعض الوقت)...", false, 'warning');
+              // END: Disable buttons
+
+              const MAX_WRITES_PER_BATCH = 450; // Firestore batch limit is 500, use slightly less
+              const salesRef = collection(db, 'sales');
+              let deleteCounter = 0;
+
+              try {
+                   console.log("Fetching sales document IDs to delete...");
+                   // Fetch only IDs if possible (though Firestore typically fetches full docs)
+                   const querySnapshot = await getDocs(query(salesRef, limit(10000))); // Add a safety limit maybe?
+                   console.log(`Found ${querySnapshot.size} sales documents to delete.`);
+
+                   if (querySnapshot.empty) {
+                        showNotification("السجل فارغ بالفعل.", false, 'info');
+                        loadSalesLog(); // Refresh view
+                        return; // Exit early
+                   }
+
+                   // Split deletes into batches
+                   let batch = writeBatch(db);
+                   let batchCount = 0;
+                   const totalDocs = querySnapshot.size;
+
+                   for (let i = 0; i < totalDocs; i++) {
+                       const docSnap = querySnapshot.docs[i];
+                       batch.delete(docSnap.ref);
+                       batchCount++;
+                       deleteCounter++;
+
+                       if (batchCount >= MAX_WRITES_PER_BATCH || i === totalDocs - 1) {
+                           console.log(`Committing batch ${Math.ceil(deleteCounter / MAX_WRITES_PER_BATCH)} of ${Math.ceil(totalDocs / MAX_WRITES_PER_BATCH)} (${batchCount} deletes)...`);
+                           showNotification(`⏳ جارٍ مسح الدفعة ${Math.ceil(deleteCounter / MAX_WRITES_PER_BATCH)} من ${Math.ceil(totalDocs / MAX_WRITES_PER_BATCH)}...`, false, 'info');
+                           await batch.commit();
+                           batch = writeBatch(db); // Start a new batch
+                           batchCount = 0;
+                           // Optional: Add a small delay between batches if needed for large datasets
+                           // await new Promise(resolve => setTimeout(resolve, 100));
+                       }
+                   }
+
+                   console.log(`Successfully deleted ${deleteCounter} sales documents.`);
+                   showNotification(`✅ تم مسح جميع سجلات المبيعات (${deleteCounter} سجلات).`, false, 'success');
+                   loadSalesLog(); // Refresh the view (will be empty)
+                   fetchAndDisplayDailySalesSummary(); // Refresh footer summary
+
+              } catch (error) {
+                   console.error("Error clearing sales log:", error);
+                   showNotification(`❌ فشل مسح السجل: ${error.message}`, true);
+              } finally {
+                   // START: Re-enable buttons after operation completes or fails
+                   if (clearLogBtn) clearLogBtn.disabled = false;
+                   if (salesLogCloseBtn) salesLogCloseBtn.disabled = false;
+                   if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = false; // Re-enable X button too
+                   // END: Re-enable buttons
+              }
+         }
+
+
+        // --- Daily Sales Summary Function ---
+        async function fetchAndDisplayDailySalesSummary() {
+              if (!db || !footerSummaryEl) return;
+              footerSummaryEl.innerHTML = `مبيعات اليوم: <span style="opacity:0.6;">جار التحميل...</span>`; // Show loading state
+              const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+              const todayEnd = new Date(); todayEnd.setHours(23, 59, 59, 999);
+              const salesRef = collection(db, 'sales');
+              const q = query(salesRef, where('saleTimestamp', '>=', Timestamp.fromDate(todayStart)), where('saleTimestamp', '<=', Timestamp.fromDate(todayEnd)));
+              try {
+                  const snapshot = await getDocs(q); let dailyTotal = 0;
+                  snapshot.forEach(doc => { dailyTotal += doc.data().totalSaleAmount || 0; });
+                  const displayTotal = dailyTotal.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                  footerSummaryEl.innerHTML = `مبيعات اليوم: <span style="color: var(--info);">${displayTotal}</span>`;
+                  footerSummaryEl.style.display = 'block';
+              } catch (error) { console.error("Error fetching daily summary:", error); footerSummaryEl.innerHTML = `مبيعات اليوم: <span style="color: var(--danger);">خطأ</span>`; footerSummaryEl.style.display = 'block'; }
+          }
+
 
         // --- Initialization ---
         async function initializeAppAndFirestore() {
-            console.log("Initializing app..."); updateMainViewStatus("🔄 تهيئة..."); listPlaceholderEl.textContent = "جارٍ التحميل..."; listPlaceholderEl.style.display = 'block'; connectionStatusDotEl.className = 'connection-status-dot connecting'; updateConnectionStatusUI(navigator.onLine);
-            try {
-                console.log("Initializing Firebase..."); app = initializeApp(firebaseConfig); db = getFirestore(app); storage = getStorage(app); console.log("Firebase OK.");
-                try { updateMainViewStatus("🔄 تفعيل التخزين المحلي..."); console.log("Enabling persistence..."); await enableIndexedDbPersistence(db); console.log("Persistence OK."); } catch (err) { if (err.code === 'failed-precondition') { console.warn("Persistence failed (multi-tabs?)."); showNotification("⚠️ لم يتم تمكين التخزين المحلي.", false, 'warning'); } else { console.error("Persistence error:", err); showNotification("⚠️ خطأ تخزين محلي.", true); } if (!db) throw new Error("Firestore init failed."); }
-                console.log("Applying theme..."); const isDarkMode = localStorage.getItem('darkMode') === 'true'; if (isDarkMode) document.body.classList.add('dark-mode'); const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '☀️' : '🌙'; if(themeButton) themeButton.title = isDarkMode ? 'فاتح' : 'داكن';
-                updateMainViewStatus("🔄 جلب البيانات..."); console.log("Attaching listener...");
-                if (db && !unsubscribeSnapshot) {
-                    const itemsCollection = collection(db, 'clothes'); const q = query(itemsCollection, orderBy('createdAt', 'desc'));
-                    unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-                        console.log(`Snapshot (${snapshot.docChanges().length} changes). Source: ${snapshot.metadata.fromCache ? 'Cache' : 'Server'}. Pending: ${snapshot.metadata.hasPendingWrites}`); latestSnapshotMetadata = snapshot.metadata; updateConnectionStatusUI(navigator.onLine); let needsTotalUpdate = false;
-                        snapshot.docChanges().forEach((change) => {
-                            const docData = change.doc.data({ serverTimestamps: "estimate" }); const itemData = { id: change.doc.id, ...docData };
-                            if (change.type === "added") { console.debug("Add:", itemData.id); itemsMap.set(itemData.id, itemData); renderItemCard(itemData); needsTotalUpdate = true; }
-                            if (change.type === "modified") { console.debug("Mod:", itemData.id); itemsMap.set(itemData.id, itemData); renderItemCard(itemData); needsTotalUpdate = true; if (currentViewItemId === itemData.id) { showItemDetails(itemData.id); } if (currentEditItemId === itemData.id) { console.warn(`Edited item ${itemData.id} modified externally.`); } }
-                            if (change.type === "removed") { console.debug("Del:", itemData.id); itemsMap.delete(itemData.id); removeItemCard(itemData.id); needsTotalUpdate = true; if (currentViewItemId === itemData.id) { currentViewItemId = null; updateMainViewStatus("🗑️ حذف المنتج المعروض."); } if (currentEditItemId === itemData.id) { currentEditItemId = null; updateMainViewStatus("🗑️ حذف المنتج قيد التعديل."); } }
-                        });
-                        if (needsTotalUpdate) { updateTotalPrice(); }
-                        if (!firstLoadComplete) { firstLoadComplete = true; console.log("Initial sync complete."); listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block'; if (itemsMap.size === 0) { listPlaceholderEl.textContent = "➕ لا توجد منتجات."; } if (!currentViewItemId && !currentEditItemId) { updateMainViewStatus(itemsMap.size > 0 ? "👈 اختر منتجاً." : "➕ لا توجد منتجات."); } }
-                    }, (error) => { console.error("❌ Listener error:", error); showNotification("خطأ استقبال التحديثات.", true); updateMainViewStatus(`فشل الاتصال: ${error.message}.`, true); updateConnectionStatusUI(false); firstLoadComplete = true; listPlaceholderEl.textContent = "❌ خطأ تحميل القائمة"; listPlaceholderEl.style.display = 'block'; });
-                    console.log("Listener attached.");
-                } else { throw new Error("DB not available."); }
-                 console.log("Setting up listeners..."); window.addEventListener('online', () => updateConnectionStatusUI(true)); window.addEventListener('offline', () => updateConnectionStatusUI(false));
-                 console.log("Exposing functions..."); window.addItem = addItem; window.updateItem = updateItem; window.deleteItem = deleteItem; window.showItemDetails = showItemDetails; window.showEditForm = showEditForm; window.cancelEdit = cancelEdit; window.showConfirmModal = showConfirmModal; window.hideConfirmModal = hideConfirmModal; window.generateReport = generateReport; window.toggleDarkMode = toggleDarkMode; window.showAddForm = showAddForm; window.hideAddForm = hideAddForm; window.handleImagePreview = handleImagePreview;
-                 console.log("✅ Init success.");
-            } catch (initError) { console.error("❌ Init Failed:", initError); updateMainViewStatus(`فشل التهيئة: ${initError.message} (${initError.code || ''}).`, true); listPlaceholderEl.textContent = "❌ فشل التهيئة"; listPlaceholderEl.style.display = 'block'; connectionStatusDotEl.className = 'connection-status-dot disconnected'; connectionStatusDotEl.title = `فشل: ${initError.message}`; }
-        }
+             console.log("Initializing app (Sales Focus - URL Icons)..."); updateMainViewStatus("🔄 تهيئة..."); listPlaceholderEl.textContent = "جارٍ التحميل..."; listPlaceholderEl.style.display = 'block'; connectionStatusDotEl.className = 'connection-status-dot connecting'; updateConnectionStatusUI(navigator.onLine);
+             try {
+                 console.log("Initializing Firebase..."); app = initializeApp(firebaseConfig); db = getFirestore(app); console.log("Firebase OK.");
+                 try { updateMainViewStatus("🔄 تفعيل التخزين المحلي..."); console.log("Enabling persistence..."); await enableIndexedDbPersistence(db); console.log("Persistence OK."); } catch (err) { /* ... Persistence error handling ... */ if (err.code === 'failed-precondition') { console.warn("Persistence failed (multi-tabs?)."); showNotification("⚠️ لم يتم تمكين التخزين المحلي (قد يكون التطبيق مفتوحاً في نافذة أخرى).", false, 'warning'); } else if (err.code === 'unimplemented') { console.warn("Persistence not supported in this browser."); showNotification("⚠️ التخزين المحلي غير مدعوم في هذا المتصفح.", false, 'warning'); } else { console.error("Persistence error:", err); showNotification("⚠️ خطأ في التخزين المحلي.", true); } if (!db) throw new Error("Firestore init failed after persistence check."); }
+                 console.log("Applying theme..."); const isDarkMode = localStorage.getItem('darkMode') === 'true'; if (isDarkMode) document.body.classList.add('dark-mode'); const themeButton = document.querySelector('.control-panel button[onclick*="toggleDarkMode"]'); if(themeButton) themeButton.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; if(themeButton) themeButton.title = isDarkMode ? 'الوضع الفاتح' : 'الوضع الداكن';
+                 updateMainViewStatus("🔄 جلب بيانات المنتجات..."); console.log("Attaching items listener...");
+                 if (db && !unsubscribeItems) {
+                     const itemsCollection = collection(db, 'clothes'); const q = query(itemsCollection, orderBy('name', 'asc')); // Order by name for consistent list
+                     unsubscribeItems = onSnapshot(q, (snapshot) => {
+                         console.log(`Items Snapshot (${snapshot.docChanges().length} changes). Source: ${snapshot.metadata.fromCache ? 'Cache' : 'Server'}. Pending: ${snapshot.metadata.hasPendingWrites}`); latestSnapshotMetadata = snapshot.metadata; updateConnectionStatusUI(navigator.onLine);
+
+                         let needsDetailsRefresh = false;
+                         let refreshId = null;
+
+                         snapshot.docChanges().forEach((change) => {
+                             const docData = change.doc.data({ serverTimestamps: "estimate" }); const itemData = { id: change.doc.id, ...docData };
+                             if (change.type === "added" || change.type === "modified") {
+                                 itemsMap.set(itemData.id, itemData);
+                                 renderItemCard(itemData);
+                                 // Only refresh details if the *currently viewed* item is modified
+                                 if ((currentViewItemId === itemData.id || currentEditItemId === itemData.id) && change.type === "modified") {
+                                     needsDetailsRefresh = true;
+                                     refreshId = itemData.id;
+                                 }
+                             }
+                             if (change.type === "removed") {
+                                 const removedItemId = change.doc.id;
+                                 itemsMap.delete(removedItemId);
+                                 removeItemCard(removedItemId);
+                                 if (currentViewItemId === removedItemId) {
+                                     currentViewItemId = null;
+                                     updateMainViewStatus("🗑️ تم حذف المنتج المعروض.");
+                                 }
+                                 if (currentEditItemId === removedItemId) {
+                                     currentEditItemId = null;
+                                     updateMainViewStatus("🗑️ تم حذف المنتج قيد التعديل.");
+                                 }
+                             }
+                         });
+
+                         // Refresh details view outside the loop if needed
+                         if (needsDetailsRefresh && refreshId && !currentEditItemId) { // Don't auto-refresh if user is editing
+                             console.log(`Refreshing details for modified item: ${refreshId}`);
+                             showItemDetails(refreshId);
+                         }
+
+
+                         // Removed total price update
+                         if (!firstLoadComplete) {
+                             firstLoadComplete = true;
+                             console.log("Initial item sync complete.");
+                             listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block';
+                             if (itemsMap.size === 0) {
+                                 listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر على زر (+) للإضافة.";
+                             }
+                             if (!currentViewItemId && !currentEditItemId) {
+                                 updateMainViewStatus(itemsMap.size > 0 ? "👈 اختر منتجاً لعرض التفاصيل أو التعديل." : "➕ لا توجد منتجات حالياً. ابدأ بإضافة منتج جديد.");
+                             }
+                             fetchAndDisplayDailySalesSummary();
+                         }
+                     }, (error) => { /* ... Error handling ... */ console.error("❌ Items Listener error:", error); showNotification("خطأ استقبال تحديثات المنتجات.", true); updateMainViewStatus(`فشل الاتصال بقاعدة البيانات: ${error.message}.`, true); updateConnectionStatusUI(false); firstLoadComplete = true; listPlaceholderEl.textContent = "❌ خطأ تحميل القائمة"; listPlaceholderEl.style.display = 'block'; });
+                     console.log("Items listener attached.");
+                 } else { throw new Error("DB not available or listener already attached."); }
+                  console.log("Setting up listeners..."); window.addEventListener('online', () => updateConnectionStatusUI(true)); window.addEventListener('offline', () => updateConnectionStatusUI(false));
+                  console.log("Exposing functions...");
+                  window.addItem = addItem; window.updateItem = updateItem; window.deleteItem = deleteItem;
+                  window.showItemDetails = showItemDetails; window.showEditForm = showEditForm; window.cancelEdit = cancelEdit;
+                  window.showConfirmModal = showConfirmModal; window.hideConfirmModal = hideConfirmModal;
+                  window.generateInventoryReport = generateInventoryReport; window.toggleDarkMode = toggleDarkMode;
+                  window.showAddForm = showAddForm; window.hideAddForm = hideAddForm;
+                  window.showLogSaleModal = showLogSaleModal; window.hideLogSaleModal = hideLogSaleModal;
+                  window.addSaleItemEntry = addSaleItemEntry; window.removeSaleItem = removeSaleItem;
+                  window.saveSales = saveSales;
+                  window.showSalesReportModal = showSalesReportModal; window.hideSalesReportModal = hideSalesReportModal;
+                  window.generateSalesReport = generateSalesReport; window.exportSalesToCSV = exportSalesToCSV;
+                  window.showSalesLogModal = showSalesLogModal; window.hideSalesLogModal = hideSalesLogModal;
+                  window.confirmDeleteSalesLogEntry = confirmDeleteSalesLogEntry; // Expose confirmation step
+                  window.deleteSalesLogEntry = deleteSalesLogEntry; // Expose actual deletion
+                  window.confirmClearSalesLog = confirmClearSalesLog; // Expose confirmation step
+                  window.executeClearSalesLog = executeClearSalesLog; // Expose actual clearing
+                  window.handleProductSelectionChange = handleProductSelectionChange;
+                  // Removed handleImagePreview
+                  console.log("✅ Init success.");
+             } catch (initError) { /* ... Init Error handling ... */ console.error("❌ Init Failed:", initError); updateMainViewStatus(`فشل التهيئة الأساسية: ${initError.message} (${initError.code || ''}). يرجى تحديث الصفحة أو التأكد من الاتصال بالإنترنت.`, true); listPlaceholderEl.textContent = "❌ فشل التهيئة"; listPlaceholderEl.style.display = 'block'; connectionStatusDotEl.className = 'connection-status-dot disconnected'; connectionStatusDotEl.title = `فشل: ${initError.message}`; }
+         }
 
         // Start the App
         document.addEventListener('DOMContentLoaded', initializeAppAndFirestore);
         // Cleanup listener
-        window.addEventListener('beforeunload', () => { if (unsubscribeSnapshot) { console.log("Detaching listener."); unsubscribeSnapshot(); } });
+        window.addEventListener('beforeunload', () => { if (unsubscribeItems) { console.log("Detaching items listener."); unsubscribeItems(); } });
 
     </script>
 
