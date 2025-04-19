@@ -1160,7 +1160,7 @@
              if ('serviceWorker' in navigator) {
                // تأخير التسجيل قليلاً حتى يتم تحميل الصفحة الأساسية لتجنب التأثير على التحميل الأولي
                window.addEventListener('load', () => {
-                 navigator.serviceWorker.register('/service-worker.js') // تأكد من تطابق المسار
+                 // navigator.serviceWorker.register('./service-worker.js')
                    .then(registration => {
                      console.log('✅ ServiceWorker Registration Successful:', registration.scope);
                      // يمكنك إضافة منطق للتحقق من التحديثات هنا إذا أردت
