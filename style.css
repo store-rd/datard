@@ -1,0 +1,3 @@
+#items-list, .history-section, #salesReportArea, #salesLogArea {
+    overscroll-behavior: contain; /* يمنع التمرير من "التسرب" للخارج */
+}
