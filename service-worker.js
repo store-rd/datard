@@ -1,7 +1,7 @@
 // service-worker.js (الكود الأصلي مع التخزين المؤقت)
 
 // !!! هام: غيّر رقم الإصدار في كل مرة تحدث فيها أي من الملفات في urlsToCache !!!
-const CACHE_NAME = 'sales-inventory-v10.3-cache-v4'; // <--- استخدم رقم إصدار جديد (مثل v4)
+const CACHE_NAME = 'sales-inventory-v10.4-cache-v5'; // <--- استخدم رقم إصدار جديد (مثل v4)
 
 const urlsToCache = [
   './',                     // الجذر النسبي
