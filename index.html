@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ar" class="no-js" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام إدارة المبيعات والمخزون الإحترافي v10.8</title>
+    <title>نظام إدارة المبيعات والمخزون الإحترافي v10.10</title> <!-- Version updated -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#B71C1C" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#455A64" media="(prefers-color-scheme: dark)">
@@ -27,6 +26,8 @@
     --info-hover-light: #0a3d1b;
     --danger-light: #D32F2F; /* Standard Red */
     --danger-hover-light: #B71C1C; /* Darker Red */
+    --warning-light: #FFA000; /* Amber 700 */
+    --warning-hover-light: #FF8F00; /* Amber 800 */
     --dark-text-light: #212121; /* Near Black */
     --light-bg: #FAFAFA; /* Very Light Grey */
     --grey-light-bg: #FFFFFF; /* White */
@@ -49,6 +50,8 @@
     --info-hover-dark: #A5D6A7;
     --danger-dark: #EF9A9A; /* Light Red */
     --danger-hover-dark: #E57373; /* Slightly darker light red */
+    --warning-dark: #FFCA28; /* Amber 400 */
+    --warning-hover-dark: #FFD54F; /* Amber 300 */
     --dark-bg: #121212; /* True Dark Background */
     --light-text-dark: #E0E0E0; /* Light Grey Text */
     --grey-light-dark-bg: #212121; /* Dark Grey */
@@ -87,6 +90,8 @@
     --info-hover: var(--info-hover-light);
     --danger: var(--danger-light);
     --danger-hover: var(--danger-hover-light);
+    --warning: var(--warning-light);
+    --warning-hover: var(--warning-hover-light);
     --dark: var(--dark-text-light);
     --light: var(--light-bg);
     --grey-light: var(--grey-light-bg);
@@ -125,6 +130,8 @@ body.dark-mode {
     --info-hover: var(--info-hover-dark);
     --danger: var(--danger-dark);
     --danger-hover: var(--danger-hover-dark);
+    --warning: var(--warning-dark);
+    --warning-hover: var(--warning-hover-dark);
     --dark: var(--dark-bg); /* Reference dark background */
     --light: var(--light-text-dark); /* Reference light text */
     --grey-light: var(--grey-light-dark-bg);
@@ -321,6 +328,17 @@ body.dark-mode {
 .dark-mode .form-buttons .btn-save:hover:not(:disabled), .dark-mode .modal-footer .btn-save:hover:not(:disabled) { background: linear-gradient(135deg, color-mix(in srgb, var(--accent-dark), black 15%), var(--accent-dark)); }
 .dark-mode .form-buttons .btn-cancel, .dark-mode .modal-footer .btn-cancel { background: linear-gradient(135deg, #546E7A, #455A64); color: var(--light); }
 .dark-mode .form-buttons .btn-cancel:hover:not(:disabled), .dark-mode .modal-footer .btn-cancel:hover:not(:disabled) { background: linear-gradient(135deg, #455A64, #37474F); }
+/* Confirmation Button Specific Style */
+#confirmActionBtn.btn-danger { background: linear-gradient(135deg, var(--danger), var(--danger-hover)) !important; color: white !important; text-shadow: 1px 1px 1px rgba(0,0,0,0.15); }
+#confirmActionBtn.btn-danger:hover:not(:disabled) { background: linear-gradient(135deg, var(--danger-hover), var(--danger)) !important; }
+.dark-mode #confirmActionBtn.btn-danger { background: linear-gradient(135deg, var(--danger-hover), var(--danger-dark)) !important; text-shadow: none; }
+.dark-mode #confirmActionBtn.btn-danger:hover:not(:disabled) { background: linear-gradient(135deg, var(--danger-dark), var(--danger-hover)) !important; }
+
+#confirmActionBtn.btn-warning { background: linear-gradient(135deg, var(--warning), var(--warning-hover)) !important; color: var(--dark-text-light) !important; text-shadow: none; }
+#confirmActionBtn.btn-warning:hover:not(:disabled) { background: linear-gradient(135deg, var(--warning-hover), var(--warning)) !important; }
+.dark-mode #confirmActionBtn.btn-warning { background: linear-gradient(135deg, var(--warning-hover-dark), var(--warning-dark)) !important; color: var(--dark-bg) !important; }
+.dark-mode #confirmActionBtn.btn-warning:hover:not(:disabled) { background: linear-gradient(135deg, var(--warning-dark), var(--warning-hover-dark)) !important; }
+
 
 /* Modal Styles */
 .modal { position: fixed; inset: 0; background: rgba(var(--dark-bg-rgb), 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s var(--transition-ease), visibility 0s linear 0.3s; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); overflow-y: auto; padding: 20px; }
@@ -375,7 +393,7 @@ body.dark-mode {
 .dark-mode #add-sale-item-btn { background-color: var(--secondary); color: var(--dark-bg); }
 .dark-mode #add-sale-item-btn:hover { background-color: color-mix(in srgb, var(--secondary-dark), black 10%); }
 
-#salesReportModal .modal-content, #salesLogModal .modal-content { max-width: 1200px; }
+#salesReportModal .modal-content, #salesLogModal .modal-content { max-width: 1300px; } /* Increased width */
 .report-controls { display: flex; flex-wrap: wrap; gap: 12px 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--grey-medium); align-items: flex-end; }
 .dark-mode .report-controls { border-bottom-color: var(--grey-medium-dark-border); }
 .report-controls > div { display: flex; flex-direction: column; flex-grow: 1; min-width: 150px; }
@@ -392,7 +410,7 @@ body.dark-mode {
 .dark-mode #salesReportArea h4, .dark-mode #salesLogArea h4 { color: var(--primary-dark); border-bottom-color: var(--grey-medium-dark-border); }
 
 /* Enhanced Sales Log Table Styles */
-.professional-report-table { width: 100%; border-collapse: collapse; font-size: 0.95em; table-layout: auto; margin-top: 15px; box-shadow: var(--shadow-sm); border-radius: var(--border-radius-md); overflow: hidden; background-color: #fff; min-width: 1100px; }
+.professional-report-table { width: 100%; border-collapse: collapse; font-size: 0.95em; table-layout: auto; margin-top: 15px; box-shadow: var(--shadow-sm); border-radius: var(--border-radius-md); overflow: hidden; background-color: #fff; min-width: 1300px; } /* Increased min-width */
 .dark-mode .professional-report-table { background-color: var(--grey-light-dark-bg); }
 .professional-report-table th, .professional-report-table td { border: 1px solid var(--grey-medium); padding: 12px 14px; text-align: right; vertical-align: middle; white-space: nowrap; }
 .professional-report-table th { background-color: var(--grey-light); color: var(--dark); font-weight: 700; position: sticky; top: -16px; z-index: 1; border-bottom-width: 2px; border-bottom-color: var(--grey-medium); }
@@ -404,8 +422,10 @@ body.dark-mode {
 /* Wrap specific columns */
 .professional-report-table .wrap-text { white-space: normal; min-width: 150px; vertical-align: top; line-height: 1.5; }
 .professional-report-table td:nth-child(2), /* Buyer Name */
-.professional-report-table td:nth-child(4) { /* Product Name */ white-space: normal; min-width: 130px; }
-.professional-report-table td:nth-child(10) { /* Notes */ white-space: normal; min-width: 180px; }
+.professional-report-table td:nth-child(4) { /* Product Name */ white-space: normal; min-width: 140px; }
+.professional-report-table td:nth-child(11) { /* Notes */ white-space: normal; min-width: 180px; }
+.professional-report-table td:nth-child(5) { /* Product ID */ font-family: monospace; font-size: 0.85em; color: var(--grey-dark); }
+.dark-mode .professional-report-table td:nth-child(5) { color: var(--grey-dark-dark-text); }
 .professional-report-table td.number-cell { text-align: left; font-feature-settings: "tnum"; font-weight: 600; }
 .professional-report-table .sale-status { font-weight: bold; text-align: center; padding: 5px 10px; border-radius: var(--border-radius-sm); display: inline-block; min-width: 70px; border: 1px solid transparent; font-size: 0.9em; }
 .professional-report-table .sale-status-paid { color: var(--info); background-color: color-mix(in srgb, var(--info-light), transparent 90%); border-color: color-mix(in srgb, var(--info-light), transparent 70%); }
@@ -418,11 +438,13 @@ body.dark-mode {
 .professional-report-table .log-actions button { background: transparent; border: none; cursor: pointer; padding: 0 5px; font-size: 1.2em; opacity: 0.8; transition: opacity 0.2s, color 0.2s, transform 0.2s; margin: 0 5px; vertical-align: middle; min-height: 36px; min-width: 36px; }
 .professional-report-table .log-actions .edit-sale-log-entry { color: var(--accent); }
 .professional-report-table .log-actions .delete-sale-log-entry { color: var(--danger); }
-.professional-report-table .log-actions button:hover { opacity: 1; transform: scale(1.1); }
-.professional-report-table .log-actions .edit-sale-log-entry:hover { color: var(--info); }
-.professional-report-table .log-actions .delete-sale-log-entry:hover { color: var(--danger-hover); }
+.professional-report-table .log-actions button:hover:not(:disabled) { opacity: 1; transform: scale(1.1); }
+.professional-report-table .log-actions .edit-sale-log-entry:hover:not(:disabled) { color: var(--info); }
+.professional-report-table .log-actions .delete-sale-log-entry:hover:not(:disabled) { color: var(--danger-hover); }
+.professional-report-table .log-actions button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; color: var(--grey-dark) !important; }
 .dark-mode .professional-report-table th, .dark-mode .professional-report-table td { border-color: var(--grey-medium-dark-border); }
-.dark-mode .professional-report-table th { background-color: var(--grey-light); color: var(--light); border-bottom-color: var(--grey-medium-dark-border); }
+.dark-mode .professional-report-table th { background-color: var(--grey-light-dark-bg); color: var(--light); border-bottom-color: var(--grey-medium-dark-border); }
+
 
 #salesReportArea .report-summary p { font-size: 1.1em; font-weight: bold; margin-bottom: 12px; padding: 12px; border-bottom: 1px solid var(--grey-medium); background: var(--grey-light); border-radius: var(--border-radius-sm); }
 .dark-mode #salesReportArea .report-summary p { border-bottom-color: var(--grey-medium-dark-border); background: var(--grey-light-dark-bg); }
@@ -441,26 +463,33 @@ body.dark-mode {
 #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #263238; color: white; padding: 14px 25px; border-radius: var(--border-radius-md); z-index: 2000; font-size: 1em; box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease, transform 0.4s ease; font-weight: 700; width: calc(100% - 40px); max-width: 400px; text-align: center; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); margin: 0 auto; }
 #toast.show { opacity: 1; visibility: visible; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease, transform 0.4s ease; }
 #toast.error { background-color: var(--danger); }
-#toast.warning { background-color: var(--offline-indicator); color: #212121; }
+#toast.warning { background-color: var(--warning); color: #212121; }
 #toast.success { background-color: var(--info); }
 #toast.info { background-color: var(--accent); }
 .dark-mode #toast { background: #CFD8DC; color: #263238; }
 .dark-mode #toast.error { background-color: var(--danger-hover); color: white; }
-.dark-mode #toast.warning { background-color: var(--secondary); color: #424242; }
+.dark-mode #toast.warning { background-color: var(--warning-dark); color: #424242; }
 .dark-mode #toast.success { background-color: var(--info-hover); color: white; }
-.dark-mode #toast.info { background-color: var(--accent); color: white; }
+.dark-mode #toast.info { background-color: var(--accent-dark); color: white; }
 
-.control-panel { position: fixed; display: flex; gap: 15px; z-index: 100; flex-direction: row; bottom: calc(15px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background-color: rgba(var(--grey-light-rgb), 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 10px 15px; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); border: 1px solid color-mix(in srgb, var(--grey-medium), transparent 50%); }
+.control-panel { position: fixed; display: flex; gap: 15px; z-index: 100; flex-direction: row; bottom: calc(15px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background-color: rgba(var(--grey-light-rgb), 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 10px 15px; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); border: 1px solid color-mix(in srgb, var(--grey-medium), transparent 50%); flex-wrap: wrap; justify-content: center; }
 body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-rgb), 0.85); border-color: color-mix(in srgb, var(--grey-medium-dark-border), transparent 50%); }
-.btn-magic { background: linear-gradient(145deg, var(--accent), color-mix(in srgb, var(--accent-light), white 10%)); border: none; width: 48px; height: 48px; border-radius: 50%; color: white; font-size: 1.5em; cursor: pointer; transition: all var(--transition-speed) var(--transition-ease); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); }
+.btn-magic { background: linear-gradient(145deg, var(--accent), color-mix(in srgb, var(--accent-light), white 10%)); border: none; width: 48px; height: 48px; border-radius: 50%; color: white; font-size: 1.5em; cursor: pointer; transition: all var(--transition-speed) var(--transition-ease); box-shadow: var(--shadow-sm); display: flex; justify-content: center; align-items: center; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); flex-shrink: 0; }
 .btn-magic i { line-height: 1; }
-.btn-magic:hover { background: linear-gradient(145deg, color-mix(in srgb, var(--accent-light), white 10%), var(--accent)); transform: translateY(-4px) scale(1.08); box-shadow: var(--shadow-lg); }
-.btn-magic:active { transform: translateY(-1px) scale(1.02); box-shadow: var(--shadow-sm); }
+.btn-magic:hover:not(:disabled) { background: linear-gradient(145deg, color-mix(in srgb, var(--accent-light), white 10%), var(--accent)); transform: translateY(-4px) scale(1.08); box-shadow: var(--shadow-lg); }
+.btn-magic:active:not(:disabled) { transform: translateY(-1px) scale(1.02); box-shadow: var(--shadow-sm); }
+.btn-magic:disabled { opacity: 0.5; cursor: not-allowed; background: var(--grey-medium) !important; box-shadow: none !important; transform: none !important; }
 .dark-mode .btn-magic { background: linear-gradient(145deg, var(--secondary), color-mix(in srgb, var(--secondary-dark), white 10%)); color: var(--dark-bg); box-shadow: var(--shadow-sm); text-shadow: none; }
-.dark-mode .btn-magic:hover { background: linear-gradient(145deg, color-mix(in srgb, var(--secondary-dark), white 10%), var(--secondary)); }
+.dark-mode .btn-magic:hover:not(:disabled) { background: linear-gradient(145deg, color-mix(in srgb, var(--secondary-dark), white 10%), var(--secondary)); }
+.dark-mode .btn-magic:disabled { background: var(--grey-medium-dark-border) !important; color: var(--grey-dark-dark-text) !important; }
+/* Specific Backup/Restore Button Colors */
+.btn-backup { background: linear-gradient(145deg, var(--info), var(--info-hover)); }
+.dark-mode .btn-backup { background: linear-gradient(145deg, var(--info-dark), var(--info-hover-dark)); }
+.btn-restore { background: linear-gradient(145deg, var(--warning), var(--warning-hover)); color: var(--dark-text-light) !important; text-shadow: none; }
+.dark-mode .btn-restore { background: linear-gradient(145deg, var(--warning-dark), var(--warning-hover-dark)); color: var(--dark-bg) !important; }
 
 @media (max-width: 768px) {
-    body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; perspective: none; padding-bottom: 100px; }
+    body { flex-direction: column; overflow-y: auto; height: auto; font-size: 15px; perspective: none; padding-bottom: 140px; } /* Increased padding */
     #detail-view-container { order: 1; height: auto; min-height: 40vh; padding: 20px 15px; overflow-y: visible; }
     .detail-content, .edit-form-container { padding: 20px 25px; max-width: none; margin-bottom: 15px; }
     .sidebar { order: 2; width: 100%; height: auto; min-height: 55vh; border-left: none; border-top: 1px solid var(--grey-medium); box-shadow: none; flex-shrink: 0; }
@@ -491,21 +520,22 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
     #salesReportModal .report-controls, #salesLogModal .report-controls { flex-direction: column; gap: 10px; }
     #salesReportModal .report-controls > div, #salesLogModal .report-controls > div { width: 100%; }
     #salesReportModal .report-controls button { width: 100%; margin-top: 5px; }
-    .professional-report-table { font-size: 0.85em; min-width: 800px; }
+    .professional-report-table { font-size: 0.85em; min-width: 900px; } /* Adjusted min-width */
     .professional-report-table th, .professional-report-table td { padding: 8px 10px; }
     #salesLogModal .modal-footer { justify-content: space-around; }
-    /* Specific nowrap columns for sales log */
+    /* Specific nowrap columns for sales log (Adjusted indices) */
     #salesLogTable th:nth-child(1), #salesLogTable td:nth-child(1), /* Date */
-    #salesLogTable th:nth-child(5), #salesLogTable td:nth-child(5), /* Qty */
-    #salesLogTable th:nth-child(11), #salesLogTable td:nth-child(11), /* Status */
-    #salesLogTable th:nth-child(12), #salesLogTable td:nth-child(12) /* Actions */
+    #salesLogTable th:nth-child(6), #salesLogTable td:nth-child(6), /* Qty */
+    #salesLogTable th:nth-child(12), #salesLogTable td:nth-child(12), /* Status */
+    #salesLogTable th:nth-child(13), #salesLogTable td:nth-child(13) /* Actions */
     { white-space: nowrap; }
-    .control-panel { gap: 10px; padding: 8px 12px; }
+    .control-panel { gap: 10px; padding: 8px 12px; width: calc(100% - 20px); justify-content: space-around; left: 10px; transform: none; }
     .btn-magic { width: 44px; height: 44px; font-size: 1.4em; }
 }
 @media (min-width: 769px) {
     #toast { width: auto; max-width: 450px; left: 50%; transform: translateX(-50%); right: auto; }
     .item-actions { margin-right: 0; }
+    .control-panel { width: auto; } /* Revert width change on larger screens */
 }
     </style>
 </head>
@@ -516,7 +546,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
     </div>
     <div class="sidebar">
         <div class="sidebar-header">
-             <span><i class="fas fa-store"></i> المنتجات v10.8</span>
+             <span><i class="fas fa-store"></i> المنتجات v10.10</span>
              <span id="connectionStatus" class="connection-status-dot connecting" title="حالة الاتصال"></span>
         </div>
         <div id="items-list">
@@ -555,6 +585,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 <label for="itemIconUrl"><i class="fas fa-image"></i> رابط الأيقونة (اختياري):</label>
                 <input type="url" id="itemIconUrl" placeholder="اتركه فارغاً للأيقونة التلقائية">
             </div>
+            <!-- ملاحظة: لا يوجد حقل لـ partnerName هنا حالياً -->
             <div class="form-buttons">
                 <button id="addItemBtn" class="btn-save" onclick="window.addItem()"><i class="fas fa-plus"></i> إضافة المنتج</button>
                 <button class="btn-cancel" onclick="window.hideAddForm()">إلغاء</button>
@@ -577,8 +608,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 <label for="salePartner"><i class="fas fa-handshake"></i> نوع البيع / الشريك:</label>
                 <select id="salePartner" onchange="window.handlePartnerSelectionChange(this)">
                      <option value="">بيع مباشر (لا يوجد شريك)</option>
-                     <option value="حسن">شريك: حسن</option>
-                     <!-- Add more partners here dynamically if needed -->
+                     <option value="حسن">شريك: حسن</option> <!-- شريك حسن مضاف بشكل ثابت -->
+                     <!-- <option value="علي">شريك: علي</option> --> <!-- مثال لشريك آخر يمكنك إضافته -->
+                     <!-- أضف المزيد من الشركاء هنا إذا لزم الأمر -->
                 </select>
             </div>
 
@@ -628,7 +660,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
 
             <div class="field-container form-field-group">
                 <label for="editPartnerNameDisplay"><i class="fas fa-handshake"></i> الشريك:</label>
-                <input type="text" id="editPartnerNameDisplay" readonly disabled>
+                <input type="text" id="editPartnerNameDisplay" readonly disabled> <!-- Partner is read-only -->
             </div>
 
             <div class="form-field-group">
@@ -654,11 +686,11 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              <div class="edit-item-details">
                  <div class="field-container">
                      <label for="editSaleProductName"><i class="fas fa-tag"></i> المنتج:</label>
-                     <input type="text" id="editSaleProductName" readonly disabled>
+                     <input type="text" id="editSaleProductName" readonly disabled> <!-- Product name is read-only -->
                  </div>
                  <div class="field-container edit-cost-price-container" style="display: none;">
                      <label for="editSaleCostPrice"><i class="fas fa-dollar-sign"></i> التكلفة (المسجلة):</label>
-                     <input type="number" id="editSaleCostPrice" placeholder="التكلفة" readonly disabled>
+                     <input type="number" id="editSaleCostPrice" placeholder="التكلفة" readonly disabled> <!-- Cost is read-only -->
                  </div>
                  <div class="field-container">
                       <label for="editSaleSellingPrice" class="edit-price-label"><i class="fas fa-money-bill-alt"></i> سعر البيع:</label>
@@ -700,8 +732,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                     <select id="reportPartnerFilter">
                         <option value="all">الكل (مباشر وشركاء)</option>
                         <option value="direct">بيع مباشر فقط</option>
-                        <option value="حسن">حسن فقط</option>
-                         <!-- Add more partners here dynamically if needed -->
+                        <option value="حسن">حسن فقط</option> <!-- شريك حسن مضاف بشكل ثابت -->
+                        <!-- <option value="علي">علي فقط</option> --> <!-- مثال لشريك آخر يمكنك إضافته -->
+                         <!-- أضف المزيد من الشركاء هنا إذا لزم الأمر -->
                     </select>
                 </div>
                 <div> <label>&nbsp;</label> <button class="btn-save" onclick="window.generateSalesReport('summary')"><i class="fas fa-list-alt"></i> ملخص وتفاصيل</button> </div>
@@ -727,18 +760,19 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 <table id="salesLogTable" class="professional-report-table" style="display: none;">
                     <thead>
                         <tr>
-                            <th>التاريخ والوقت</th> <!-- 1 -->
-                            <th class="wrap-text">اسم المشتري</th> <!-- 2 -->
-                            <th>الشريك</th> <!-- 3 -->
+                            <th>التاريخ والوقت</th>      <!-- 1 -->
+                            <th class="wrap-text">المشتري</th>    <!-- 2 -->
+                            <th>الشريك</th>             <!-- 3 -->
                             <th class="wrap-text">اسم المنتج</th> <!-- 4 -->
-                            <th>الكمية</th> <!-- 5 -->
-                            <th>سعر التكلفة</th> <!-- 6 -->
-                            <th>سعر البيع</th> <!-- 7 -->
-                            <th>الإجمالي</th> <!-- 8 -->
-                            <th>الربح التقريبي</th> <!-- 9 -->
-                            <th class="wrap-text">الملاحظات</th> <!-- 10 -->
-                            <th>الحالة</th> <!-- 11 -->
-                            <th>إجراء</th> <!-- 12 -->
+                            <th>معرف المنتج</th>         <!-- 5 -->
+                            <th>الكمية</th>             <!-- 6 -->
+                            <th>سعر التكلفة</th>       <!-- 7 -->
+                            <th>سعر البيع</th>         <!-- 8 -->
+                            <th>الإجمالي</th>           <!-- 9 -->
+                            <th>الربح التقريبي</th>     <!-- 10 -->
+                            <th class="wrap-text">الملاحظات</th> <!-- 11 -->
+                            <th>الحالة</th>             <!-- 12 -->
+                            <th>إجراء</th>             <!-- 13 -->
                         </tr>
                     </thead>
                     <tbody><!-- Log entries will be populated here --></tbody>
@@ -758,7 +792,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             <h3 id="confirmTitle"><i class="fas fa-exclamation-triangle"></i> تأكيد الإجراء</h3>
             <div id="confirmMessage" style="text-align: center; margin-bottom: 25px; font-size: 1.1em;">هل أنت متأكد؟</div>
             <div class="form-buttons">
-                <button id="confirmActionBtn" class="btn-save" style="background: var(--danger);"><i class="fas fa-check"></i> نعم، تأكيد</button>
+                <button id="confirmActionBtn" class="btn-save"><i class="fas fa-check"></i> نعم، تأكيد</button> <!-- Class/Style set dynamically -->
                 <button class="btn-cancel" onclick="window.hideConfirmModal()">إلغاء</button>
             </div>
         </div>
@@ -774,13 +808,19 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         <button class="btn-magic" onclick="window.showLogSaleModal()" title="تسجيل عملية بيع"><i class="fas fa-cash-register"></i></button>
         <button class="btn-magic" onclick="window.showSalesLogModal()" title="عرض سجل المبيعات"><i class="fas fa-history"></i></button>
         <button class="btn-magic" onclick="window.showSalesReportModal()" title="عرض تقارير المبيعات"><i class="fas fa-chart-line"></i></button>
+        <button class="btn-magic btn-backup" onclick="window.backupData()" title="إنشاء نسخة احتياطية للبيانات"><i class="fas fa-download"></i></button>
+        <button class="btn-magic btn-restore" onclick="window.triggerRestore()" title="استعادة بيانات من نسخة احتياطية"><i class="fas fa-upload"></i></button>
     </div>
+
+    <!-- Hidden File Input for Restore -->
+    <input type="file" id="restoreFile" accept=".json" style="display: none;">
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-        import { getFirestore, enableIndexedDbPersistence, collection, query, orderBy, onSnapshot, getDocs, limit, where, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import { getFirestore, enableIndexedDbPersistence, collection, collectionGroup, query, orderBy, onSnapshot, getDocs, limit, where, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, Timestamp, getDoc, writeBatch, getCountFromServer } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
         // --- Firebase Config ---
+        // تأكد من أن هذه المعلومات صحيحة لمشروع Firebase الخاص بك
         const firebaseConfig = { apiKey: "AIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEAAIzaSyABUQJfis7wbSn508w1RuGCd6ZsoxMoEEA", authDomain: "storedatabase-642e0.firebaseapp.com", projectId: "storedatabase-642e0", storageBucket: "storedatabase-642e0.appspot.com", messagingSenderId: "806751758744", appId: "1:806751758744:web:079104a8fe4e73cdc023ed", measurementId: "G-778H49MMJK" };
 
         // --- Global Variables ---
@@ -795,14 +835,16 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         let firstLoadComplete = false;
         const defaultIcon = 'https://img.icons8.com/fluency/48/ffffff/box.png'; // White outline icon
         const HISTORY_LIMIT = 15;
-        const SALES_LOG_LIMIT = 250;
+        const SALES_LOG_LIMIT = 500; // Increased limit
         const CLEAR_LOG_PASSWORD = "0750";
+        const BACKUP_VERSION = "1.0"; // Version for backup file structure
+        const BATCH_DELETE_LIMIT = 450; // Firestore batch write limit (use slightly less than 500)
         let professionalTipInterval = null;
         let toastTimer = null;
 
         // --- Constants & Maps ---
         const professionalTips = [
-            "💡 تذكر: ابتسامة لطيفة عند التعامل مع الزبون تترك انطباعاً إيجابياً دائماً.", "💡 خاطب الزبون باحترام واستخدم ألقاباً مثل 'أستاذ' أو 'حضرتك'.", "💡 استمع جيداً لاحتياجات الزبون قبل عرض المنتجات.", "💡 كن خبيراً بمنتجاتك واشرح ميزاتها بوضوح وثقة.", "💡 قدم حلولاً ومقترحات للزبون بدلاً من مجرد عرض البضاعة.", "💡 حافظ على مظهر المحل نظيفاً ومنظماً.", "💡 اهتم بالتفاصيل الصغيرة، فهي تصنع فرقاً كبيراً في تجربة العميل.", "💡 لا تتردد في طلب رأي الزبون حول الخدمة أو المنتج.", "💡 عرض المنتجات بشكل جذاب ومنظم يسهل على الزبون الاختيار.", "💡 كن صبوراً مع الزبائن المترددين وقدم المساعدة بلطف.", "💡 تابع مع الزبائن الدائمين وقدم لهم عروضاً خاصة.", "💡 كلمة 'شكراً' بعد إتمام البيع تزيد من ولاء الزبون.", "💡 تحليل تقارير المبيعات يساعدك على فهم المنتجات الأكثر طلباً.", "💡 تنظيم المخزون بشكل دوري يمنع نفاد البضاعة أو تكدسها.", "💡 كتابة ملاحظات دقيقة عند تسجيل البيع تساعدك لاحقاً في المتابعة أو التبديل.", "💡 تحديد سعر تكلفة للشريك مسبقاً يسهل عملية تسجيل البيع للشريك."
+            "💡 تذكر: ابتسامة لطيفة عند التعامل مع الزبون تترك انطباعاً إيجابياً دائماً.", "💡 خاطب الزبون باحترام واستخدم ألقاباً مثل 'أستاذ' أو 'حضرتك'.", "💡 استمع جيداً لاحتياجات الزبون قبل عرض المنتجات.", "💡 كن خبيراً بمنتجاتك واشرح ميزاتها بوضوح وثقة.", "💡 قدم حلولاً ومقترحات للزبون بدلاً من مجرد عرض البضاعة.", "💡 حافظ على مظهر المحل نظيفاً ومنظماً.", "💡 اهتم بالتفاصيل الصغيرة، فهي تصنع فرقاً كبيراً في تجربة العميل.", "💡 لا تتردد في طلب رأي الزبون حول الخدمة أو المنتج.", "💡 عرض المنتجات بشكل جذاب ومنظم يسهل على الزبون الاختيار.", "💡 كن صبوراً مع الزبائن المترددين وقدم المساعدة بلطف.", "💡 تابع مع الزبائن الدائمين وقدم لهم عروضاً خاصة.", "💡 كلمة 'شكراً' بعد إتمام البيع تزيد من ولاء الزبون.", "💡 تحليل تقارير المبيعات يساعدك على فهم المنتجات الأكثر طلباً.", "💡 تنظيم المخزون بشكل دوري يمنع نفاد البضاعة أو تكدسها.", "💡 كتابة ملاحظات دقيقة عند تسجيل البيع تساعدك لاحقاً في المتابعة أو التبديل.", "💡 تحديد سعر تكلفة للشريك مسبقاً يسهل عملية تسجيل البيع للشريك.", "💡 استخدم ميزة النسخ الاحتياطي بانتظام لحماية بياناتك."
         ];
         const keywordIconMap = { 'قميص': 'https://img.icons8.com/fluency/48/ffffff/shirt.png', 'تيشيرت': 'https://img.icons8.com/fluency/48/ffffff/t-shirt.png', 'تي شيرت': 'https://img.icons8.com/fluency/48/ffffff/t-shirt.png', 'بولو': 'https://img.icons8.com/fluency/48/ffffff/polo-shirt.png', 'بنطلون': 'https://img.icons8.com/fluency/48/ffffff/pantaloon.png', 'جينز': 'https://img.icons8.com/fluency/48/ffffff/jeans.png', 'سروال': 'https://img.icons8.com/fluency/48/ffffff/pantaloon.png', 'شورت': 'https://img.icons8.com/fluency/48/ffffff/shorts.png', 'برمودا': 'https://img.icons8.com/fluency/48/ffffff/bermuda-shorts.png', 'فستان': 'https://img.icons8.com/fluency/48/ffffff/dress.png', 'تنورة': 'https://img.icons8.com/fluency/48/ffffff/skirt.png', 'جيبة': 'https://img.icons8.com/fluency/48/ffffff/skirt.png', 'جاكيت': 'https://img.icons8.com/fluency/48/ffffff/jacket.png', 'سترة': 'https://img.icons8.com/fluency/48/ffffff/vest.png', 'معطف': 'https://img.icons8.com/fluency/48/ffffff/coat.png', 'بليزر': 'https://img.icons8.com/fluency/48/ffffff/blazer.png', 'هودي': 'https://img.icons8.com/fluency/48/ffffff/hoodie.png', 'كنزة': 'https://img.icons8.com/fluency/48/ffffff/sweater.png', 'بلوفر': 'https://img.icons8.com/fluency/48/ffffff/sweater.png', 'حذاء': 'https://img.icons8.com/fluency/48/ffffff/trainers.png', 'احذية': 'https://img.icons8.com/fluency/48/ffffff/trainers.png', 'رياضي': 'https://img.icons8.com/fluency/48/ffffff/sneakers.png', 'جزمة': 'https://img.icons8.com/fluency/48/ffffff/boot.png', 'كعب': 'https://img.icons8.com/fluency/48/ffffff/high-heels.png', 'صندل': 'https://img.icons8.com/fluency/48/ffffff/sandal.png', 'شبشب': 'https://img.icons8.com/fluency/48/ffffff/slippers.png', 'ملابس داخلية': 'https://img.icons8.com/fluency/48/ffffff/underwear.png', 'داخلي': 'https://img.icons8.com/fluency/48/ffffff/underwear.png', 'بدي': 'https://img.icons8.com/fluency/48/ffffff/bodysuit.png', 'بيجامة': 'https://img.icons8.com/fluency/48/ffffff/pajamas.png', 'قبعة': 'https://img.icons8.com/fluency/48/ffffff/baseball-cap.png', 'طاقية': 'https://img.icons8.com/fluency/48/ffffff/winter-hat.png', 'كاب': 'https://img.icons8.com/fluency/48/ffffff/baseball-cap.png', 'وشاح': 'https://img.icons8.com/fluency/48/ffffff/scarf.png', 'شال': 'https://img.icons8.com/fluency/48/ffffff/scarf.png', 'قفاز': 'https://img.icons8.com/fluency/48/ffffff/gloves.png', 'كفوف': 'https://img.icons8.com/fluency/48/ffffff/gloves.png', 'حزام': 'https://img.icons8.com/fluency/48/ffffff/belt.png', 'ربطة': 'https://img.icons8.com/fluency/48/ffffff/tie.png', 'حقيبة': 'https://img.icons8.com/fluency/48/ffffff/handbag.png', 'شنطة': 'https://img.icons8.com/fluency/48/ffffff/school-bag.png' };
 
@@ -834,12 +876,16 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         const salesLogCloseBtn = salesLogModalEl?.querySelector('.modal-footer .btn-cancel');
         const salesLogModalCloseIconBtn = salesLogModalEl?.querySelector('.close-btn');
         const updateSaleBtn = document.getElementById('updateSaleBtn');
+        const restoreFileInput = document.getElementById('restoreFile');
+        const backupBtn = document.querySelector('.btn-backup');
+        const restoreBtn = document.querySelector('.btn-restore');
 
         // --- Utility Functions ---
         function formatCurrency(amount) {
             const num = parseFloat(amount);
             if (isNaN(num)) { return '-'; }
-            return num.toLocaleString('ar-IQ', { style: 'currency', currency: 'IQD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            const numberPart = num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            return `${numberPart} د.ع`;
         }
 
         function formatFirestoreTimestamp(timestamp, includeTime = true) {
@@ -850,6 +896,8 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                     date = timestamp.toDate();
                 } else if (timestamp instanceof Date) {
                     date = timestamp;
+                } else if (typeof timestamp === 'string') {
+                    date = new Date(timestamp);
                 } else {
                     date = new Date(timestamp);
                 }
@@ -909,6 +957,8 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                     connectionStatusDotEl.title = 'متصل ومُحدّث';
                 }
             }
+            if (backupBtn) backupBtn.disabled = !online;
+            if (restoreBtn) restoreBtn.disabled = !online;
         }
 
         function updateMainViewStatus(message, isError = false) {
@@ -1009,7 +1059,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 itemsListEl?.querySelector('.item-card.selected')?.classList.remove('selected');
                 return;
             }
-            if (currentViewItemId === itemId && !currentEditItemId) return; // Avoid re-render
+            if (currentViewItemId === itemId && !currentEditItemId) return;
 
             currentEditItemId = null;
             currentViewItemId = itemId;
@@ -1019,7 +1069,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             const updatedAtFormatted = formatFirestoreTimestamp(item.updatedAt);
             const displayIcon = item.icon || getIconForName(item.name) || defaultIcon;
 
-            // Fetch history
             const historyCollectionRef = collection(db, 'clothes', itemId, 'history');
             const qHistory = query(historyCollectionRef, orderBy('timestamp', 'desc'), limit(HISTORY_LIMIT));
             let historyHtml = '<ul>';
@@ -1053,7 +1102,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             if (!historyEntriesFound) historyHtml += '<li class="no-history"><em>لا يوجد سجل تعديلات.</em></li>';
              historyHtml += '</ul>';
 
-            // Render detail view
             const partnerCostInfo = item.partnerCost > 0 ? `
                 <p class="partner-cost-info"><strong><i class="fas fa-handshake"></i> تكلفة الشريك:</strong> <span style="font-weight:700; color: var(--secondary); font-size: 1.1em;">${formatCurrency(item.partnerCost)}</span></p>` : '';
 
@@ -1066,7 +1114,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                         ${partnerCostInfo}
 
                         <div class="history-section">
-                            <h4><i class="fas fa-history"></i> سجل تعديلات المنتج</h4>
+                            <h4><i class="fas fa-history"></i> سجل تعديلات المنتج <small>(غير مشمول بالنسخ الاحتياطي)</small></h4>
                             ${historyHtml}
                         </div>
 
@@ -1168,6 +1216,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                     showNotification('سعر تكلفة الشريك غير صالح. يرجى إدخال رقم موجب أو اتركه فارغاً.', true);
                     return;
                 }
+                if (partnerCost > price) {
+                     showNotification('تحذير: سعر تكلفة الشريك أعلى من سعر البيع!', false, 'warning');
+                }
              }
 
             addFormButton.disabled = true;
@@ -1198,7 +1249,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                         const newCard = itemsListEl?.querySelector(`.item-card[data-id="${docRef.id}"]`);
                         newCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     } else {
-                        console.warn("New item not yet in map, cannot show details.");
+                        console.warn("New item not yet in map after add, cannot show details immediately.");
                     }
                  }, 500);
 
@@ -1251,6 +1302,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                      if (updateButton) { updateButton.disabled = false; updateButton.innerHTML = '<i class="fas fa-save"></i> حفظ التغييرات'; }
                     return;
                 }
+                 if (partnerCost > price) {
+                     showNotification('تحذير: سعر تكلفة الشريك أعلى من سعر البيع!', false, 'warning');
+                 }
              }
 
             const itemRef = doc(db, 'clothes', itemId);
@@ -1324,8 +1378,8 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         }
 
         // --- Confirmation Modal ---
-        function showConfirmModal(id, type = 'product') {
-            if (!id && type !== 'clearSales') return;
+        function showConfirmModal(id, type = 'product', data = null) {
+            if (!id && type !== 'clearSales' && type !== 'restoreBackup') return;
             if (!confirmModalEl || !confirmTitleEl || !confirmMessageEl || !confirmActionBtnEl) {
                 console.error("Confirm modal elements not found");
                 return;
@@ -1335,8 +1389,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             let title = "<i class='fas fa-exclamation-triangle'></i> تأكيد الإجراء";
             let action = () => {};
             let confirmButtonText = '<i class="fas fa-check"></i> نعم، تأكيد';
-            let confirmButtonClass = 'btn-save';
-            let confirmButtonBg = 'var(--danger)';
+            let confirmButtonClass = 'btn-danger'; // Default to danger for delete actions
             let iconClass = 'fa-check';
 
             if (type === 'product') {
@@ -1344,17 +1397,17 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 if (!item) { showNotification('المنتج غير موجود!', true); return; }
                 const safeItemName = escapeHtml(item.name);
                 title = `<i class="fas fa-trash-alt"></i> تأكيد حذف المنتج`;
-                message = `هل أنت متأكد من حذف المنتج: <strong style="color: var(--danger); font-weight: bold;">${safeItemName}</strong>؟<br><small>(لا يمكن التراجع)</small>`;
+                message = `هل أنت متأكد من حذف المنتج: <strong style="color: var(--danger); font-weight: bold;">${safeItemName}</strong>؟<br><small>(لا يمكن التراجع عن حذف المنتج نفسه)</small>`;
                 action = () => deleteItem(id);
                 iconClass = 'fa-trash-alt';
-                 confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، حذف المنتج`;
+                confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، حذف المنتج`;
 
             } else if (type === 'saleEntry') {
                 title = `<i class="fas fa-eraser"></i> تأكيد حذف سجل البيع`;
                 message = `هل أنت متأكد من حذف هذا السجل؟ <br><small>(لا يمكن التراجع)</small>`;
                 action = () => deleteSalesLogEntry(id);
                 iconClass = 'fa-eraser';
-                 confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، حذف السجل`;
+                confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، حذف السجل`;
 
             } else if (type === 'clearSales') {
                 title = `<i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> تأكيد مسح السجل بالكامل`;
@@ -1363,7 +1416,20 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 iconClass = 'fa-skull-crossbones';
                 confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، مسح الكل`;
 
-            } else {
+            } else if (type === 'restoreBackup') {
+                 title = `<i class="fas fa-upload" style="color: var(--warning);"></i> تأكيد الاستعادة`;
+                 message = `<strong style="color: var(--danger); display: block; font-size: 1.2em; margin-bottom: 10px;">⚠ تحذير خطير! ⚠</strong>
+                            سيتم <strong style="color: var(--danger);">حذف جميع المنتجات وسجلات المبيعات الحالية</strong> بشكل نهائي واستبدالها بالبيانات من الملف المختار.
+                            <br><br>
+                            <strong style="color: var(--warning);">تأكد من أنك اخترت الملف الصحيح وأنه لديك نسخة احتياطية حديثة إذا كنت غير متأكد.</strong>
+                            <br><br>
+                            هل أنت متأكد تماماً من المتابعة؟`;
+                 action = () => processRestoreFile(data.file);
+                 iconClass = 'fa-upload';
+                 confirmButtonClass = 'btn-warning'; // Use warning style for restore
+                 confirmButtonText = `<i class="fas ${iconClass}"></i> نعم، حذف واستعادة`;
+            }
+            else {
                 console.error("Unknown confirmation type:", type);
                 return;
             }
@@ -1371,12 +1437,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             confirmTitleEl.innerHTML = title;
             confirmMessageEl.innerHTML = message;
             confirmActionBtnEl.onclick = action;
-            confirmActionBtnEl.className = confirmButtonClass;
-            confirmActionBtnEl.style.background = confirmButtonBg;
-             confirmActionBtnEl.innerHTML = confirmButtonText;
-             if (type !== 'product' && type !== 'saleEntry' && type !== 'clearSales') {
-                 confirmActionBtnEl.style.background = 'var(--info)';
-             }
+            // Apply base class btn-save for structure, then add specific danger/warning class
+            confirmActionBtnEl.className = `btn-save ${confirmButtonClass}`;
+            confirmActionBtnEl.innerHTML = confirmButtonText;
 
             confirmModalEl.classList.add('show');
         }
@@ -1391,81 +1454,152 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
 
             const item = itemsMap.get(itemId);
             const itemName = item ? item.name : `ID: ${itemId}`;
+            hideConfirmModal();
             showNotification(`⏳ جارٍ حذف "${escapeHtml(itemName)}"...`, false, 'info');
 
             try {
+                // Note: History subcollection is NOT deleted automatically.
+                // Add code here to delete history if required, using deleteCollection helper.
                 await deleteDoc(doc(db, 'clothes', itemId));
-                showNotification(`✅ تم حذف "${escapeHtml(itemName)}".`, false, 'success');
-                hideConfirmModal();
 
+                // UI updates (removal from list, clearing view) are handled by the listener.
+                showNotification(`✅ تم حذف "${escapeHtml(itemName)}".`, false, 'success');
+
+                 // If the deleted item was being viewed or edited, clear the main view immediately
                  if (currentViewItemId === itemId) { currentViewItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); }
                  if (currentEditItemId === itemId) { currentEditItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); }
+
+                 // Refresh product dropdowns as the deleted item should be removed
+                 populateProductSelectsInModals();
 
             } catch (error) {
                 showNotification(`خطأ حذف "${escapeHtml(itemName)}": ${error.message}`, true);
                 console.error("Delete item error: ", error);
-                 hideConfirmModal();
             }
         }
 
         // --- HTML Reports ---
         function generateInventoryHTMLReport() {
              if (itemsMap.size === 0) { showNotification("لا توجد منتجات لإنشاء تقرير.", false, 'warning'); return; }
-             let reportHtml = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المنتجات</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet"><style>body{font-family:'Tajawal','Changa',sans-serif;direction:rtl;margin:20px;background-color:#fdfdfd;color:#333;font-size:14px}h1{text-align:center;color:#B71C1C;border-bottom:2px solid #FF6F00;padding-bottom:10px;margin-bottom:25px;font-size:1.8em}table{width:100%;border-collapse:collapse;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);background-color:#fff;border:1px solid #ddd}th,td{border:1px solid #ddd;padding:10px 12px;text-align:right;vertical-align:middle}th{background-color:#f5f5f5;font-weight:700;color:#424242;font-size:1.1em}tr:nth-child(even){background-color:#fbfbfb}tr:hover{background-color:#f0f0f0}td.number-cell{text-align:left;font-feature-settings:"tnum";font-weight:600}td.id-cell{font-size:0.85em;color:#777;font-family:monospace}.footer{text-align:center;margin-top:25px;font-size:0.9em;color:#777;border-top:1px solid #ccc;padding-top:15px}@media print{body{margin:10px;background-color:#fff;font-size:12px}h1{font-size:1.5em;margin-bottom:15px}table{box-shadow:none;border:1px solid #ccc}th,td{padding:6px 8px}}</style></head><body><h1><i class="fas fa-boxes"></i> تقرير المنتجات الحالية</h1><table><thead><tr><th>#</th><th>اسم المنتج</th><th>سعر البيع</th><th>تكلفة الشريك</th><th>تاريخ الإنشاء</th><th>آخر تعديل</th><th>المعرف (ID)</th></tr></thead><tbody>`;
-            let index = 0;
-            const sortedItems = Array.from(itemsMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
-            sortedItems.forEach((item) => {
-                index++;
-                const createdAt = formatFirestoreTimestamp(item.createdAt, false);
-                const updatedAt = formatFirestoreTimestamp(item.updatedAt, false);
-                 const partnerCostFormatted = item.partnerCost > 0 ? formatCurrency(item.partnerCost) : '-';
-                reportHtml += `<tr><td>${index}</td><td>${escapeHtml(item.name)}</td><td class="number-cell">${formatCurrency(item.price)}</td><td class="number-cell">${partnerCostFormatted}</td><td>${createdAt}</td><td>${updatedAt}</td><td class="id-cell">${escapeHtml(item.id)}</td></tr>`;
-            });
-            reportHtml += `</tbody></table><div class="footer">إجمالي أنواع المنتجات: ${itemsMap.size}<br>تاريخ التقرير: ${new Date().toLocaleString('ar-EG')}</div></body></html>`;
-            try {
-                const reportWindow = window.open("", "_blank", "noopener,noreferrer");
-                if (reportWindow) {
-                    reportWindow.document.write(reportHtml);
-                    reportWindow.document.close();
-                    // Success notification is good, no need to change
-                } else {
-                    // Inform the user about pop-up blockers
-                    showNotification("⚠️ فشل فتح نافذة التقرير. يرجى التأكد من السماح بالنوافذ المنبثقة لهذا الموقع.", true, 'warning');
-                }
+
+             let reportWindow = null;
+             try {
+                 // 1. Open window immediately
+                 reportWindow = window.open("", "_blank", "noopener,noreferrer");
+                 if (reportWindow) {
+                     reportWindow.document.write('<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المنتجات - جارٍ التحميل...</title><style>body{font-family:sans-serif; padding: 20px; text-align: center;} h1{color:#555;}</style></head><body><h1><i class="fas fa-spinner fa-spin"></i> جارٍ تحضير تقرير المنتجات...</h1></body></html>');
+                     reportWindow.document.close(); // Close stream for initial write
+                 } else {
+                     showNotification("⚠️ فشل فتح نافذة التقرير. يرجى التأكد من السماح بالنوافذ المنبثقة لهذا الموقع.", true, 'warning');
+                     return; // Stop if window couldn't be opened
+                 }
+
+                 // 2. Prepare report content (asynchronously)
+                 showNotification('⏳ تحضير تقرير المنتجات...', false, 'info');
+                 let reportHtml = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المنتجات</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet"><style>body{font-family:'Tajawal','Changa',sans-serif;direction:rtl;margin:20px;background-color:#fdfdfd;color:#333;font-size:14px}h1{text-align:center;color:#B71C1C;border-bottom:2px solid #FF6F00;padding-bottom:10px;margin-bottom:25px;font-size:1.8em}table{width:100%;border-collapse:collapse;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);background-color:#fff;border:1px solid #ddd}th,td{border:1px solid #ddd;padding:10px 12px;text-align:right;vertical-align:middle}th{background-color:#f5f5f5;font-weight:700;color:#424242;font-size:1.1em}tr:nth-child(even){background-color:#fbfbfb}tr:hover{background-color:#f0f0f0}td.number-cell{text-align:left;font-feature-settings:"tnum";font-weight:600}td.id-cell{font-size:0.85em;color:#777;font-family:monospace; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}.footer{text-align:center;margin-top:25px;font-size:0.9em;color:#777;border-top:1px solid #ccc;padding-top:15px}@media print{body{margin:10px;background-color:#fff;font-size:12px}h1{font-size:1.5em;margin-bottom:15px}table{box-shadow:none;border:1px solid #ccc}th,td{padding:6px 8px} td.id-cell{max-width: 100px;}}</style></head><body><h1><i class="fas fa-boxes"></i> تقرير المنتجات الحالية</h1><table><thead><tr><th>#</th><th>اسم المنتج</th><th>سعر البيع</th><th>تكلفة الشريك</th><th>تاريخ الإنشاء</th><th>آخر تعديل</th><th>المعرف (ID)</th></tr></thead><tbody>`;
+                 let index = 0;
+                 const sortedItems = Array.from(itemsMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+                 sortedItems.forEach((item) => {
+                     index++;
+                     const createdAt = formatFirestoreTimestamp(item.createdAt, false);
+                     const updatedAt = formatFirestoreTimestamp(item.updatedAt, false);
+                     const partnerCostFormatted = item.partnerCost > 0 ? formatCurrency(item.partnerCost) : '-';
+                     reportHtml += `<tr><td>${index}</td><td>${escapeHtml(item.name)}</td><td class="number-cell">${formatCurrency(item.price)}</td><td class="number-cell">${partnerCostFormatted}</td><td>${createdAt}</td><td>${updatedAt}</td><td class="id-cell" title="${escapeHtml(item.id)}">${escapeHtml(item.id)}</td></tr>`;
+                 });
+                 reportHtml += `</tbody></table><div class="footer">إجمالي أنواع المنتجات: ${itemsMap.size}<br>تاريخ التقرير: ${new Date().toLocaleString('ar-EG')}</div></body></html>`;
+
+                 // 3. Write final content to the already opened window
+                 reportWindow.document.open(); // Re-open stream
+                 reportWindow.document.write(reportHtml);
+                 reportWindow.document.close(); // Close stream
+                 showNotification('✅ تم فتح تقرير المنتجات.', false, 'success');
+
              } catch (e) {
-                showNotification("فشل إنشاء تقرير المنتجات.", true);
-                console.error("Inventory HTML Report error:", e);
-            }
+                 showNotification("فشل إنشاء تقرير المنتجات.", true);
+                 console.error("Inventory HTML Report error:", e);
+                 // If window was opened, try to write error message there
+                 if (reportWindow && !reportWindow.closed) {
+                    try {
+                         reportWindow.document.open();
+                         reportWindow.document.write('<html><body><h1>خطأ</h1><p>حدث خطأ أثناء إنشاء التقرير.</p></body></html>');
+                         reportWindow.document.close();
+                     } catch (writeError) {
+                         console.error("Error writing error message to report window:", writeError);
+                     }
+                 }
+             }
         }
+
         async function generateBuyerReport() {
              if (!db) { showNotification("الخدمة غير جاهزة.", true); return; }
-             showNotification('⏳ تحضير تقرير المشترين...', false, 'info');
+
+             let reportWindow = null;
              try {
-                const salesRef = collection(db, 'sales');
-                const q = query(salesRef, orderBy('saleTimestamp', 'desc'));
-                const salesSnapshot = await getDocs(q);
-                if (salesSnapshot.empty) { showNotification("لا توجد مبيعات مسجلة.", false, 'warning'); return; }
-                const buyerSales = {};
-                let totalOverallValue = 0; let totalOverallQuantity = 0;
-                salesSnapshot.docs.forEach(doc => { const sale = doc.data(); const buyerName = sale.buyerName?.trim() || 'زبون غير مسجل'; const saleValue = sale.totalSaleAmount || 0; const saleQuantity = sale.quantitySold || 0; if (!buyerSales[buyerName]) { buyerSales[buyerName] = { name: buyerName, qty: 0, value: 0 }; } buyerSales[buyerName].qty += saleQuantity; buyerSales[buyerName].value += saleValue; totalOverallQuantity += saleQuantity; totalOverallValue += saleValue; });
-                const sortedBuyers = Object.values(buyerSales).sort((a, b) => b.value - a.value);
-                let reportHtml = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المبيعات حسب المشتري</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet"><style>body{font-family:'Tajawal','Changa',sans-serif;direction:rtl;margin:20px;background-color:#fdfdfd;color:#333;font-size:14px}h1{text-align:center;color:#0D47A1;border-bottom:2px solid #FF6F00;padding-bottom:10px;margin-bottom:25px;font-size:1.8em}table{width:100%;border-collapse:collapse;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);background-color:#fff;border:1px solid #ddd}th,td{border:1px solid #ddd;padding:10px 12px;text-align:right;vertical-align:middle}th{background-color:#e3f2fd;font-weight:700;color:#0D47A1;font-size:1.1em}tr:nth-child(even){background-color:#fbfbfb}tr:hover{background-color:#f0f8ff}td.number-cell{text-align:left;font-feature-settings:"tnum";font-weight:700}.footer{text-align:center;margin-top:25px;font-size:0.9em;color:#777;border-top:1px solid #ccc;padding-top:15px}.summary-total{font-weight:bold;background-color:#eee;font-size:1.1em}@media print{body{margin:10px;background-color:#fff;font-size:12px}h1{font-size:1.5em;margin-bottom:15px}table{box-shadow:none;border:1px solid #ccc}th,td{padding:6px 8px}}</style></head><body><h1><i class="fas fa-users"></i> تقرير المبيعات حسب المشتري</h1><p style="text-align:center;margin-bottom:15px;color:#555;">(الإجمالي بناءً على سعر البيع النهائي - يشمل جميع المبيعات)</p><table><thead><tr><th>#</th><th>اسم المشتري</th><th>إجمالي الكمية</th><th>إجمالي القيمة</th></tr></thead><tbody>`;
-                let index = 0;
-                sortedBuyers.forEach((buyer) => { index++; reportHtml += `<tr><td>${index}</td><td>${escapeHtml(buyer.name)}</td><td class="number-cell">${buyer.qty.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(buyer.value)}</td></tr>`; });
-                reportHtml += `<tr class="summary-total"><td colspan="2"><strong>الإجمالي العام</strong></td><td class="number-cell">${totalOverallQuantity.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(totalOverallValue)}</td></tr></tbody></table><div class="footer">إجمالي عدد المشترين: ${Object.keys(buyerSales).length}<br>تاريخ التقرير: ${new Date().toLocaleString('ar-EG')}</div></body></html>`;
-                const reportWindow = window.open("", "_blank", "noopener,noreferrer");
-                if (reportWindow) {
-                    reportWindow.document.write(reportHtml);
-                    reportWindow.document.close();
-                    // Success notification is good
-                } else {
-                     showNotification("⚠️ فشل فتح نافذة التقرير. يرجى التأكد من السماح بالنوافذ المنبثقة.", true, 'warning');
-                }
-            } catch (error) {
-                showNotification("فشل إنشاء تقرير المشترين.", true);
-                console.error("Buyer Report error:", error);
-            }
-        }
+                 // 1. Open window immediately
+                 reportWindow = window.open("", "_blank", "noopener,noreferrer");
+                 if (reportWindow) {
+                     reportWindow.document.write('<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المشترين - جارٍ التحميل...</title><style>body{font-family:sans-serif; padding: 20px; text-align: center;} h1{color:#555;}</style></head><body><h1><i class="fas fa-spinner fa-spin"></i> جارٍ تحضير تقرير المشترين...</h1></body></html>');
+                     reportWindow.document.close();
+                 } else {
+                      showNotification("⚠️ فشل فتح نافذة التقرير. يرجى التأكد من السماح بالنوافذ المنبثقة.", true, 'warning');
+                      return;
+                 }
+
+                 // 2. Fetch data and prepare report
+                 showNotification('⏳ تحضير تقرير المشترين...', false, 'info');
+                 const salesRef = collection(db, 'sales');
+                 const q = query(salesRef, orderBy('saleTimestamp', 'desc'));
+                 const salesSnapshot = await getDocs(q);
+
+                 if (salesSnapshot.empty) {
+                     reportWindow.document.open();
+                     reportWindow.document.write('<html><body><h1>لا توجد بيانات</h1><p>لا توجد مبيعات مسجلة لإنشاء التقرير.</p></body></html>');
+                     reportWindow.document.close();
+                     showNotification("لا توجد مبيعات مسجلة لإنشاء التقرير.", false, 'warning');
+                     return;
+                 }
+
+                 const buyerSales = {};
+                 let totalOverallValue = 0; let totalOverallQuantity = 0;
+                 salesSnapshot.docs.forEach(doc => {
+                     const sale = doc.data();
+                     const buyerName = sale.buyerName?.trim() || 'زبون غير مسجل';
+                     const saleValue = sale.totalSaleAmount || 0;
+                     const saleQuantity = sale.quantitySold || 0;
+                     if (!buyerSales[buyerName]) { buyerSales[buyerName] = { name: buyerName, qty: 0, value: 0 }; }
+                     buyerSales[buyerName].qty += saleQuantity;
+                     buyerSales[buyerName].value += saleValue;
+                     totalOverallQuantity += saleQuantity;
+                     totalOverallValue += saleValue;
+                 });
+                 const sortedBuyers = Object.values(buyerSales).sort((a, b) => b.value - a.value);
+
+                 let reportHtml = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>تقرير المبيعات حسب المشتري</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet"><style>body{font-family:'Tajawal','Changa',sans-serif;direction:rtl;margin:20px;background-color:#fdfdfd;color:#333;font-size:14px}h1{text-align:center;color:#0D47A1;border-bottom:2px solid #FF6F00;padding-bottom:10px;margin-bottom:25px;font-size:1.8em}table{width:100%;border-collapse:collapse;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);background-color:#fff;border:1px solid #ddd}th,td{border:1px solid #ddd;padding:10px 12px;text-align:right;vertical-align:middle}th{background-color:#e3f2fd;font-weight:700;color:#0D47A1;font-size:1.1em}tr:nth-child(even){background-color:#fbfbfb}tr:hover{background-color:#f0f8ff}td.number-cell{text-align:left;font-feature-settings:"tnum";font-weight:700}.footer{text-align:center;margin-top:25px;font-size:0.9em;color:#777;border-top:1px solid #ccc;padding-top:15px}.summary-total{font-weight:bold;background-color:#eee;font-size:1.1em}@media print{body{margin:10px;background-color:#fff;font-size:12px}h1{font-size:1.5em;margin-bottom:15px}table{box-shadow:none;border:1px solid #ccc}th,td{padding:6px 8px}}</style></head><body><h1><i class="fas fa-users"></i> تقرير المبيعات حسب المشتري</h1><p style="text-align:center;margin-bottom:15px;color:#555;">(الإجمالي بناءً على سعر البيع النهائي - يشمل جميع المبيعات المسجلة)</p><table><thead><tr><th>#</th><th>اسم المشتري</th><th>إجمالي الكمية</th><th>إجمالي القيمة</th></tr></thead><tbody>`;
+                 let index = 0;
+                 sortedBuyers.forEach((buyer) => { index++; reportHtml += `<tr><td>${index}</td><td>${escapeHtml(buyer.name)}</td><td class="number-cell">${buyer.qty.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(buyer.value)}</td></tr>`; });
+                 reportHtml += `<tr class="summary-total"><td colspan="2"><strong>الإجمالي العام</strong></td><td class="number-cell">${totalOverallQuantity.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(totalOverallValue)}</td></tr></tbody></table><div class="footer">إجمالي عدد المشترين (مع غير المسجلين): ${Object.keys(buyerSales).length}<br>تاريخ التقرير: ${new Date().toLocaleString('ar-EG')}</div></body></html>`;
+
+                 // 3. Write final content
+                 reportWindow.document.open();
+                 reportWindow.document.write(reportHtml);
+                 reportWindow.document.close();
+                 showNotification('✅ تم فتح تقرير المشترين.', false, 'success');
+
+             } catch (error) {
+                 showNotification("فشل إنشاء تقرير المشترين.", true);
+                 console.error("Buyer Report error:", error);
+                  if (reportWindow && !reportWindow.closed) {
+                    try {
+                         reportWindow.document.open();
+                         reportWindow.document.write('<html><body><h1>خطأ</h1><p>حدث خطأ أثناء إنشاء التقرير.</p></body></html>');
+                         reportWindow.document.close();
+                     } catch (writeError) {
+                         console.error("Error writing error message to report window:", writeError);
+                     }
+                 }
+             }
+         }
+
 
         // --- Dark Mode & Theme ---
         function toggleDarkMode() {
@@ -1483,11 +1617,16 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             }
              const themeMetaLight = document.querySelector('meta[name="theme-color"][media="(prefers-color-scheme: light)"]');
              const themeMetaDark = document.querySelector('meta[name="theme-color"][media="(prefers-color-scheme: dark)"]');
-             // Update meta tags based on actual current mode, not prefers-color-scheme
+             const currentThemeMeta = document.querySelector('meta[name="theme-color"]:not([media])') || document.createElement('meta');
+             if (!currentThemeMeta.parentNode) {
+                 currentThemeMeta.name = "theme-color";
+                 document.head.appendChild(currentThemeMeta);
+             }
+
              if(isDarkMode){
-                if(themeMetaDark) document.querySelector('meta[name="theme-color"]').content = themeMetaDark.content;
+                if(themeMetaDark) currentThemeMeta.content = themeMetaDark.content;
              } else {
-                if(themeMetaLight) document.querySelector('meta[name="theme-color"]').content = themeMetaLight.content;
+                if(themeMetaLight) currentThemeMeta.content = themeMetaLight.content;
              }
         }
 
@@ -1495,11 +1634,11 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         function showAddForm() {
             if (!addFormModalEl) return;
             addFormModalEl.classList.add('show');
-            addFormModalEl.querySelector('#itemName')?.focus();
             addFormModalEl.querySelector('#itemName').value = '';
             addFormModalEl.querySelector('#itemPrice').value = '';
             addFormModalEl.querySelector('#itemPartnerCost').value = '';
             addFormModalEl.querySelector('#itemIconUrl').value = '';
+            addFormModalEl.querySelector('#itemName')?.focus();
             if (addFormButton) {
                  addFormButton.disabled = false;
                  addFormButton.innerHTML = '<i class="fas fa-plus"></i> إضافة المنتج';
@@ -1507,27 +1646,34 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         }
         function hideAddForm() { addFormModalEl?.classList.remove('show'); }
 
-        function showNotification(message, isError = false, type = 'normal') {
+        function showNotification(message, isError = false, type = 'normal', duration = null) {
             if (!toastEl) return;
             toastEl.textContent = message;
             toastEl.className = 'toast';
-            let duration = 3500;
+            let finalDuration = 3500;
 
-            if (isError) { toastEl.classList.add('error'); duration = 4500; }
-             else if (type === 'warning') { toastEl.classList.add('warning'); duration = 4000; }
+            if (isError) { toastEl.classList.add('error'); finalDuration = 4500; }
+             else if (type === 'warning') { toastEl.classList.add('warning'); finalDuration = 4000; }
              else if (type === 'success') { toastEl.classList.add('success'); }
-             else if (type === 'info') { toastEl.classList.add('info'); duration = 5000; }
+             else if (type === 'info') { toastEl.classList.add('info'); finalDuration = 5000; }
+
+            if(duration !== null && duration > 0) {
+                finalDuration = duration;
+            }
 
             toastEl.classList.add('show');
             if(toastTimer) clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => { toastEl.classList.remove('show'); toastTimer = null; }, duration);
+            toastTimer = setTimeout(() => {
+                toastEl.classList.remove('show');
+                toastTimer = null;
+            }, finalDuration);
         }
 
         // --- Professional Tips ---
         function showProfessionalTip() {
-            if (professionalTips.length > 0 && !isDefinitelyOffline) {
+            if (professionalTips.length > 0 && !isDefinitelyOffline && firstLoadComplete) {
                 const randomIndex = Math.floor(Math.random() * professionalTips.length);
-                showNotification(professionalTips[randomIndex], false, 'info');
+                showNotification(professionalTips[randomIndex], false, 'info', 7000);
             }
         }
 
@@ -1549,10 +1695,12 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              handleProductSelectionChange(selectElement, window.getSelectedPartner());
         }
 
+         // Simplified: Only populates PRODUCT selects. Partner selects are now hardcoded in HTML.
          function populateProductSelectsInModals() {
             const logSaleSelects = logSaleModalEl?.querySelectorAll('.sale-product-select');
             logSaleSelects?.forEach(populateProductSelect);
          }
+
 
          function handlePartnerSelectionChange(partnerSelect) {
              const partnerName = partnerSelect?.value ?? '';
@@ -1600,7 +1748,8 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              const basePartnerCost = selectedOption.dataset.partnerCost || '';
 
              sellingInput.value = baseSellingPrice;
-             sellingInput.placeholder = baseSellingPrice ? `السعر (أساس: ${formatCurrency(baseSellingPrice)})` : 'سعر البيع';
+             const sellingPlaceholderBase = partnerName ? 'السعر للزبون' : 'السعر';
+             sellingInput.placeholder = baseSellingPrice ? `${sellingPlaceholderBase} (أساس: ${formatCurrency(baseSellingPrice)})` : sellingPlaceholderBase;
 
              if (partnerName && costInput) {
                  if (basePartnerCost !== '') {
@@ -1650,7 +1799,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              const entryDiv = document.createElement('div');
              entryDiv.className = `sale-item-entry ${partnerName ? 'is-partner-sale' : ''}`;
 
-             // 1. Product Select
              const productSelectContainer = document.createElement('div');
              productSelectContainer.className = 'sale-product-select-container';
              const productSelect = document.createElement('select');
@@ -1661,7 +1809,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              productSelectContainer.appendChild(productSelect);
              entryDiv.appendChild(productSelectContainer);
 
-             // 2. Cost Price (Conditional)
              const costContainer = document.createElement('div');
              costContainer.className = 'sale-cost-price-input-container';
              costContainer.style.display = partnerName ? 'block' : 'none';
@@ -1678,7 +1825,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              costContainer.appendChild(costInput);
              entryDiv.appendChild(costContainer);
 
-             // 3. Selling Price
              const sellingContainer = document.createElement('div');
              sellingContainer.className = 'sale-selling-price-input-container';
              const sellingLabel = document.createElement('label');
@@ -1695,7 +1841,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              sellingContainer.appendChild(sellingInput);
              entryDiv.appendChild(sellingContainer);
 
-             // 4. Quantity
              const quantityContainer = document.createElement('div');
              quantityContainer.className = 'sale-quantity-input-container';
              const quantityLabel = document.createElement('label');
@@ -1711,7 +1856,6 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
              quantityContainer.appendChild(quantityInput);
              entryDiv.appendChild(quantityContainer);
 
-             // 5. Remove Button
              const removeBtn = document.createElement('button');
              removeBtn.type = 'button';
              removeBtn.className = 'remove-sale-item-btn';
@@ -1730,11 +1874,12 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         function removeSaleItem(button) {
             const entry = button?.closest('.sale-item-entry');
             if (entry && saleItemsListContainer && saleItemsListContainer.querySelectorAll('.sale-item-entry').length > 1) {
-                 entry.style.transition = 'opacity 0.3s ease-out';
+                 entry.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
                  entry.style.opacity = '0';
+                 entry.style.transform = 'scale(0.95)';
                  setTimeout(() => { entry.remove(); }, 300);
             } else {
-                showNotification('يجب وجود بند واحد على الأقل.', true, 'warning');
+                showNotification('يجب وجود بند واحد على الأقل في عملية البيع.', true, 'warning');
             }
         }
 
@@ -1803,6 +1948,11 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                         entryValid = false;
                         costPriceInput.style.borderColor = 'var(--danger)';
                     }
+                     if (costPricePerUnit > sellingPricePerUnit) {
+                          costPriceInput.style.borderColor = 'var(--warning)';
+                          sellingPriceInput.style.borderColor = 'var(--warning)';
+                          showNotification(`تحذير في البند ${salesToLog.length + 1}: التكلفة (${formatCurrency(costPricePerUnit)}) أعلى من البيع (${formatCurrency(sellingPricePerUnit)}).`, false, 'warning', 6000);
+                     }
                 }
 
                 if (!entryValid) { isValid = false; entry.style.border = '1px solid var(--danger)'; continue; }
@@ -1824,20 +1974,20 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                      });
                 } else {
                     isValid = false; entry.style.border = '1px solid var(--danger)'; productSelect.style.borderColor = 'var(--danger)';
-                    showNotification(`خطأ: المنتج المحدد "${productSelect.options[productSelect.selectedIndex]?.text || productId}" غير موجود.`, true);
+                    showNotification(`خطأ: المنتج المحدد في البند ${salesToLog.length + 1} غير موجود.`, true);
                     break;
                 }
             }
 
             if (!isValid || salesToLog.length === 0) {
-                showNotification('يرجى مراجعة البنود والتأكد من صحة البيانات (المنتج, الكمية, السعر, والتكلفة للشريك).', true);
+                showNotification('يرجى مراجعة البنود التي عليها علامة حمراء أو صفراء والتأكد من صحة البيانات.', true);
                 saveButton.disabled = false; saveButton.innerHTML = '<i class="fas fa-save"></i> حفظ المبيعات'; return;
             }
 
             try {
                 salesToLog.forEach(saleData => batch.set(doc(collection(db, 'sales')), saleData));
                 await batch.commit();
-                showNotification(`✅ تم تسجيل ${salesToLog.length} ${salesToLog.length === 1 ? 'بيع' : 'مبيعات'} بنجاح!`, false, 'success');
+                showNotification(`✅ تم تسجيل ${salesToLog.length} ${salesToLog.length === 1 ? 'بند بيع' : 'بنود بيع'} بنجاح!`, false, 'success');
                 hideLogSaleModal();
                 fetchAllPaidSalesSummary();
                 fetchAndDisplayOutstandingDebts();
@@ -1863,6 +2013,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             if (endDateInput) endDateInput.valueAsDate = today;
             if (filterSelect) filterSelect.value = 'all';
             if (partnerFilterSelect) partnerFilterSelect.value = 'all';
+            // No need to populate partner filter dynamically here as it's hardcoded
             if (salesReportArea) salesReportArea.innerHTML = '<p class="detail-placeholder">اختر فترة ونوع التقرير.</p>';
         }
         function hideSalesReportModal() { salesReportModalEl?.classList.remove('show'); }
@@ -1882,20 +2033,26 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             if (!startDate || !endDate || endDate < startDate) { showNotification('يرجى تحديد فترة صحيحة.', true, 'warning'); return; }
 
             const endOfDay = new Date(endDate); endOfDay.setHours(23, 59, 59, 999);
-            salesReportArea.innerHTML = '<p class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</p>';
+            salesReportArea.innerHTML = '<p class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل بيانات التقرير...</p>';
 
             try {
                 const salesRef = collection(db, 'sales');
-                let conditions = [ where('saleTimestamp', '>=', Timestamp.fromDate(startDate)), where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay)) ];
-                if (paymentStatusFilter !== 'all') conditions.push(where('paymentStatus', '==', paymentStatusFilter));
-                if (partnerFilter === 'direct') conditions.push(where('partnerName', '==', null));
-                else if (partnerFilter !== 'all') conditions.push(where('partnerName', '==', partnerFilter));
+                let conditions = [
+                     where('saleTimestamp', '>=', Timestamp.fromDate(startDate)),
+                     where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay))
+                 ];
+                if (paymentStatusFilter !== 'all') { conditions.push(where('paymentStatus', '==', paymentStatusFilter)); }
+                if (partnerFilter === 'direct') { conditions.push(where('partnerName', '==', null)); }
+                else if (partnerFilter !== 'all') { conditions.push(where('partnerName', '==', partnerFilter)); }
                 conditions.push(orderBy('saleTimestamp', 'desc'));
 
                 const q = query(salesRef, ...conditions);
                 const salesSnapshot = await getDocs(q);
 
-                if (salesSnapshot.empty) { salesReportArea.innerHTML = `<p class="detail-placeholder">لا توجد مبيعات تطابق الفلترة.</p>`; return; }
+                if (salesSnapshot.empty) {
+                    salesReportArea.innerHTML = `<p class="detail-placeholder">لا توجد مبيعات تطابق الفلترة المحددة.</p>`;
+                    return;
+                }
 
                 let reportHtml = '';
                 const salesData = salesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1906,22 +2063,131 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                  if (reportType === 'summary') {
                      let totalValue = 0, totalQuantity = 0;
                      salesData.forEach(sale => { totalValue += sale.totalSaleAmount || 0; totalQuantity += sale.quantitySold || 0; });
-                     reportHtml = `<h4>ملخص وتفاصيل${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div class="report-summary"><p>إجمالي القيمة: <span>${formatCurrency(totalValue)}</span></p><p>إجمالي الكمية: <span>${totalQuantity.toLocaleString('ar-IQ')}</span></p></div><br><h4>التفاصيل:</h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>التاريخ</th><th>المشتري</th><th>الشريك</th><th>المنتج</th><th>الكمية</th><th>سعر البيع</th><th>الإجمالي</th><th class="wrap-text">الملاحظات</th><th>الحالة</th></tr></thead><tbody>${salesData.map(s => `<tr><td>${formatFirestoreTimestamp(s.saleTimestamp)}</td><td>${escapeHtml(s.buyerName) || '-'}</td><td>${escapeHtml(s.partnerName) || 'مباشر'}</td><td>${escapeHtml(s.productName) || '?'}</td><td class="number-cell">${(s.quantitySold || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(s.pricePerUnitAtSale)}</td><td class="number-cell">${formatCurrency(s.totalSaleAmount)}</td><td class="wrap-text">${escapeHtml(s.notes) || '-'}</td><td><span class="sale-status ${s.paymentStatus === 'paid' ? 'sale-status-paid' : 'sale-status-debt'}">${s.paymentStatus === 'paid' ? 'مدفوع' : 'دين'}</span></td></tr>`).join('')}</tbody></table></div>`;
+                     reportHtml = `<h4>ملخص وتفاصيل${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div class="report-summary"><p>إجمالي القيمة: <span>${formatCurrency(totalValue)}</span></p><p>إجمالي الكمية: <span>${totalQuantity.toLocaleString('ar-IQ')}</span> قطعة</p></div><br><h4>التفاصيل:</h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>التاريخ</th><th>المشتري</th><th>الشريك</th><th>المنتج</th><th>الكمية</th><th>سعر البيع</th><th>الإجمالي</th><th class="wrap-text">الملاحظات</th><th>الحالة</th></tr></thead><tbody>${salesData.map(s => `<tr><td>${formatFirestoreTimestamp(s.saleTimestamp)}</td><td class="wrap-text">${escapeHtml(s.buyerName) || '-'}</td><td>${escapeHtml(s.partnerName) || 'مباشر'}</td><td class="wrap-text">${escapeHtml(s.productName) || '?'}</td><td class="number-cell">${(s.quantitySold || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(s.pricePerUnitAtSale)}</td><td class="number-cell">${formatCurrency(s.totalSaleAmount)}</td><td class="wrap-text">${escapeHtml(s.notes) || '-'}</td><td><span class="sale-status ${s.paymentStatus === 'paid' ? 'sale-status-paid' : 'sale-status-debt'}">${s.paymentStatus === 'paid' ? 'مدفوع' : 'دين'}</span></td></tr>`).join('')}</tbody></table></div>`;
                  } else if (reportType === 'bestSellerQty' || reportType === 'bestSellerValue') {
-                     const productSales = {}; salesData.forEach(sale => { const pid = sale.productId || 'unknown'; if (!productSales[pid]) productSales[pid] = { name: sale.productName || '?', qty: 0, value: 0 }; productSales[pid].qty += sale.quantitySold || 0; productSales[pid].value += sale.totalSaleAmount || 0; }); const sorted = Object.values(productSales).sort((a, b) => (reportType === 'bestSellerQty' ? b.qty - a.qty : b.value - a.value)); reportHtml = `<h4>الأكثر مبيعاً ${reportType === 'bestSellerQty' ? '(كمية)' : '(قيمة)'}${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>المنتج</th><th>الكمية</th><th>القيمة</th></tr></thead><tbody>${sorted.map(p => `<tr><td>${escapeHtml(p.name)}</td><td class="number-cell">${(p.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(p.value)}</td></tr>`).join('')}</tbody></table></div>`;
+                     const productSales = {}; salesData.forEach(sale => { const pid = sale.productId || 'unknown'; if (!productSales[pid]) productSales[pid] = { name: sale.productName || '?', qty: 0, value: 0 }; productSales[pid].qty += sale.quantitySold || 0; productSales[pid].value += sale.totalSaleAmount || 0; }); const sorted = Object.values(productSales).sort((a, b) => (reportType === 'bestSellerQty' ? b.qty - a.qty : b.value - a.value)); reportHtml = `<h4>الأكثر مبيعاً ${reportType === 'bestSellerQty' ? '(حسب الكمية)' : '(حسب القيمة)'}${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>المنتج</th><th>إجمالي الكمية</th><th>إجمالي القيمة</th></tr></thead><tbody>${sorted.map(p => `<tr><td class="wrap-text">${escapeHtml(p.name)}</td><td class="number-cell">${(p.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(p.value)}</td></tr>`).join('')}</tbody></table></div>`;
                  } else if (reportType === 'buyerSummary') {
-                     const buyerSales = {}; salesData.forEach(sale => { const bName = sale.buyerName?.trim() || 'زبون غير مسجل'; if (!buyerSales[bName]) buyerSales[bName] = { name: bName, qty: 0, value: 0 }; buyerSales[bName].qty += sale.quantitySold || 0; buyerSales[bName].value += sale.totalSaleAmount || 0; }); const sorted = Object.values(buyerSales).sort((a, b) => b.value - a.value); reportHtml = `<h4>ملخص حسب المشتري${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>المشتري</th><th>الكمية</th><th>القيمة</th></tr></thead><tbody>${sorted.map(b => `<tr><td>${escapeHtml(b.name)}</td><td class="number-cell">${(b.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(b.value)}</td></tr>`).join('')}</tbody></table></div>`;
+                     const buyerSales = {}; salesData.forEach(sale => { const bName = sale.buyerName?.trim() || 'زبون غير مسجل'; if (!buyerSales[bName]) buyerSales[bName] = { name: bName, qty: 0, value: 0 }; buyerSales[bName].qty += sale.quantitySold || 0; buyerSales[bName].value += sale.totalSaleAmount || 0; }); const sorted = Object.values(buyerSales).sort((a, b) => b.value - a.value); reportHtml = `<h4>ملخص حسب المشتري${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>المشتري</th><th>إجمالي الكمية</th><th>إجمالي القيمة</th></tr></thead><tbody>${sorted.map(b => `<tr><td class="wrap-text">${escapeHtml(b.name)}</td><td class="number-cell">${(b.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(b.value)}</td></tr>`).join('')}</tbody></table></div>`;
                  } else if (reportType === 'partnerSummary') {
-                     const partnerSales = {}; let totalCost=0, totalSelling=0, totalProfit=0, totalQty=0; salesData.forEach(sale => { const pName = sale.partnerName || 'بيع مباشر'; if (!partnerSales[pName]) partnerSales[pName] = { name: pName, qty: 0, totalCost: 0, totalSelling: 0, totalProfit: 0 }; const qty = sale.quantitySold || 0; const costPU = sale.costPricePerUnit; const sellingPU = sale.pricePerUnitAtSale || 0; const cost = (pName !== 'بيع مباشر' && costPU != null) ? costPU * qty : 0; const selling = sellingPU * qty; const profit = (pName !== 'بيع مباشر' && costPU != null) ? (sellingPU - costPU) * qty : 0; partnerSales[pName].qty += qty; partnerSales[pName].totalCost += cost; partnerSales[pName].totalSelling += selling; partnerSales[pName].totalProfit += profit; totalQty += qty; totalCost += cost; totalSelling += selling; totalProfit += profit; }); const sorted = Object.values(partnerSales).sort((a, b) => { if (a.name === 'بيع مباشر') return 1; if (b.name === 'بيع مباشر') return -1; return b.totalProfit - a.totalProfit; }); reportHtml = `<h4>ملخص الشركاء والمباشر${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>الشريك/النوع</th><th>الكمية</th><th>إجمالي التكلفة</th><th>إجمالي البيع</th><th>إجمالي الربح</th></tr></thead><tbody>${sorted.map(p => `<tr><td>${escapeHtml(p.name)}</td><td class="number-cell">${(p.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${p.name !== 'بيع مباشر' ? formatCurrency(p.totalCost) : '-'}</td><td class="number-cell">${formatCurrency(p.totalSelling)}</td><td class="number-cell partner-profit">${p.name !== 'بيع مباشر' ? formatCurrency(p.totalProfit) : '-'}</td></tr>`).join('')}<tr style="font-weight: bold; background-color: var(--grey-light); border-top: 2px solid var(--grey-medium);"><td style="background-color:var(--grey-light);"><strong>الإجمالي (للفلترة)</strong></td><td class="number-cell">${totalQty.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(totalCost)}</td><td class="number-cell">${formatCurrency(totalSelling)}</td><td class="number-cell partner-profit">${formatCurrency(totalProfit)}</td></tr></tbody></table></div>`;
-                 } else { reportHtml = '<p class="detail-placeholder">نوع التقرير غير معروف.</p>'; }
+                     const partnerSales = {}; let totalCost=0, totalSelling=0, totalProfit=0, totalQty=0;
+                     salesData.forEach(sale => {
+                        const pName = sale.partnerName || 'بيع مباشر';
+                        if (!partnerSales[pName]) partnerSales[pName] = { name: pName, qty: 0, totalCost: 0, totalSelling: 0, totalProfit: 0 };
+                        const qty = sale.quantitySold || 0;
+                        const costPU = sale.costPricePerUnit;
+                        const sellingPU = sale.pricePerUnitAtSale || 0;
+                        const isPartnerSale = pName !== 'بيع مباشر';
+                        const cost = (isPartnerSale && costPU != null && costPU >= 0) ? costPU * qty : 0;
+                        const selling = sellingPU * qty;
+                        const profit = (isPartnerSale && costPU != null && costPU >= 0) ? (sellingPU - costPU) * qty : 0;
+                        partnerSales[pName].qty += qty;
+                        partnerSales[pName].totalCost += cost;
+                        partnerSales[pName].totalSelling += selling;
+                        partnerSales[pName].totalProfit += profit;
+                        totalQty += qty;
+                        totalCost += cost;
+                        totalSelling += selling;
+                        totalProfit += profit;
+                     });
+                     const sorted = Object.values(partnerSales).sort((a, b) => { if (a.name === 'بيع مباشر') return 1; if (b.name === 'بيع مباشر') return -1; return b.totalProfit - a.totalProfit; });
+                     reportHtml = `<h4>ملخص الشركاء والمبيعات المباشرة${statusText}${partnerText}<br><small>(${dateRangeText})</small></h4><div style="overflow-x: auto;"><table class="professional-report-table"><thead><tr><th>الشريك/النوع</th><th>الكمية المباعة</th><th>إجمالي التكلفة (للشركاء)</th><th>إجمالي سعر البيع</th><th>إجمالي الربح (للشركاء)</th></tr></thead><tbody>${sorted.map(p => `<tr><td>${escapeHtml(p.name)}</td><td class="number-cell">${(p.qty || 0).toLocaleString('ar-IQ')}</td><td class="number-cell">${p.name !== 'بيع مباشر' ? formatCurrency(p.totalCost) : '-'}</td><td class="number-cell">${formatCurrency(p.totalSelling)}</td><td class="number-cell partner-profit">${p.name !== 'بيع مباشر' ? formatCurrency(p.totalProfit) : '-'}</td></tr>`).join('')}<tr style="font-weight: bold; background-color: var(--grey-light); border-top: 2px solid var(--grey-medium);"><td style="background-color:var(--grey-light);"><strong>الإجمالي (للفترة المحددة)</strong></td><td class="number-cell">${totalQty.toLocaleString('ar-IQ')}</td><td class="number-cell">${formatCurrency(totalCost)}</td><td class="number-cell">${formatCurrency(totalSelling)}</td><td class="number-cell partner-profit">${formatCurrency(totalProfit)}</td></tr></tbody></table></div><p style="font-size: 0.85em; text-align: center; margin-top: 10px; opacity: 0.8;">* الربح والتكلفة محسوبة فقط لمبيعات الشركاء التي تم تسجيل سعر تكلفة لها.</p>`;
+                 } else {
+                     reportHtml = '<p class="detail-placeholder">نوع التقرير غير معروف.</p>';
+                 }
 
                 salesReportArea.innerHTML = reportHtml;
-            } catch (error) { console.error("Error generating report:", error); salesReportArea.innerHTML = `<p class="detail-error">خطأ إنشاء التقرير: ${error.message}</p>`; }
+            } catch (error) {
+                 console.error("Error generating report:", error);
+                 salesReportArea.innerHTML = `<p class="detail-error">خطأ في إنشاء التقرير: ${error.message}</p>`;
+            }
         }
 
         // --- Export Sales to CSV ---
         function exportSalesToCSV() {
-             if (!db || !salesReportModalEl) return; const sDateIn = salesReportModalEl.querySelector('#reportStartDate'); const eDateIn = salesReportModalEl.querySelector('#reportEndDate'); const statusFilterIn = salesReportModalEl.querySelector('#reportPaymentStatusFilter'); const partnerFilterIn = salesReportModalEl.querySelector('#reportPartnerFilter'); if (!sDateIn || !eDateIn || !statusFilterIn || !partnerFilterIn) { showNotification("خطأ: عناصر التحكم مفقودة.", true); return; } const statusFilter = statusFilterIn.value; const partnerFilter = partnerFilterIn.value; const startDate = sDateIn.valueAsDate; const endDate = eDateIn.valueAsDate; if (!startDate || !endDate || endDate < startDate) { showNotification('يرجى تحديد فترة صحيحة.', true, 'warning'); return; } const endOfDay = new Date(endDate); endOfDay.setHours(23, 59, 59, 999); showNotification('⏳ تحضير التصدير...', false, 'info'); const salesRef = collection(db, 'sales'); let conditions = [ where('saleTimestamp', '>=', Timestamp.fromDate(startDate)), where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay)) ]; if (statusFilter !== 'all') conditions.push(where('paymentStatus', '==', statusFilter)); if (partnerFilter === 'direct') conditions.push(where('partnerName', '==', null)); else if (partnerFilter !== 'all') conditions.push(where('partnerName', '==', partnerFilter)); conditions.push(orderBy('saleTimestamp', 'desc')); const q = query(salesRef, ...conditions); getDocs(q).then(snapshot => { if (snapshot.empty) { showNotification('لا توجد بيانات للتصدير.', false, 'warning'); return; } let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; csvContent += "التاريخ,الوقت,المشتري,الشريك,معرف المنتج,اسم المنتج,الكمية,تكلفة الشريك,سعر البيع,الإجمالي,الحالة,الملاحظات\r\n"; const formatCsv = (f) => { if (f == null) return ''; let s = String(f); if (s.includes(',') || s.includes('\n') || s.includes('"')) { s = s.replace(/"/g, '""'); return `"${s}"`; } return s; }; snapshot.docs.forEach(doc => { const s = doc.data(); const ts = s.saleTimestamp?.toDate ? s.saleTimestamp.toDate() : new Date(); const date = ts.toLocaleDateString('en-CA'); const time = ts.toLocaleTimeString('en-GB', { hour12: false }); const row = [date, time, formatCsv(s.buyerName), formatCsv(s.partnerName || 'مباشر'), s.productId || '', formatCsv(s.productName), s.quantitySold || 0, s.costPricePerUnit ?? '', s.pricePerUnitAtSale ?? 0, s.totalSaleAmount ?? 0, s.paymentStatus === 'paid' ? 'مدفوع' : 'دين', formatCsv(s.notes)].join(','); csvContent += row + "\r\n"; }); const uri = encodeURI(csvContent); const link = document.createElement("a"); link.setAttribute("href", uri); const dateStr = `${startDate.toISOString().slice(0, 10)}_${endDate.toISOString().slice(0, 10)}`; const pStr = partnerFilter === 'all' ? 'all' : partnerFilter === 'direct' ? 'direct' : partnerFilter.replace(/[^a-z0-9]/gi, '_'); link.setAttribute("download", `sales_${dateStr}_${statusFilter}_${pStr}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); showNotification('✅ تم تنزيل ملف CSV.', false, 'success'); }).catch(err => { console.error("Error exporting CSV:", err); showNotification(`خطأ التصدير: ${err.message}`, true); });
+             if (!db || !salesReportModalEl) return;
+             const sDateIn = salesReportModalEl.querySelector('#reportStartDate');
+             const eDateIn = salesReportModalEl.querySelector('#reportEndDate');
+             const statusFilterIn = salesReportModalEl.querySelector('#reportPaymentStatusFilter');
+             const partnerFilterIn = salesReportModalEl.querySelector('#reportPartnerFilter');
+
+             if (!sDateIn || !eDateIn || !statusFilterIn || !partnerFilterIn) {
+                 showNotification("خطأ: عناصر التحكم في التقرير مفقودة.", true); return;
+             }
+             const statusFilter = statusFilterIn.value;
+             const partnerFilter = partnerFilterIn.value;
+             const startDate = sDateIn.valueAsDate;
+             const endDate = eDateIn.valueAsDate;
+             if (!startDate || !endDate || endDate < startDate) {
+                 showNotification('يرجى تحديد فترة زمنية صحيحة للتصدير.', true, 'warning'); return;
+             }
+             const endOfDay = new Date(endDate); endOfDay.setHours(23, 59, 59, 999);
+
+             showNotification('⏳ تحضير بيانات التصدير...', false, 'info');
+
+             const salesRef = collection(db, 'sales');
+             let conditions = [
+                 where('saleTimestamp', '>=', Timestamp.fromDate(startDate)),
+                 where('saleTimestamp', '<=', Timestamp.fromDate(endOfDay))
+             ];
+             if (statusFilter !== 'all') conditions.push(where('paymentStatus', '==', statusFilter));
+             if (partnerFilter === 'direct') conditions.push(where('partnerName', '==', null));
+             else if (partnerFilter !== 'all') conditions.push(where('partnerName', '==', partnerFilter));
+             conditions.push(orderBy('saleTimestamp', 'desc'));
+
+             const q = query(salesRef, ...conditions);
+
+             getDocs(q).then(snapshot => {
+                 if (snapshot.empty) {
+                     showNotification('لا توجد بيانات مطابقة للفترة المحددة للتصدير.', false, 'warning'); return;
+                 }
+
+                 let csvContent = "\uFEFF";
+                 csvContent += "التاريخ,الوقت,اسم المشتري,الشريك,معرف المنتج,اسم المنتج,الكمية,سعر التكلفة للوحدة,سعر البيع للوحدة,الإجمالي,الحالة,الملاحظات\r\n";
+
+                 const formatCsvField = (field) => {
+                     if (field == null) return '';
+                     let str = String(field);
+                     if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+                         str = str.replace(/"/g, '""');
+                         return `"${str}"`;
+                     }
+                     return str;
+                 };
+
+                 snapshot.docs.forEach(doc => {
+                     const s = doc.data();
+                     const ts = s.saleTimestamp?.toDate ? s.saleTimestamp.toDate() : new Date();
+                     const date = ts.toLocaleDateString('en-CA');
+                     const time = ts.toLocaleTimeString('en-GB', { hour12: false });
+
+                     const row = [
+                         date, time, formatCsvField(s.buyerName), formatCsvField(s.partnerName || 'مباشر'),
+                         s.productId || '', formatCsvField(s.productName), s.quantitySold || 0,
+                         s.costPricePerUnit ?? '', s.pricePerUnitAtSale ?? 0, s.totalSaleAmount ?? 0,
+                         s.paymentStatus === 'paid' ? 'مدفوع' : 'دين', formatCsvField(s.notes)
+                     ].join(',');
+                     csvContent += row + "\r\n";
+                 });
+
+                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                 const link = document.createElement("a");
+                 const url = URL.createObjectURL(blob);
+                 link.setAttribute("href", url);
+                 const dateStr = `${startDate.toISOString().slice(0, 10)}_to_${endDate.toISOString().slice(0, 10)}`;
+                 const partnerStr = partnerFilter === 'all' ? 'all' : partnerFilter === 'direct' ? 'direct' : partnerFilter.replace(/[^a-z0-9]/gi, '_');
+                 const filename = `sales_report_${dateStr}_status-${statusFilter}_partner-${partnerStr}.csv`;
+                 link.setAttribute("download", filename);
+                 link.style.visibility = 'hidden';
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 URL.revokeObjectURL(url);
+                 showNotification('✅ تم تنزيل ملف CSV بنجاح.', false, 'success');
+
+             }).catch(err => {
+                 console.error("Error exporting CSV:", err);
+                 showNotification(`خطأ في تصدير البيانات: ${err.message}`, true);
+             });
         }
 
         // --- Sales Log Modal ---
@@ -1942,7 +2208,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
 
         async function loadSalesLog() {
             if (!db || !salesLogTableBody) return;
-            salesLogTableBody.innerHTML = `<tr><td colspan="12" class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل السجل...</td></tr>`;
+            salesLogTableBody.innerHTML = `<tr><td colspan="13" class="detail-placeholder"><i class="fas fa-spinner fa-spin"></i> جارٍ تحميل السجل...</td></tr>`;
             if(salesLogTableBody.parentElement) salesLogTableBody.parentElement.style.display = 'table';
 
             try {
@@ -1951,7 +2217,8 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 const salesSnapshot = await getDocs(q);
 
                 if (salesSnapshot.empty) {
-                    salesLogTableBody.innerHTML = `<tr><td colspan="12" class="detail-placeholder">لا توجد مبيعات مسجلة.</td></tr>`; return;
+                    salesLogTableBody.innerHTML = `<tr><td colspan="13" class="detail-placeholder">لا توجد مبيعات مسجلة في السجل.</td></tr>`;
+                    return;
                 }
 
                 let logHtml = '';
@@ -1964,7 +2231,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                     const sellingPrice = sale.pricePerUnitAtSale;
                     const quantity = sale.quantitySold || 0;
                     let profit = '-';
-                    if (partnerName !== 'مباشر' && costPrice != null && sellingPrice != null) {
+                    if (partnerName !== 'مباشر' && costPrice != null && costPrice >= 0 && sellingPrice != null) {
                         profit = formatCurrency((sellingPrice - costPrice) * quantity);
                     }
 
@@ -1974,27 +2241,28 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                             <td class="wrap-text">${escapeHtml(sale.buyerName) || '-'}</td>
                             <td>${escapeHtml(partnerName)}</td>
                             <td class="wrap-text">${escapeHtml(sale.productName) || '?'}</td>
+                            <td>${escapeHtml(sale.productId) || '-'}</td>
                             <td class="number-cell">${quantity.toLocaleString('ar-IQ')}</td>
-                            <td class="number-cell">${(partnerName !== 'مباشر' && costPrice != null) ? formatCurrency(costPrice) : '-'}</td>
+                            <td class="number-cell">${(partnerName !== 'مباشر' && costPrice != null && costPrice >= 0) ? formatCurrency(costPrice) : '-'}</td>
                             <td class="number-cell">${formatCurrency(sellingPrice || 0)}</td>
                             <td class="number-cell">${formatCurrency(sale.totalSaleAmount || 0)}</td>
                             <td class="number-cell partner-profit">${profit}</td>
                             <td class="wrap-text">${escapeHtml(sale.notes) || '-'}</td>
                             <td><span class="sale-status ${statusClass}">${statusText}</span></td>
                             <td class="log-actions">
-                                <button class="edit-sale-log-entry" onclick="window.showEditSaleModal('${sale.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
-                                <button class="delete-sale-log-entry" onclick="window.confirmDeleteSalesLogEntry('${sale.id}', this)" title="حذف"><i class="fas fa-times-circle"></i></button>
+                                <button class="edit-sale-log-entry" onclick="window.showEditSaleModal('${sale.id}')" title="تعديل السجل"><i class="fas fa-edit"></i></button>
+                                <button class="delete-sale-log-entry" onclick="window.confirmDeleteSalesLogEntry('${sale.id}', this)" title="حذف السجل"><i class="fas fa-times-circle"></i></button>
                             </td>
                         </tr>`;
                 });
                 salesLogTableBody.innerHTML = logHtml;
                  if (salesSnapshot.docs.length >= SALES_LOG_LIMIT) {
-                    salesLogTableBody.insertAdjacentHTML('beforeend', `<tr><td colspan="12" style="text-align: center; font-size: 0.9em; opacity: 0.7; padding: 8px;">(أحدث ${SALES_LOG_LIMIT} سجل)</td></tr>`);
+                    salesLogTableBody.insertAdjacentHTML('beforeend', `<tr><td colspan="13" style="text-align: center; font-size: 0.9em; opacity: 0.7; padding: 8px;">(عرض أحدث ${SALES_LOG_LIMIT} سجل)</td></tr>`);
                 }
 
             } catch (error) {
                 console.error("Error loading sales log:", error);
-                salesLogTableBody.innerHTML = `<tr><td colspan="12" class="detail-error">خطأ تحميل السجل: ${error.message}</td></tr>`;
+                salesLogTableBody.innerHTML = `<tr><td colspan="13" class="detail-error">خطأ في تحميل سجل المبيعات: ${error.message}</td></tr>`;
             }
         }
 
@@ -2019,7 +2287,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             if (!idInput || !dateInput || !partnerNameDisplay || !buyerNameInput || !notesInput || !productNameInput ||
                 !quantityInput || !costPriceDisplay || !sellingPriceInput || !costContainer || !sellingLabel ||
                 !totalDisplay || !paidRadio || !debtRadio || !updateSaleBtn) {
-                showNotification("خطأ: عناصر نافذة التعديل مفقودة.", true); return;
+                showNotification("خطأ: عناصر نافذة تعديل البيع مفقودة.", true); return;
             }
 
             sellingPriceInput.removeEventListener('input', updateEditSaleTotal);
@@ -2028,10 +2296,14 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             quantityInput.addEventListener('input', updateEditSaleTotal);
 
             try {
-                 showNotification("⏳ جلب بيانات السجل...", false, 'info');
+                 showNotification("⏳ جلب بيانات السجل للتعديل...", false, 'info');
                 const saleRef = doc(db, 'sales', saleId);
                 const docSnap = await getDoc(saleRef);
-                if (!docSnap.exists()) { showNotification("السجل غير موجود!", true); hideEditSaleModal(); return; }
+                if (!docSnap.exists()) {
+                    showNotification("السجل المطلوب غير موجود!", true);
+                    hideEditSaleModal();
+                    return;
+                }
                 const saleData = docSnap.data();
 
                 idInput.value = saleId;
@@ -2046,24 +2318,27 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 if (saleData.partnerName && saleData.costPricePerUnit != null) {
                     costContainer.style.display = 'flex';
                     costPriceDisplay.value = saleData.costPricePerUnit;
-                    costPriceDisplay.readOnly = true;
-                    costPriceDisplay.disabled = true;
                     sellingLabel.textContent = 'سعر البيع للزبون:';
                 } else {
                     costContainer.style.display = 'none';
                     costPriceDisplay.value = '';
-                    costPriceDisplay.readOnly = true;
-                    costPriceDisplay.disabled = true;
                     sellingLabel.textContent = 'سعر البيع:';
                 }
+                costPriceDisplay.readOnly = true;
+                costPriceDisplay.disabled = true;
 
-                if (saleData.paymentStatus === 'paid') paidRadio.checked = true; else debtRadio.checked = true;
+                if (saleData.paymentStatus === 'paid') paidRadio.checked = true;
+                else debtRadio.checked = true;
                 updateEditSaleTotal();
                 updateSaleBtn.disabled = false;
+                updateSaleBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات';
                 editSaleModalEl.classList.add('show');
                 dateInput.focus();
 
-            } catch (error) { console.error("Error fetching sale for edit:", error); showNotification(`خطأ جلب البيانات: ${error.message}`, true); }
+            } catch (error) {
+                 console.error("Error fetching sale for edit:", error);
+                 showNotification(`خطأ في جلب بيانات السجل: ${error.message}`, true);
+             }
         }
 
          function updateEditSaleTotal() {
@@ -2096,7 +2371,9 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             const sellingPriceInput = editSaleModalEl.querySelector('#editSaleSellingPrice');
             const paymentStatusInput = editSaleModalEl.querySelector('input[name="editSalePaymentStatus"]:checked');
 
-            if (!saleIdInput || !saleDateInput || !buyerNameInput || !notesInput || !quantityInput || !sellingPriceInput || !paymentStatusInput) { showNotification("خطأ: حقول التعديل مفقودة.", true); return; }
+            if (!saleIdInput || !saleDateInput || !buyerNameInput || !notesInput || !quantityInput || !sellingPriceInput || !paymentStatusInput) {
+                showNotification("خطأ: حقول التعديل مفقودة أو غير صالحة.", true); return;
+            }
             const saleId = saleIdInput.value;
             const saleDate = saleDateInput.valueAsDate;
             const buyerName = buyerNameInput.value.trim();
@@ -2105,17 +2382,26 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             const sellingPrice = parseFloat(sellingPriceInput.value);
             const paymentStatus = paymentStatusInput.value;
 
-            if (!saleId || !saleDate || isNaN(quantity) || quantity <= 0 || isNaN(sellingPrice) || sellingPrice < 0 || !paymentStatus) { showNotification("يرجى ملء الحقول المطلوبة بشكل صحيح.", true, 'warning'); return; }
+            if (!saleId || !saleDate || isNaN(quantity) || quantity <= 0 || isNaN(sellingPrice) || sellingPrice < 0 || !paymentStatus) {
+                 showNotification("يرجى ملء الحقول المطلوبة (التاريخ، الكمية، السعر) بشكل صحيح.", true, 'warning');
+                 if (isNaN(quantity) || quantity <= 0) quantityInput.style.borderColor = 'var(--danger)'; else quantityInput.style.borderColor = '';
+                 if (isNaN(sellingPrice) || sellingPrice < 0) sellingPriceInput.style.borderColor = 'var(--danger)'; else sellingPriceInput.style.borderColor = '';
+                 if (!saleDate) saleDateInput.style.borderColor = 'var(--danger)'; else saleDateInput.style.borderColor = '';
+                 return;
+            }
 
             updateSaleBtn.disabled = true; updateSaleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ الحفظ...';
             const saleRef = doc(db, 'sales', saleId);
 
             try {
                 const originalDoc = await getDoc(saleRef);
-                if (!originalDoc.exists()) throw new Error("السجل الأصلي غير موجود");
+                if (!originalDoc.exists()) throw new Error("السجل الأصلي غير موجود ليتم تحديثه");
                 const originalData = originalDoc.data();
                 const originalTimestampDate = originalData.saleTimestamp?.toDate ? originalData.saleTimestamp.toDate() : new Date();
-                const newTimestamp = new Date( saleDate.getFullYear(), saleDate.getMonth(), saleDate.getDate(), originalTimestampDate.getHours(), originalTimestampDate.getMinutes(), originalTimestampDate.getSeconds() );
+                const newTimestamp = new Date(
+                    saleDate.getFullYear(), saleDate.getMonth(), saleDate.getDate(),
+                    originalTimestampDate.getHours(), originalTimestampDate.getMinutes(), originalTimestampDate.getSeconds()
+                );
                 const calculatedTotal = quantity * sellingPrice;
 
                 const updatedData = {
@@ -2129,13 +2415,17 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 };
 
                 await updateDoc(saleRef, updatedData);
-                showNotification("✅ تم تحديث السجل بنجاح!", false, 'success');
+                showNotification("✅ تم تحديث سجل البيع بنجاح!", false, 'success');
                 hideEditSaleModal();
                 loadSalesLog();
                 fetchAllPaidSalesSummary();
                 fetchAndDisplayOutstandingDebts();
 
-            } catch (error) { console.error("updateSaleEntry Error:", error); showNotification(`❌ فشل تحديث السجل: ${error.message}`, true); updateSaleBtn.disabled = false; updateSaleBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات'; }
+            } catch (error) {
+                 console.error("updateSaleEntry Error:", error);
+                 showNotification(`❌ فشل تحديث السجل: ${error.message}`, true);
+                 updateSaleBtn.disabled = false; updateSaleBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات';
+             }
         }
 
         // --- Delete & Clear Sales Log ---
@@ -2145,45 +2435,301 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             showConfirmModal(saleId, 'saleEntry');
              const cancelBtn = confirmModalEl.querySelector('.btn-cancel');
              const closeXBtn = confirmModalEl.querySelector('.close-btn');
-             const enableButton = () => { if(buttonElement) buttonElement.disabled = false; cancelBtn?.removeEventListener('click', enableButton); closeXBtn?.removeEventListener('click', enableButton); }
+             const enableButton = () => {
+                 if(buttonElement) buttonElement.disabled = false;
+                 cancelBtn?.removeEventListener('click', enableButton);
+                 closeXBtn?.removeEventListener('click', enableButton);
+             }
              cancelBtn?.addEventListener('click', enableButton);
              closeXBtn?.addEventListener('click', enableButton);
         }
 
         async function deleteSalesLogEntry(saleId) {
             if (!db || !saleId) return;
+            hideConfirmModal();
             showNotification('⏳ جارٍ حذف السجل...', false, 'info');
             const rowToRemove = salesLogTableBody?.querySelector(`tr[data-sale-id="${saleId}"]`);
             const deleteButtonInRow = rowToRemove?.querySelector('.delete-sale-log-entry');
 
             try {
                 await deleteDoc(doc(db, 'sales', saleId));
-                showNotification('✅ تم حذف السجل.', false, 'success');
-                hideConfirmModal();
+                showNotification('✅ تم حذف سجل البيع بنجاح.', false, 'success');
                 if (rowToRemove) {
-                    rowToRemove.style.transition = 'opacity 0.4s, transform 0.4s'; rowToRemove.style.opacity = '0'; rowToRemove.style.transform = 'translateX(50px)';
-                    setTimeout(() => { rowToRemove.remove(); if (salesLogTableBody && salesLogTableBody.rows.length === 0) loadSalesLog(); }, 400);
-                } else { loadSalesLog(); }
+                    rowToRemove.style.transition = 'opacity 0.4s, transform 0.4s';
+                    rowToRemove.style.opacity = '0';
+                    rowToRemove.style.transform = 'translateX(50px)';
+                    setTimeout(() => {
+                         rowToRemove.remove();
+                         if (salesLogTableBody && salesLogTableBody.rows.length === 0) {
+                             loadSalesLog();
+                         }
+                     }, 400);
+                } else {
+                    loadSalesLog();
+                }
                 fetchAllPaidSalesSummary();
                 fetchAndDisplayOutstandingDebts();
-            } catch (error) { console.error(`Error deleting log ${saleId}:`, error); showNotification(`❌ فشل حذف السجل: ${error.message}`, true); if (deleteButtonInRow) deleteButtonInRow.disabled = false; hideConfirmModal(); }
+            } catch (error) {
+                 console.error(`Error deleting log entry ${saleId}:`, error);
+                 showNotification(`❌ فشل حذف السجل: ${error.message}`, true);
+                 if (deleteButtonInRow) deleteButtonInRow.disabled = false;
+            }
         }
 
         function confirmClearSalesLog() {
             if (!clearLogBtn || clearLogBtn.disabled) return;
-            const password = prompt(`للتأكيد، أدخل كلمة السر (${CLEAR_LOG_PASSWORD}) لمسح السجل:\n(لا يمكن التراجع!)`);
+            const password = prompt(`للتأكيد، أدخل كلمة السر (${CLEAR_LOG_PASSWORD}) لمسح **جميع** سجلات المبيعات:\n(لا يمكن التراجع عن هذا الإجراء!)`);
             if (password === null) return;
-            if (password !== CLEAR_LOG_PASSWORD) { showNotification("كلمة السر غير صحيحة!", true); return; }
+            if (password !== CLEAR_LOG_PASSWORD) {
+                 showNotification("❌ كلمة السر المدخلة غير صحيحة!", true); return;
+            }
             showConfirmModal(null, 'clearSales');
         }
 
         async function executeClearSalesLog() {
             if (!db) { showNotification("الخدمة غير جاهزة.", true); return; }
             hideConfirmModal();
-            if (clearLogBtn) clearLogBtn.disabled = true; if (salesLogCloseBtn) salesLogCloseBtn.disabled = true; if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = true;
-            showNotification("⏳⏳ جارٍ مسح جميع السجلات...", false, 'warning');
-            const MAX_WRITES = 450; const salesRef = collection(db, 'sales'); let deletedCount = 0; let error = false;
-            try { while (true) { const snap = await getDocs(query(salesRef, limit(MAX_WRITES))); if (snap.empty) break; let batch = writeBatch(db); let batchCount = 0; snap.docs.forEach(d => { batch.delete(d.ref); batchCount++; deletedCount++; }); showNotification(`⏳ مسح دفعة (${batchCount})... المجموع: ${deletedCount}`, false, 'info'); await batch.commit(); if (snap.size < MAX_WRITES) break; await new Promise(r => setTimeout(r, 100)); } } catch (e) { error = true; console.error("Error clearing log:", e); showNotification(`❌ فشل مسح السجل: ${e.message}`, true); } finally { if (!error) showNotification(`✅ تم مسح السجل (${deletedCount} سجلات).`, false, 'success'); loadSalesLog(); fetchAllPaidSalesSummary(); fetchAndDisplayOutstandingDebts(); if (clearLogBtn) clearLogBtn.disabled = false; if (salesLogCloseBtn) salesLogCloseBtn.disabled = false; if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = false; }
+            if (clearLogBtn) clearLogBtn.disabled = true;
+            if (salesLogCloseBtn) salesLogCloseBtn.disabled = true;
+            if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = true;
+
+            showNotification("⏳⏳ جارٍ مسح جميع سجلات المبيعات... قد يستغرق هذا بعض الوقت.", false, 'warning', 10000);
+
+            try {
+                const deletedCount = await deleteCollection(collection(db, 'sales'));
+                 showNotification(`✅ تم مسح السجل بنجاح (${deletedCount} سجلات تم حذفها).`, false, 'success');
+                 loadSalesLog();
+                 fetchAllPaidSalesSummary();
+                 fetchAndDisplayOutstandingDebts();
+            } catch(e) {
+                 showNotification(`❌ فشل مسح السجل بالكامل: ${e.message}`, true, 'error', 10000);
+                 console.error("Error clearing sales log:", e);
+            } finally {
+                 if (clearLogBtn) clearLogBtn.disabled = false;
+                 if (salesLogCloseBtn) salesLogCloseBtn.disabled = false;
+                 if (salesLogModalCloseIconBtn) salesLogModalCloseIconBtn.disabled = false;
+            }
+        }
+
+        // --- Backup and Restore ---
+
+        async function deleteCollection(collectionRef) {
+            if (!db) throw new Error("Database not initialized");
+            let deletedCount = 0;
+            const path = collectionRef.path || 'unknown collection'; // Get path for messages
+            showNotification(`⏳ بدء حذف المجموعة: ${path}...`, false, 'info', 5000);
+            try {
+                while (true) {
+                    const q = query(collectionRef, limit(BATCH_DELETE_LIMIT));
+                    const snapshot = await getDocs(q);
+                    if (snapshot.empty) break;
+
+                    const batch = writeBatch(db);
+                    snapshot.docs.forEach(d => batch.delete(d.ref));
+
+                    const batchSize = snapshot.size;
+                    await batch.commit();
+                    deletedCount += batchSize;
+                    showNotification(`⏳ حذف ${deletedCount} مستندات من ${path}...`, false, 'info', 3000);
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                showNotification(`✅ اكتمل حذف المجموعة: ${path} (${deletedCount} مستندات).`, false, 'success', 5000);
+                return deletedCount;
+            } catch (error) {
+                console.error(`Error deleting collection ${path}:`, error);
+                throw new Error(`فشل حذف المجموعة ${path}: ${error.message}`);
+            }
+        }
+
+        async function backupData() {
+             if (!db || isDefinitelyOffline) { showNotification("لا يمكن إجراء النسخ الاحتياطي وأنت غير متصل.", true, 'warning'); return; }
+             if (backupBtn) backupBtn.disabled = true;
+             showNotification("⏳ جارٍ تحضير النسخة الاحتياطية...", false, 'info', 10000);
+
+             try {
+                 showNotification("⏳ جلب بيانات المنتجات...", false, 'info');
+                 const productsRef = collection(db, 'clothes');
+                 const productsSnapshot = await getDocs(query(productsRef, orderBy('createdAt', 'desc')));
+                 const products = productsSnapshot.docs.map(doc => {
+                     const data = doc.data();
+                     return {
+                         id: doc.id, ...data,
+                         createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : null,
+                         updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : null,
+                     };
+                 });
+                 showNotification(`⏳ تم جلب ${products.length} منتجات.`, false, 'info');
+
+                 showNotification("⏳ جلب بيانات المبيعات...", false, 'info');
+                 const salesRef = collection(db, 'sales');
+                 // Consider adding a limit if sales collection is huge, but backup should ideally be complete
+                 const salesSnapshot = await getDocs(query(salesRef, orderBy('saleTimestamp', 'desc')));
+                 const sales = salesSnapshot.docs.map(doc => {
+                     const data = doc.data();
+                     return {
+                         id: doc.id, ...data,
+                         saleTimestamp: data.saleTimestamp?.toDate ? data.saleTimestamp.toDate().toISOString() : null,
+                     };
+                 });
+                 showNotification(`⏳ تم جلب ${sales.length} سجلات مبيعات.`, false, 'info');
+
+                 const backupObject = {
+                     backupVersion: BACKUP_VERSION, createdAt: new Date().toISOString(),
+                     productCount: products.length, salesCount: sales.length,
+                     products: products, sales: sales,
+                 };
+
+                 const jsonString = JSON.stringify(backupObject, null, 2);
+                 const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
+                 const link = document.createElement("a");
+                 const url = URL.createObjectURL(blob);
+                 link.setAttribute("href", url);
+                 const dateStr = new Date().toISOString().slice(0, 10);
+                 const filename = `sales_inventory_backup_${dateStr}.json`;
+                 link.setAttribute("download", filename);
+                 link.style.visibility = 'hidden';
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 URL.revokeObjectURL(url);
+
+                 showNotification(`✅ تم إنشاء وتنزيل ملف النسخ الاحتياطي (${filename}) بنجاح!`, false, 'success', 7000);
+
+             } catch (error) {
+                 console.error("Backup Error:", error);
+                 showNotification(`❌ فشل إنشاء النسخة الاحتياطية: ${error.message}`, true, 'error', 10000);
+             } finally {
+                 if (backupBtn) backupBtn.disabled = false;
+             }
+         }
+
+        function triggerRestore() {
+             if (!db || isDefinitelyOffline) { showNotification("لا يمكن استعادة البيانات وأنت غير متصل.", true, 'warning'); return; }
+             if (!restoreFileInput) { showNotification("خطأ: لم يتم العثور على عنصر إدخال الملف.", true); return; }
+             restoreFileInput.value = '';
+             restoreFileInput.click();
+        }
+
+        function handleRestoreFileSelect(event) {
+            const file = event.target.files?.[0];
+            if (!file) return; // User cancelled
+            if (!file.type || file.type !== 'application/json') {
+                showNotification("خطأ: يرجى اختيار ملف نسخة احتياطية بصيغة JSON (.json).", true);
+                return;
+            }
+            showConfirmModal(null, 'restoreBackup', { file: file });
+        }
+
+        async function processRestoreFile(file) {
+            if (!db || !file) {
+                showNotification("خطأ: لا يوجد ملف أو قاعدة بيانات غير جاهزة.", true);
+                hideConfirmModal(); return;
+            }
+            hideConfirmModal();
+            showNotification("⏳ جارٍ قراءة ملف النسخة الاحتياطية...", false, 'info');
+            if (restoreBtn) restoreBtn.disabled = true;
+            if (backupBtn) backupBtn.disabled = true;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const content = e.target?.result;
+                    if (typeof content !== 'string') throw new Error("فشل قراءة محتوى الملف.");
+                    const backupData = JSON.parse(content);
+
+                    if (!backupData || typeof backupData !== 'object' || backupData.backupVersion !== BACKUP_VERSION || !Array.isArray(backupData.products) || !Array.isArray(backupData.sales)) {
+                         throw new Error("ملف النسخ الاحتياطي غير صالح أو غير متوافق.");
+                    }
+                    const productCount = backupData.products.length;
+                    const salesCount = backupData.sales.length;
+                    showNotification(`⏳ التحقق: ${productCount} منتجات, ${salesCount} مبيعات.`, false, 'info', 5000);
+
+                    showNotification("⚠ تحذير: سيتم الآن حذف جميع البيانات الحالية...", false, 'warning', 8000);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+
+                    // Clear collections using helper function
+                    await deleteCollection(collection(db, 'clothes'));
+                    await deleteCollection(collection(db, 'sales'));
+                    itemsMap.clear();
+                    itemsListEl.innerHTML = '';
+                    listPlaceholderEl.textContent = "جارٍ استعادة المنتجات..."; listPlaceholderEl.style.display = 'block';
+                    updateMainViewStatus("جارٍ استعادة البيانات...");
+
+
+                    showNotification(`⏳ بدء استعادة ${productCount} منتجات...`, false, 'info');
+                    const productsRef = collection(db, 'clothes');
+                    let productsBatch = writeBatch(db);
+                    let productsAdded = 0;
+                    for (let i = 0; i < backupData.products.length; i++) {
+                         const product = backupData.products[i];
+                         const docRef = doc(productsRef, product.id); // Use original ID
+                         const productData = { ...product,
+                             createdAt: product.createdAt ? Timestamp.fromDate(new Date(product.createdAt)) : serverTimestamp(),
+                             updatedAt: product.updatedAt ? Timestamp.fromDate(new Date(product.updatedAt)) : null,
+                         };
+                         delete productData.id;
+                         productsBatch.set(docRef, productData);
+                         productsAdded++;
+                         if (productsAdded % BATCH_DELETE_LIMIT === 0 || i === backupData.products.length - 1) {
+                             await productsBatch.commit();
+                             showNotification(`⏳ استعادة المنتجات: ${productsAdded}/${productCount}...`, false, 'info', 3000);
+                             if (i < backupData.products.length - 1) productsBatch = writeBatch(db);
+                         }
+                    }
+                    showNotification(`✅ تم استعادة ${productsAdded} منتجات.`, false, 'success', 5000);
+
+
+                    showNotification(`⏳ بدء استعادة ${salesCount} سجلات مبيعات...`, false, 'info');
+                    const salesRef = collection(db, 'sales');
+                    let salesBatch = writeBatch(db);
+                    let salesAdded = 0;
+                    for (let i = 0; i < backupData.sales.length; i++) {
+                         const sale = backupData.sales[i];
+                         const docRef = doc(salesRef, sale.id);
+                         const saleData = { ...sale,
+                             saleTimestamp: sale.saleTimestamp ? Timestamp.fromDate(new Date(sale.saleTimestamp)) : serverTimestamp(),
+                         };
+                         delete saleData.id;
+                         salesBatch.set(docRef, saleData);
+                         salesAdded++;
+                         if (salesAdded % BATCH_DELETE_LIMIT === 0 || i === backupData.sales.length - 1) {
+                             await salesBatch.commit();
+                             showNotification(`⏳ استعادة المبيعات: ${salesAdded}/${salesCount}...`, false, 'info', 3000);
+                             if (i < backupData.sales.length - 1) salesBatch = writeBatch(db);
+                         }
+                     }
+                     showNotification(`✅ تم استعادة ${salesAdded} سجلات مبيعات.`, false, 'success', 5000);
+
+
+                     showNotification("🎉 اكتملت عملية الاستعادة بنجاح! سيتم تحديث الواجهة تلقائياً.", false, 'success', 7000);
+                     // Data will refresh via the main listener. Refresh summaries manually.
+                     fetchAllPaidSalesSummary();
+                     fetchAndDisplayOutstandingDebts();
+                     // Partner selects don't need explicit update as they are hardcoded now.
+
+                } catch (error) {
+                    console.error("Restore Processing Error:", error);
+                    showNotification(`❌ فشلت عملية الاستعادة: ${error.message}`, true, 'error', 15000);
+                     updateMainViewStatus(`فشلت الاستعادة: ${error.message}. قد تحتاج إلى إعادة تحميل الصفحة.`, true);
+                } finally {
+                    if (restoreBtn) restoreBtn.disabled = false;
+                    if (backupBtn) backupBtn.disabled = false;
+                     if (restoreFileInput) restoreFileInput.value = '';
+                }
+            };
+            reader.onerror = (e) => {
+                console.error("File Reading Error:", e);
+                showNotification("❌ خطأ في قراءة الملف المحدد.", true);
+                if (restoreBtn) restoreBtn.disabled = false;
+                if (backupBtn) backupBtn.disabled = false;
+                 if (restoreFileInput) restoreFileInput.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // Add listener for the hidden file input
+        if (restoreFileInput) {
+             restoreFileInput.addEventListener('change', handleRestoreFileSelect);
         }
 
         // --- Summary Calculations ---
@@ -2191,28 +2737,62 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
             if (!db || !allPaidSalesSummarySpan || !footerSummaryEl) return;
             allPaidSalesSummarySpan.innerHTML = `<span style="opacity:0.6;">جلب...</span>`;
             const q = query(collection(db, 'sales'), where('paymentStatus', '==', 'paid'));
-            try { const snap = await getDocs(q); let total = 0; snap.forEach(doc => { total += parseFloat(doc.data().totalSaleAmount || 0); }); allPaidSalesSummarySpan.innerHTML = `${formatCurrency(total)}`; footerSummaryEl.style.display = 'block'; } catch (e) { console.error("Error fetching paid summary:", e); allPaidSalesSummarySpan.innerHTML = `<span style="color: var(--danger);">خطأ</span>`; footerSummaryEl.style.display = 'block'; }
+            try {
+                 const snap = await getDocs(q);
+                 let total = 0;
+                 snap.forEach(doc => total += parseFloat(doc.data().totalSaleAmount || 0));
+                 allPaidSalesSummarySpan.innerHTML = `${formatCurrency(total)}`;
+                 footerSummaryEl.style.display = 'block';
+             } catch (e) {
+                 console.error("Error fetching paid summary:", e);
+                 allPaidSalesSummarySpan.innerHTML = `<span style="color: var(--danger);">خطأ</span>`;
+                 footerSummaryEl.style.display = 'block';
+             }
         }
+
         async function fetchAndDisplayOutstandingDebts() {
             if (!db || !totalDebtsAmountSpan || !debtsSummaryDiv) return;
             totalDebtsAmountSpan.innerHTML = `<span style="opacity:0.6;">جلب...</span>`;
             const q = query(collection(db, 'sales'), where('paymentStatus', '==', 'debt'));
-            try { const snap = await getDocs(q); let total = 0; snap.forEach(doc => { total += parseFloat(doc.data().totalSaleAmount || 0); }); if (total > 0) { totalDebtsAmountSpan.innerHTML = `${formatCurrency(total)}`; debtsSummaryDiv.style.display = 'block'; } else { debtsSummaryDiv.style.display = 'none'; } } catch (e) { console.error("Error fetching debts:", e); totalDebtsAmountSpan.innerHTML = `<span style="color: var(--danger);">خطأ</span>`; debtsSummaryDiv.style.display = 'block'; }
+            try {
+                 const snap = await getDocs(q);
+                 let total = 0;
+                 snap.forEach(doc => total += parseFloat(doc.data().totalSaleAmount || 0));
+                 if (total > 0) {
+                     totalDebtsAmountSpan.innerHTML = `${formatCurrency(total)}`;
+                     debtsSummaryDiv.style.display = 'block';
+                 } else {
+                     debtsSummaryDiv.style.display = 'none';
+                 }
+             } catch (e) {
+                 console.error("Error fetching debts:", e);
+                 totalDebtsAmountSpan.innerHTML = `<span style="color: var(--danger);">خطأ</span>`;
+                 debtsSummaryDiv.style.display = 'block';
+             }
         }
 
         // --- Initialization ---
         async function initializeAppAndFirestore() {
-            console.log("Initializing v10.8...");
+            console.log("Initializing Sales & Inventory PWA v10.10...");
             updateMainViewStatus("🔄 تهيئة النظام...");
             listPlaceholderEl.textContent = "جارٍ تحميل المنتجات..."; listPlaceholderEl.style.display = 'block';
             connectionStatusDotEl.className = 'connection-status-dot connecting'; updateConnectionStatusUI(navigator.onLine);
 
-            if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').then(reg => console.log('✅ SW Registered:', reg.scope)).catch(err => console.error('❌ SW Reg Failed:', err)); }); } else { console.warn('Service workers not supported.'); }
+            if ('serviceWorker' in navigator) {
+                 window.addEventListener('load', () => {
+                     navigator.serviceWorker.register('./service-worker.js')
+                        .then(reg => console.log('✅ Service Worker Registered:', reg.scope))
+                        .catch(err => console.error('❌ Service Worker Registration Failed:', err));
+                });
+            } else {
+                console.warn('Service workers are not supported in this browser.');
+            }
 
             try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
-                try { await enableIndexedDbPersistence(db); console.log("Offline persistence enabled."); } catch (err) { console.warn("Persistence Error:", err.code); if (err.code === 'failed-precondition') showNotification("⚠️ التخزين المحلي معطل (علامات تبويب متعددة؟).", false, 'warning'); else if (err.code !== 'unimplemented') showNotification("⚠️ خطأ تفعيل التخزين المحلي.", true); }
+                try { await enableIndexedDbPersistence(db); console.log("Offline persistence enabled."); }
+                catch (err) { console.warn("Persistence Error:", err.code, err.message); if (err.code === 'failed-precondition') { showNotification("⚠️ التخزين المحلي معطل (ربما بسبب فتح علامات تبويب متعددة).", false, 'warning', 8000); } else if (err.code !== 'unimplemented') { showNotification("⚠️ خطأ في تفعيل التخزين المحلي للعمل دون اتصال.", true); } }
 
                 const isDarkMode = localStorage.getItem('darkMode') === 'true';
                 if (isDarkMode) document.body.classList.add('dark-mode');
@@ -2223,46 +2803,66 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
                 if (db && !unsubscribeItems) {
                     const itemsCollection = collection(db, 'clothes');
                     const q = query(itemsCollection, orderBy('name', 'asc'));
+
                     unsubscribeItems = onSnapshot(q, (snapshot) => {
-                        latestSnapshotMetadata = snapshot.metadata; updateConnectionStatusUI(navigator.onLine);
-                        let productInfoChanged = false; let itemsAddedOrRemoved = false;
+                        latestSnapshotMetadata = snapshot.metadata;
+                        updateConnectionStatusUI(navigator.onLine);
+                        let productInfoChanged = false;
+                        let itemsAddedOrRemoved = false;
 
-                        snapshot.docChanges().forEach((change) => {
-                            const docData = change.doc.data({ serverTimestamps: "estimate" });
-                            const itemData = { id: change.doc.id, ...docData };
+                        if (snapshot.empty && firstLoadComplete) {
+                             itemsMap.clear();
+                             itemsListEl.innerHTML = '';
+                             listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر (+) للإضافة.";
+                             listPlaceholderEl.style.display = 'block';
+                             populateProductSelectsInModals(); // Update dropdowns
+                             itemsAddedOrRemoved = true;
+                        } else {
+                            snapshot.docChanges().forEach((change) => {
+                                const docData = change.doc.data({ serverTimestamps: "estimate" });
+                                const itemData = { id: change.doc.id, ...docData };
 
-                            if (change.type === "added") { itemsMap.set(itemData.id, itemData); renderItemCard(itemData); productInfoChanged = true; itemsAddedOrRemoved = true; }
-                             else if (change.type === "modified") { const oldData = itemsMap.get(itemData.id); itemsMap.set(itemData.id, itemData); renderItemCard(itemData); if (oldData && (oldData.price !== itemData.price || oldData.name !== itemData.name || oldData.partnerCost !== itemData.partnerCost)) productInfoChanged = true; if (currentViewItemId === itemData.id && !currentEditItemId) showItemDetails(itemData.id); }
-                             else if (change.type === "removed") { const removedId = change.doc.id; itemsMap.delete(removedId); removeItemCard(removedId); productInfoChanged = true; itemsAddedOrRemoved = true; if (currentViewItemId === removedId) { currentViewItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); } if (currentEditItemId === removedId) { currentEditItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); } }
-                        });
+                                if (change.type === "added") { itemsMap.set(itemData.id, itemData); renderItemCard(itemData); productInfoChanged = true; itemsAddedOrRemoved = true; }
+                                 else if (change.type === "modified") { const oldData = itemsMap.get(itemData.id); itemsMap.set(itemData.id, itemData); renderItemCard(itemData); if (oldData && (oldData.price !== itemData.price || oldData.name !== itemData.name || oldData.partnerCost !== itemData.partnerCost)) { productInfoChanged = true; } if (currentViewItemId === itemData.id && !currentEditItemId) { showItemDetails(itemData.id); } }
+                                 else if (change.type === "removed") { const removedId = change.doc.id; itemsMap.delete(removedId); removeItemCard(removedId); productInfoChanged = true; itemsAddedOrRemoved = true; if (currentViewItemId === removedId) { currentViewItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); } if (currentEditItemId === removedId) { currentEditItemId = null; updateMainViewStatus("🗑️ تم حذف المنتج."); } }
+                            });
+                        }
 
-                        if (productInfoChanged) populateProductSelectsInModals();
-                        if (itemsAddedOrRemoved && itemsMap.size === 0 && firstLoadComplete) updateMainViewStatus("➕ لا توجد منتجات.");
+                        if (productInfoChanged) { populateProductSelectsInModals(); }
+                        if (itemsAddedOrRemoved && itemsMap.size === 0 && firstLoadComplete) { updateMainViewStatus("➕ لا توجد منتجات."); }
 
                         if (!firstLoadComplete) {
-                            firstLoadComplete = true; console.log("Initial sync complete.");
+                            firstLoadComplete = true; console.log("Initial product data sync complete.");
                             if (listPlaceholderEl) listPlaceholderEl.style.display = itemsMap.size > 0 ? 'none' : 'block';
-                            if (itemsMap.size === 0 && listPlaceholderEl) listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر (+) للإضافة.";
-                            if (!currentViewItemId && !currentEditItemId) updateMainViewStatus(itemsMap.size > 0 ? "👈 اختر منتجاً." : "➕ لا توجد منتجات.");
+                            if (itemsMap.size === 0 && listPlaceholderEl) { listPlaceholderEl.textContent = "➕ لا توجد منتجات. انقر (+) للإضافة."; }
+                            if (!currentViewItemId && !currentEditItemId) { updateMainViewStatus(itemsMap.size > 0 ? "👈 اختر منتجاً من القائمة لعرض التفاصيل." : "➕ لا توجد منتجات، انقر (+) للإضافة."); }
                             fetchAllPaidSalesSummary(); fetchAndDisplayOutstandingDebts();
-                            if (!professionalTipInterval) professionalTipInterval = setInterval(showProfessionalTip, 300000);
+                            if (!professionalTipInterval) { showProfessionalTip(); professionalTipInterval = setInterval(showProfessionalTip, 3 * 60 * 1000); }
+                             populateProductSelectsInModals(); // Populate product selects on first load
                         }
-                    }, (error) => { console.error("❌ Items Listener error:", error); showNotification("خطأ: فشل استقبال تحديثات المنتجات.", true); updateMainViewStatus(`فشل الاتصال: ${error.message}.`, true); updateConnectionStatusUI(false); firstLoadComplete = true; if (listPlaceholderEl) { listPlaceholderEl.textContent = "❌ خطأ تحميل"; listPlaceholderEl.style.display = 'block'; } });
-                } else { throw new Error("DB not ready or listener exists."); }
+                    }, (error) => {
+                        console.error("❌ Items Listener error:", error); showNotification("خطأ: فشل استقبال تحديثات المنتجات.", true); updateMainViewStatus(`فشل الاتصال بقاعدة بيانات المنتجات: ${error.message}.`, true); updateConnectionStatusUI(false); firstLoadComplete = true; if (listPlaceholderEl) { listPlaceholderEl.textContent = "❌ خطأ في تحميل المنتجات"; listPlaceholderEl.style.display = 'block'; }
+                    });
+                } else { throw new Error("Database not initialized or listener already exists."); }
 
-                // Assign functions to window
-                 window.toggleDarkMode = toggleDarkMode; window.showAddForm = showAddForm; window.hideAddForm = hideAddForm; window.addItem = addItem; window.showItemDetails = showItemDetails; window.showEditForm = showEditForm; window.cancelEdit = cancelEdit; window.updateItem = updateItem; window.showConfirmModal = showConfirmModal; window.hideConfirmModal = hideConfirmModal; window.deleteItem = deleteItem; window.showLogSaleModal = showLogSaleModal; window.hideLogSaleModal = hideLogSaleModal; window.addSaleItemEntry = addSaleItemEntry; window.removeSaleItem = removeSaleItem; window.handlePartnerSelectionChange = handlePartnerSelectionChange; window.handleProductSelectionChange = handleProductSelectionChange; window.getSelectedPartner = getSelectedPartner; window.saveSales = saveSales; window.showEditSaleModal = showEditSaleModal; window.hideEditSaleModal = hideEditSaleModal; window.updateSaleEntry = updateSaleEntry; window.updateEditSaleTotal = updateEditSaleTotal; window.showSalesLogModal = showSalesLogModal; window.hideSalesLogModal = hideSalesLogModal; window.confirmDeleteSalesLogEntry = confirmDeleteSalesLogEntry; window.deleteSalesLogEntry = deleteSalesLogEntry; window.confirmClearSalesLog = confirmClearSalesLog; window.executeClearSalesLog = executeClearSalesLog; window.showSalesReportModal = showSalesReportModal; window.hideSalesReportModal = hideSalesReportModal; window.generateSalesReport = generateSalesReport; window.exportSalesToCSV = exportSalesToCSV; window.generateInventoryHTMLReport = generateInventoryHTMLReport; window.generateBuyerReport = generateBuyerReport;
+                 window.toggleDarkMode = toggleDarkMode; window.showAddForm = showAddForm; window.hideAddForm = hideAddForm; window.addItem = addItem; window.showItemDetails = showItemDetails; window.showEditForm = showEditForm; window.cancelEdit = cancelEdit; window.updateItem = updateItem; window.showConfirmModal = showConfirmModal; window.hideConfirmModal = hideConfirmModal; window.deleteItem = deleteItem; window.showLogSaleModal = showLogSaleModal; window.hideLogSaleModal = hideLogSaleModal; window.addSaleItemEntry = addSaleItemEntry; window.removeSaleItem = removeSaleItem; window.handlePartnerSelectionChange = handlePartnerSelectionChange; window.handleProductSelectionChange = handleProductSelectionChange; window.getSelectedPartner = getSelectedPartner; window.saveSales = saveSales; window.showEditSaleModal = showEditSaleModal; window.hideEditSaleModal = hideEditSaleModal; window.updateSaleEntry = updateSaleEntry; window.updateEditSaleTotal = updateEditSaleTotal; window.showSalesLogModal = showSalesLogModal; window.hideSalesLogModal = hideSalesLogModal; window.confirmDeleteSalesLogEntry = confirmDeleteSalesLogEntry; window.deleteSalesLogEntry = deleteSalesLogEntry; window.confirmClearSalesLog = confirmClearSalesLog; window.executeClearSalesLog = executeClearSalesLog; window.showSalesReportModal = showSalesReportModal; window.hideSalesReportModal = hideSalesReportModal; window.generateSalesReport = generateSalesReport; window.exportSalesToCSV = exportSalesToCSV; window.generateInventoryHTMLReport = generateInventoryHTMLReport; window.generateBuyerReport = generateBuyerReport; window.backupData = backupData; window.triggerRestore = triggerRestore;
 
-                console.log("✅ App initialized (v10.8).");
+                console.log("✅ Application initialized successfully (v10.10).");
 
-            } catch (initError) { console.error("❌ Init Failed:", initError); updateMainViewStatus(`فشل التهيئة: ${initError.message}.`, true); if (listPlaceholderEl) { listPlaceholderEl.textContent = "❌ فشل التهيئة"; listPlaceholderEl.style.display = 'block'; } if (connectionStatusDotEl) { connectionStatusDotEl.className = 'connection-status-dot disconnected'; connectionStatusDotEl.title = `فشل: ${initError.message}`; } document.querySelectorAll('.control-panel button').forEach(btn => btn.disabled = true); }
+            } catch (initError) {
+                console.error("❌ Initialization Failed:", initError); updateMainViewStatus(`فشل تهيئة التطبيق بشكل كامل: ${initError.message}.`, true); if (listPlaceholderEl) { listPlaceholderEl.textContent = "❌ فشل التهيئة"; listPlaceholderEl.style.display = 'block'; } if (connectionStatusDotEl) { connectionStatusDotEl.className = 'connection-status-dot disconnected'; connectionStatusDotEl.title = `فشل التهيئة: ${initError.message}`; } document.querySelectorAll('.control-panel button').forEach(btn => btn.disabled = true);
+            }
         }
 
         // --- Global Event Listeners ---
         document.addEventListener('DOMContentLoaded', initializeAppAndFirestore);
         window.addEventListener('online', () => updateConnectionStatusUI(true));
         window.addEventListener('offline', () => updateConnectionStatusUI(false));
-        window.addEventListener('beforeunload', () => { if (unsubscribeItems) unsubscribeItems(); if (professionalTipInterval) clearInterval(professionalTipInterval); if (toastTimer) clearTimeout(toastTimer); });
+        window.addEventListener('beforeunload', () => {
+             if (unsubscribeItems) { console.log("Detaching Firestore listener."); unsubscribeItems(); }
+             if (professionalTipInterval) clearInterval(professionalTipInterval);
+             if (toastTimer) clearTimeout(toastTimer);
+        });
 
     </script>
 </body>
