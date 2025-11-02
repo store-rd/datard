@@ -977,7 +977,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
         function renderItemCard(itemData) {
             const existingCard = itemsListEl?.querySelector(`.item-card[data-id="${itemData.id}"]`);
             const displayIcon = itemData.icon || getIconForName(itemData.name) || defaultIcon;
-            const partnerCostDisplay = itemData.partnerCost > 0 ? `<p style="font-size: 0.8em; opacity: 0.7; margin-top: 2px;">تكلفة شريك: ${formatCurrency(itemData.partnerCost)}</p>` : '';
+            const partnerCostDisplay = itemData.partnerCost > 0 ? `<p style="font-size: 0.8em; opacity: 0.7; margin-top: 2px;">تكلفة للجملة: ${formatCurrency(itemData.partnerCost)}</p>` : '';
             const cardHTML = `
                 <img class="item-icon" src="${escapeHtml(displayIcon)}" alt="${escapeHtml(itemData.name)}" loading="lazy" onerror="this.onerror=null; this.src='${defaultIcon}'">
                 <div class="item-details">
@@ -2867,4 +2867,5 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
     </script>
 </body>
 </html>
+
 
