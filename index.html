@@ -460,8 +460,8 @@ body.dark-mode {
 .dark-mode #salesLogModal #clear-log-btn:hover:not(:disabled) { background: linear-gradient(135deg, var(--danger-dark), var(--danger-hover)); }
 #salesLogModal .modal-footer .btn-cancel { flex-grow: 0; font-size: 1em; padding: 10px 18px; }
 
-#toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #263238; color: white; padding: 14px 25px; border-radius: var(--border-radius-md); z-index: 2000; font-size: 1em; box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease, transform 0.4s ease; font-weight: 700; width: calc(100% - 40px); max-width: 400px; text-align: center; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); margin: 0 auto; }
-#toast.show { opacity: 1; visibility: visible; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease, transform 0.4s ease; }
+#toast { position: fixed; bottom: 83px; left: 50%; transform: translateX(-50%); background: #263238; color: white; padding: 14px 25px; border-radius: var(--border-radius-md); z-index: 2000; font-size: 1em; box-shadow: var(--shadow-md); opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s, bottom 0.4s ease, transform 0.4s ease; font-weight: 700; width: calc(100% - 40px); max-width: 400px; text-align: center; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); margin: 0 auto; }
+#toast.show { opacity: 1; visibility: visible; bottom: calc(93px + env(safe-area-inset-bottom, 0px)); transition: opacity 0.4s ease, visibility 0s linear 0s, bottom 0.4s ease, transform 0.4s ease; }
 #toast.error { background-color: var(--danger); }
 #toast.warning { background-color: var(--warning); color: #212121; }
 #toast.success { background-color: var(--info); }
@@ -2867,6 +2867,7 @@ body.dark-mode .control-panel { background-color: rgba(var(--grey-light-dark-bg-
     </script>
 </body>
 </html>
+
 
 
 
